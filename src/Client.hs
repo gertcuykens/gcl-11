@@ -4,12 +4,13 @@ import Data.Acid.Advanced    ( query', update' )
 --import Data.Acid.Local       ( createArchive, openLocalState )
 import Data.Acid.Remote      ( openRemoteState, sharedSecretPerform )
 import Data.ByteString.Char8 ( pack )
+import Keys                  ( serverKey )
 import Network               ( PortID(PortNumber) )
-import Token                 ( create, verify )
 import Table                 ( GroupMap(..), Group(..), InsertKey(..), LookupKey(..), group)
+import Token                 ( create, verify )
 
 openAcidState :: IO (AcidState GroupMap)
-openAcidState = openRemoteState (sharedSecretPerform $ pack "12345") "localhost" (PortNumber 8080)
+openAcidState = openRemoteState (sharedSecretPerform $ pack serverKey) "localhost" (PortNumber 8080)
 
 runAcidState :: AcidState GroupMap -> IO ()
 runAcidState acid = do
@@ -29,6 +30,8 @@ runAcidState acid = do
     print b
 
     createCheckpoint acid
+
+
 
 main :: IO ()
 main = bracket openAcidState closeAcidState runAcidState

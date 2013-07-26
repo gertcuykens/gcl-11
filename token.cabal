@@ -17,22 +17,28 @@ source-repository head
 
 library
     hs-source-dirs: src
-    exposed-modules: Token
+    exposed-modules: Token, Google
+    other-modules: Keys
     ghc-options: -Wall -O2
-    build-depends: base >= 4.6
+    build-depends: aeson >= 0.6
+                 , base >= 4.6
+                 , bytestring >= 0.10
                  , Crypto >= 4.2
+                 , hoauth2 >= 0.3
                  , unix-time >= 0.1
+                 , text >= 0.11
 
 executable client
     hs-source-dirs: src
     main-is: Client.hs
-    other-modules: Table
+    other-modules: Table, Keys
     ghc-options: -Wall -O2
     build-depends: acid-state >= 0.8
                  , base >= 4.6
                  , bytestring >= 0.10
                  , containers >= 0.5
                  , Crypto >= 4.2
+                 , hoauth2 >= 0.3
                  , lens >= 3.2
                  , network >= 2.4
                  , unix-time >= 0.1
@@ -41,12 +47,14 @@ executable client
 executable server
     hs-source-dirs: src
     main-is: Server.hs
-    other-modules: Table
+    other-modules: Table, Keys
     ghc-options: -Wall -O2
     build-depends: acid-state >= 0.8
                  , base >= 4.6
                  , bytestring >= 0.10
                  , containers >= 0.5
+                 , Crypto >= 4.2
+                 , hoauth2 >= 0.3
                  , lens >= 3.2
                  , network >= 2.4
                  , safecopy >= 0.7

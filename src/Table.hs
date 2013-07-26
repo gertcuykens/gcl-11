@@ -1,7 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable, TypeFamilies, TemplateHaskell#-}
-
 module Table where
-
 import Control.Lens ((?=), at, from, makeIso, view)
 import Data.Acid (Update, Query, makeAcidic)
 import Data.SafeCopy (deriveSafeCopy, base)

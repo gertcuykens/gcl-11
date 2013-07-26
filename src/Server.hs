@@ -5,6 +5,7 @@ import Data.Acid.Remote      ( acidServer, sharedSecretCheck )
 import Data.ByteString.Char8 ( pack )
 import Data.Map              ( empty )
 import Data.Set              ( singleton )
+import Keys                  ( serverKey )
 import Network               ( PortID(PortNumber) )
 import Table                 ( GroupMap(..) )
 
@@ -12,7 +13,7 @@ openAcidState :: IO (AcidState GroupMap)
 openAcidState = openLocalState $ GroupMap empty
 
 runAcidState :: AcidState GroupMap -> IO ()
-runAcidState = acidServer (sharedSecretCheck (singleton $ pack "12345")) (PortNumber 8080)
+runAcidState = acidServer (sharedSecretCheck (singleton $ pack serverKey)) (PortNumber 8080)
 
 main :: IO ()
 main = bracket openAcidState closeAcidState runAcidState
