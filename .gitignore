@@ -3,6 +3,6 @@ test
 data
 state
 image
-Keys.hs
+#Keys.hs
 #git update-index --assume-unchanged src/Keys.hs
 #git update-index --really-refresh
