@@ -3,18 +3,27 @@ import Data.Acid             ( AcidState, closeAcidState )
 import Data.Acid.Local       ( openLocalState )
 import Data.Acid.Remote      ( acidServer, sharedSecretCheck )
 import Data.ByteString.Char8 ( pack )
-import Data.Map              ( empty )
+import Data.IntMap           ( empty )
 import Data.Set              ( singleton )
 import Keys                  ( serverKey )
 import Network               ( PortID(PortNumber) )
-import Table                 ( GroupMap(..) )
+import UserMap               ( UserMap(..) )
+import GroupMap              ( GroupMap(..) )
 
-openAcidState :: IO (AcidState GroupMap)
-openAcidState = openLocalState $ GroupMap empty
+openAcidStateU :: IO (AcidState UserMap)
+openAcidStateU = openLocalState $ UserMap empty
 
-runAcidState :: AcidState GroupMap -> IO ()
-runAcidState = acidServer (sharedSecretCheck (singleton $ pack serverKey)) (PortNumber 8080)
+openAcidStateG :: IO (AcidState GroupMap)
+openAcidStateG = openLocalState $ GroupMap empty
+
+runAcidStateU :: AcidState UserMap -> IO ()
+runAcidStateU = acidServer (sharedSecretCheck (singleton $ pack serverKey)) (PortNumber 8081)
+
+runAcidStateG :: AcidState GroupMap -> IO ()
+runAcidStateG = acidServer (sharedSecretCheck (singleton $ pack serverKey)) (PortNumber 8082)
 
 main :: IO ()
-main = bracket openAcidState closeAcidState runAcidState
+main = do
+    bracket openAcidStateU closeAcidState runAcidStateU
+    bracket openAcidStateG closeAcidState runAcidStateG
 
