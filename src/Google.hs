@@ -38,7 +38,7 @@ test = do
         Just rt -> do
             (Right nt) <- fetchRefreshToken googleKey rt
             f nt
-    where f token = (userinfo token :: IO (OAuth2Result Email)) >>= \(Right x)-> print x >> create [read $ unpack $ id x] >>= verify >>= print
+    where f token = (userinfo token :: IO (OAuth2Result Email)) >>= \(Right x) -> print x >> create (read $ unpack $ id x) [] >>= \y -> print y >> verify y >>= print
 
 -- googleScopeProfile :: QueryParams
 -- googleScopeProfile = [("scope", "https://www.googleapis.com/auth/userinfo.profile")]
