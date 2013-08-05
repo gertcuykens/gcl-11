@@ -3,11 +3,12 @@ module Google where
 import Data.Aeson (FromJSON)
 import Data.Aeson.TH (deriveJSON)
 import qualified Data.ByteString.Char8 as BS
-import Data.Text (Text)
+import Data.Text (Text, unpack)
 import Keys (googleKey)
 import Network.OAuth.OAuth2
 import Prelude hiding (id)
 import qualified Prelude as P (id)
+import Token (create, verify)
 
 data Email = Email { id             :: Text
                    , email          :: Text
@@ -19,15 +20,9 @@ $(deriveJSON P.id ''Email)
 googleScopeEmail :: QueryParams
 googleScopeEmail = [("scope", "https://www.googleapis.com/auth/userinfo.email")]
 
-googleScopeProfile :: QueryParams
-googleScopeProfile = [("scope", "https://www.googleapis.com/auth/userinfo.profile")]
-
 googleAccessOffline :: QueryParams
 googleAccessOffline = [("access_type", "offline")
                       ,("approval_prompt", "force")]
-
-validateToken :: FromJSON a => AccessToken -> IO (OAuth2Result a)
-validateToken token = authGetJSON token "https://www.googleapis.com/oauth2/v1/tokeninfo"
 
 userinfo :: FromJSON a => AccessToken -> IO (OAuth2Result a)
 userinfo token = authGetJSON token "https://www.googleapis.com/oauth2/v2/userinfo"
@@ -43,7 +38,13 @@ test = do
         Just rt -> do
             (Right nt) <- fetchRefreshToken googleKey rt
             f nt
-    where f token = (userinfo token :: IO (OAuth2Result Email)) >>= print
+    where f token = (userinfo token :: IO (OAuth2Result Email)) >>= \(Right x)-> print x >> create [read $ unpack $ id x] >>= verify >>= print
+
+-- googleScopeProfile :: QueryParams
+-- googleScopeProfile = [("scope", "https://www.googleapis.com/auth/userinfo.profile")]
+
+-- validateToken :: FromJSON a => AccessToken -> IO (OAuth2Result a)
+-- validateToken token = authGetJSON token "https://www.googleapis.com/oauth2/v1/tokeninfo"
 
 -- data Token = Token { issued_to      :: Text
 --                    , audience       :: Text
