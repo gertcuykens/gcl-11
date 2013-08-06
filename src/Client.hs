@@ -5,7 +5,6 @@ import Data.Acid.Advanced    ( query', update' )
 import Data.Acid.Remote      ( openRemoteState, sharedSecretPerform )
 import Data.ByteString.Char8 ( pack )
 import Data.Set              ( member, fromList )
-import Data.Text             ( Text )
 import Keys                  ( serverKey )
 import Network               ( PortID(PortNumber) )
 import GroupMap              ( GroupMap(..), InsertKey(..), LookupKey(..) )
@@ -17,17 +16,15 @@ openAcidState = openRemoteState (sharedSecretPerform $ pack serverKey) "localhos
 runAcidState :: AcidState GroupMap -> IO ()
 runAcidState acid = do
 
-    _ <- update' acid (InsertKey 0 (fromList ["116469479527388802962","555"]))
-    _ <- update' acid (InsertKey 1 (fromList ["116469479527388802962"]))
-    _ <- update' acid (InsertKey 2 (fromList ["116469479527388802962"]))
-    _ <- update' acid (InsertKey 3 (fromList ["116469479527388802962"]))
+    _ <- update' acid (InsertKey 0 (fromList [116469479527388802962,555]))
+    _ <- update' acid (InsertKey 1 (fromList [116469479527388802962]))
+    _ <- update' acid (InsertKey 2 (fromList [116469479527388802962]))
+    _ <- update' acid (InsertKey 3 (fromList [116469479527388802962]))
 
-    Just s <- query' acid (LookupKey 0)
-    print ("116469479527388802962" `member` s)
-    print ("555" `member` s)
-    print ("666" `member` s)
+    c <- check 116469479527388802962 [0,1,2,3] acid
+    print c
 
-    t <- create "116469479527388802962" [0,1,2,3]
+    t <- create 116469479527388802962 [0,1,2,3]
     print t
     b <- verify t
     print b
@@ -36,4 +33,9 @@ runAcidState acid = do
 
 main :: IO ()
 main = bracket openAcidState closeAcidState runAcidState
+
+check :: Integer -> [Int] -> AcidState GroupMap -> IO Bool
+check _ [] _ = return True
+check uid [x] acid = query' acid (LookupKey x) >>= \(Just set) -> return (uid `member` set)
+check uid (x:xs) acid = query' acid (LookupKey x) >>= \(Just set) -> return (uid `member` set) >>= \r -> if (r == True) then (check uid xs acid) else (return False)
 

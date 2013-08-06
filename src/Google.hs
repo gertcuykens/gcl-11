@@ -17,28 +17,31 @@ data Email = Email { id             :: Text
 
 $(deriveJSON P.id ''Email)
 
-googleScopeEmail :: QueryParams
-googleScopeEmail = [("scope", "https://www.googleapis.com/auth/userinfo.email")]
-
-googleAccessOffline :: QueryParams
-googleAccessOffline = [("access_type", "offline")
-                      ,("approval_prompt", "force")]
+query :: QueryParams
+query = [("scope", "https://www.googleapis.com/auth/userinfo.email")
+        ,("access_type", "offline")
+        ,("approval_prompt", "force")
+        ,("state","1000")]
 
 userinfo :: FromJSON a => AccessToken -> IO (OAuth2Result a)
 userinfo token = authGetJSON token "https://www.googleapis.com/oauth2/v2/userinfo"
 
 test :: IO ()
 test = do
-    BS.putStrLn $ authorizationUrl googleKey `appendQueryParam` (googleScopeEmail ++ googleAccessOffline)
+    BS.putStrLn $ authorizationUrl googleKey `appendQueryParam` query
     code <- fmap BS.pack getLine
+    -- gid <- fmap read getLine
     (Right token) <- fetchAccessToken googleKey code
-    f token
+    uid <- f1 token
     case refreshToken token of
         Nothing -> putStrLn "Failed to fetch refresh token"
         Just rt -> do
             (Right nt) <- fetchRefreshToken googleKey rt
-            f nt
-    where f token = (userinfo token :: IO (OAuth2Result Email)) >>= \(Right x) -> print x >> create (read $ unpack $ id x) [] >>= \y -> print y >> verify y >>= print
+            uid <- f1 nt
+            print uid
+            -- f2 uid gid
+    where f1 token = (userinfo token :: IO (OAuth2Result Email)) >>= \(Right x) -> return x
+          -- f2 uid gid = check uid gid >>= \x -> create (read $ unpack $ id uid) [gid] >>= \y -> print y >> verify y >>= print
 
 -- googleScopeProfile :: QueryParams
 -- googleScopeProfile = [("scope", "https://www.googleapis.com/auth/userinfo.profile")]
