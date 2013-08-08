@@ -15,12 +15,6 @@ openAcidState = openRemoteState (sharedSecretPerform $ pack serverKey) "localhos
 
 runAcidState :: AcidState GroupMap -> IO ()
 runAcidState acid = do
-
-    _ <- update' acid (InsertKey 0 (fromList [116469479527388802962,555]))
-    _ <- update' acid (InsertKey 1 (fromList [116469479527388802962]))
-    _ <- update' acid (InsertKey 2 (fromList [116469479527388802962]))
-    _ <- update' acid (InsertKey 3 (fromList [116469479527388802962]))
-
     c <- check 116469479527388802962 [0,1,2,3] acid
     print c
 
@@ -29,7 +23,7 @@ runAcidState acid = do
     b <- verify t
     print b
 
-    createCheckpoint acid
+    runAcidState acid
 
 main :: IO ()
 main = bracket openAcidState closeAcidState runAcidState
@@ -38,4 +32,14 @@ check :: Integer -> [Int] -> AcidState GroupMap -> IO Bool
 check _ [] _ = return True
 check uid [x] acid = query' acid (LookupKey x) >>= \(Just set) -> return (uid `member` set)
 check uid (x:xs) acid = query' acid (LookupKey x) >>= \(Just set) -> return (uid `member` set) >>= \r -> if (r == True) then (check uid xs acid) else (return False)
+
+setup :: IO ()
+setup = do
+    acid <- openRemoteState (sharedSecretPerform $ pack serverKey) "localhost" (PortNumber 8080)
+    _ <- update' acid (InsertKey 0 (fromList [116469479527388802962,555]))
+    _ <- update' acid (InsertKey 1 (fromList [116469479527388802962]))
+    _ <- update' acid (InsertKey 2 (fromList [116469479527388802962]))
+    _ <- update' acid (InsertKey 3 (fromList [116469479527388802962]))
+    createCheckpoint acid
+    closeAcidState acid
 
