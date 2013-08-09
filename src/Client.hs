@@ -25,16 +25,8 @@ runAcidState acid = do
     (Right (Uid u _ _)) <- uid t
 
     let i = read . unpack $ u
-    print i
-
     c <- check i state acid
-    print c
-
-    t <- create i state
-    print t
-
-    b <- verify t
-    print b
+    create i (if c then state else []) >>= (\x -> print x >> verify x >>= print)
 
     runAcidState acid
 
