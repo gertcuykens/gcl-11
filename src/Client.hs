@@ -3,23 +3,36 @@ import Data.Acid             ( AcidState, createCheckpoint, closeAcidState )
 import Data.Acid.Advanced    ( query', update' )
 --import Data.Acid.Local       ( createArchive, openLocalState )
 import Data.Acid.Remote      ( openRemoteState, sharedSecretPerform )
-import Data.ByteString.Char8 ( pack )
+import Data.ByteString.Char8 ( pack, putStrLn)
 import Data.Set              ( member, fromList )
+import Data.Text             ( unpack )
 import Keys                  ( serverKey )
 import Network               ( PortID(PortNumber) )
+import Google                ( Uid(..), uid, tid, url, f2)
 import GroupMap              ( GroupMap(..), InsertKey(..), LookupKey(..) )
 import Token                 ( create, verify )
+import Prelude hiding        ( putStrLn )
+
 
 openAcidState :: IO (AcidState GroupMap)
 openAcidState = openRemoteState (sharedSecretPerform $ pack serverKey) "localhost" (PortNumber 8080)
 
 runAcidState :: AcidState GroupMap -> IO ()
 runAcidState acid = do
-    c <- check 116469479527388802962 [0,1,2,3] acid
+    putStrLn $ url [(pack "state", pack "[0,1,2,3]")]
+    (code,state) <- fmap f2 getLine
+    (Right t) <- tid code
+    (Right (Uid u _ _)) <- uid t
+
+    let i = read . unpack $ u
+    print i
+
+    c <- check i state acid
     print c
 
-    t <- create 116469479527388802962 [0,1,2,3]
+    t <- create i state
     print t
+
     b <- verify t
     print b
 
@@ -30,8 +43,8 @@ main = bracket openAcidState closeAcidState runAcidState
 
 check :: Integer -> [Int] -> AcidState GroupMap -> IO Bool
 check _ [] _ = return True
-check uid [x] acid = query' acid (LookupKey x) >>= \(Just set) -> return (uid `member` set)
-check uid (x:xs) acid = query' acid (LookupKey x) >>= \(Just set) -> return (uid `member` set) >>= \r -> if (r == True) then (check uid xs acid) else (return False)
+check i [x] acid = query' acid (LookupKey x) >>= \(Just set) -> return (i `member` set)
+check i (x:xs) acid = query' acid (LookupKey x) >>= \(Just set) -> if i `member` set then check i xs acid else return False
 
 setup :: IO ()
 setup = do

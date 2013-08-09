@@ -2,46 +2,58 @@
 module Google where
 import Data.Aeson (FromJSON)
 import Data.Aeson.TH (deriveJSON)
-import qualified Data.ByteString.Char8 as BS
-import Data.Text (Text, unpack)
+import Data.ByteString.Char8 ( ByteString, pack, putStrLn )
+import Data.Text (Text)
 import Keys (googleKey)
-import Network.OAuth.OAuth2
-import Prelude hiding (id)
+import Network.OAuth.OAuth2 (AccessToken, QueryParams, OAuth2Result, appendQueryParam, fetchAccessToken, fetchRefreshToken, authGetJSON, authorizationUrl, refreshToken )
+import Prelude hiding (id, putStrLn)
 import qualified Prelude as P (id)
-import Token (create, verify)
 
-data Email = Email { id             :: Text
-                   , email          :: Text
-                   , verified_email :: Bool
-                   } deriving (Show)
+data Uid = Uid { id             :: Text
+               , email          :: Text
+               , verified_email :: Bool
+               } deriving (Show)
 
-$(deriveJSON P.id ''Email)
+$(deriveJSON P.id ''Uid)
 
 query :: QueryParams
 query = [("scope", "https://www.googleapis.com/auth/userinfo.email")
         ,("access_type", "offline")
-        ,("approval_prompt", "force")
-        ,("state","1000")]
+        ,("approval_prompt", "force")]
 
-userinfo :: FromJSON a => AccessToken -> IO (OAuth2Result a)
-userinfo token = authGetJSON token "https://www.googleapis.com/oauth2/v2/userinfo"
+url :: QueryParams -> ByteString
+url state = authorizationUrl googleKey `appendQueryParam` query `appendQueryParam` state
+
+tid :: ByteString -> IO (OAuth2Result AccessToken)
+tid = fetchAccessToken googleKey
+
+uid :: FromJSON a => AccessToken -> IO (OAuth2Result a)
+uid t = authGetJSON t "https://www.googleapis.com/oauth2/v2/userinfo"
+
+f1 :: String -> [Int] -> [Int]
+f1 s i = do
+    let a = read . takeWhile (/=',') $ s :: Int
+    let b = drop 1 . dropWhile (/=',') $ s
+    if b /= [] then f1 b (i++[a]) else i++[a]
+
+f2 :: String -> (ByteString,[Int])
+f2 s = do
+    let a = drop 1 . takeWhile (/=']') . dropWhile (/='[') $ s
+    let c = drop 6 . dropWhile (/='&') $ s
+    (pack c, f1 a [])
 
 test :: IO ()
 test = do
-    BS.putStrLn $ authorizationUrl googleKey `appendQueryParam` query
-    code <- fmap BS.pack getLine
-    -- gid <- fmap read getLine
-    (Right token) <- fetchAccessToken googleKey code
-    uid <- f1 token
-    case refreshToken token of
+    putStrLn $ url [("state", "[0,1,2,3]")]
+    (code,state) <- fmap f2 getLine
+    (Right t) <- tid code
+    f t state
+    case refreshToken t of
         Nothing -> putStrLn "Failed to fetch refresh token"
         Just rt -> do
-            (Right nt) <- fetchRefreshToken googleKey rt
-            uid <- f1 nt
-            print uid
-            -- f2 uid gid
-    where f1 token = (userinfo token :: IO (OAuth2Result Email)) >>= \(Right x) -> return x
-          -- f2 uid gid = check uid gid >>= \x -> create (read $ unpack $ id uid) [gid] >>= \y -> print y >> verify y >>= print
+            (Right t) <- fetchRefreshToken googleKey rt
+            f t state
+    where f t s = (uid t :: IO (OAuth2Result Uid)) >>= \(Right x) -> print (x,s)
 
 -- googleScopeProfile :: QueryParams
 -- googleScopeProfile = [("scope", "https://www.googleapis.com/auth/userinfo.profile")]
