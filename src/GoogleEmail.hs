@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
-module Google where
+module GoogleEmail where
 import Data.Aeson (FromJSON)
 import Data.Aeson.TH (deriveJSON)
 import Data.ByteString.Char8 ( ByteString, pack, putStrLn )
@@ -9,12 +9,12 @@ import Network.OAuth.OAuth2 (AccessToken, QueryParams, OAuth2Result, appendQuery
 import Prelude hiding (id, putStrLn)
 import qualified Prelude as P (id)
 
-data Uid = Uid { id             :: Text
-               , email          :: Text
-               , verified_email :: Bool
-               } deriving (Show)
+data Email = Email { id             :: Text
+                   , email          :: Text
+                   , verified_email :: Bool
+                   } deriving (Show)
 
-$(deriveJSON P.id ''Uid)
+$(deriveJSON P.id ''Email)
 
 query :: QueryParams
 query = [("scope", "https://www.googleapis.com/auth/userinfo.email")
@@ -53,10 +53,7 @@ test = do
         Just rt -> do
             (Right r) <- fetchRefreshToken googleKey rt
             f r state
-    where f t s = (uid t :: IO (OAuth2Result Uid)) >>= \(Right x) -> print (x,s)
-
--- googleScopeProfile :: QueryParams
--- googleScopeProfile = [("scope", "https://www.googleapis.com/auth/userinfo.profile")]
+    where f t s = (uid t :: IO (OAuth2Result Email)) >>= \(Right x) -> print (x,s)
 
 -- validateToken :: FromJSON a => AccessToken -> IO (OAuth2Result a)
 -- validateToken token = authGetJSON token "https://www.googleapis.com/oauth2/v1/tokeninfo"
@@ -72,17 +69,4 @@ test = do
 --                    } deriving (Show)
 --
 -- $(deriveJSON P.id ''Token)
-
--- data UserInfo = Profile { id          :: Text
---                         , name        :: Text
---                         , given_name  :: Text
---                         , family_name :: Text
---                         , link        :: Text
---                         , picture     :: Text
---                         , gender      :: Text
---                         , birthday    :: Text
---                         , locale      :: Text
---                         } deriving (Show)
---
--- $(deriveJSON P.id ''Profile)
 

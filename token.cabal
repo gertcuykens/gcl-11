@@ -17,7 +17,7 @@ source-repository head
 
 library
     hs-source-dirs: src
-    exposed-modules: Token, Google
+    exposed-modules: Token, GoogleEmail
     other-modules: Keys
     ghc-options: -Wall -O2
     build-depends: aeson >= 0.6

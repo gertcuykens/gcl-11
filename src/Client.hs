@@ -7,7 +7,7 @@ import Data.Set              ( fromList )
 import Data.Text             ( unpack )
 import Keys                  ( serverKey )
 import Network               ( PortID(PortNumber) )
-import Google                ( Uid(..), uid, tid, url, f2)
+import GoogleEmail           ( Email(..), uid, tid, url, f2)
 import GroupMap              ( GroupMap(..), GroupInsert(..), check)
 import Token                 ( create, verify )
 import Prelude hiding        ( putStrLn )
@@ -20,7 +20,7 @@ runAcidState acid = do
     putStrLn $ url [(pack "state", pack "[0,1,2,3]")]
     (code,state) <- fmap f2 getLine
     (Right t) <- tid code
-    (Right (Uid u _ _)) <- uid t
+    (Right (Email u _ _)) <- uid t
 
     let i = read . unpack $ u
     c <- check i state acid
