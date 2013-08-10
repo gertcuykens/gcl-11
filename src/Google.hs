@@ -51,8 +51,8 @@ test = do
     case refreshToken t of
         Nothing -> putStrLn "Failed to fetch refresh token"
         Just rt -> do
-            (Right t) <- fetchRefreshToken googleKey rt
-            f t state
+            (Right r) <- fetchRefreshToken googleKey rt
+            f r state
     where f t s = (uid t :: IO (OAuth2Result Uid)) >>= \(Right x) -> print (x,s)
 
 -- googleScopeProfile :: QueryParams
