@@ -12,4 +12,3 @@ class MainPage(webapp2.RequestHandler):
             self.response.out.write('Hello, '+ user.nickname())
 
 app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
-
