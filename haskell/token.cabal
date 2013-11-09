@@ -1,0 +1,63 @@
+name: token
+version: 0.0.0.0
+synopsis: Token web service.
+--description:
+--homepage: https://github.com/gertcuykens/token.git
+license: GPL-3
+--license-file: LICENSE
+author: Gert Cuykens
+maintainer: gert.cuykens@gmail.com
+category: Token
+build-type: Simple
+cabal-version: >=1.8
+source-repository head
+    type: git
+    location: https://github.com/gertcuykens/token.git
+--data-files:
+
+library
+    hs-source-dirs: src
+    exposed-modules: Token, GoogleEmail
+    other-modules: Keys
+    ghc-options: -Wall -O2
+    build-depends: aeson >= 0.6
+                 , base >= 4.6
+                 , bytestring >= 0.10
+                 , Crypto >= 4.2
+                 , hoauth2 >= 0.3
+                 , unix-time >= 0.1
+                 , text >= 0.11
+
+executable client
+    hs-source-dirs: src
+    main-is: Client.hs
+    other-modules: GroupMap, Keys
+    ghc-options: -Wall -O2
+    build-depends: acid-state >= 0.8
+                 , aeson >= 0.6
+                 , base >= 4.6
+                 , bytestring >= 0.10
+                 , containers >= 0.5
+                 , Crypto >= 4.2
+                 , hoauth2 >= 0.3
+                 , lens >= 3.2
+                 , network >= 2.4
+                 , unix-time >= 0.1
+                 , safecopy >= 0.7
+                 , text >= 0.11
+
+executable server
+    hs-source-dirs: src
+    main-is: Server.hs
+    other-modules: GroupMap, Keys
+    ghc-options: -Wall -O2
+    build-depends: acid-state >= 0.8
+                 , base >= 4.6
+                 , bytestring >= 0.10
+                 , containers >= 0.5
+                 , Crypto >= 4.2
+                 , hoauth2 >= 0.3
+                 , lens >= 3.2
+                 , network >= 2.4
+                 , safecopy >= 0.7
+
