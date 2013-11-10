@@ -1,0 +1,113 @@
+version = '0'
+
+apply plugin: 'java'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-gae-plugin:0.9'
+        //classpath 'com.android.tools.build:gradle:0.5.+'
+    }
+}
+
+apply plugin: 'gae'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    gaeSdk  'com.google.appengine:appengine-java-sdk:1.8.5'
+    compile 'com.google.appengine:appengine-api-1.0-sdk:1.8.5'
+    compile 'javax.servlet:servlet-api:2.5'
+    compile 'javax.xml.soap:saaj-api:1.3.5'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.google.api-client:google-api-client-jackson2:1.17.0-rc'
+    compile 'com.google.apis:google-api-services-datastore-protobuf:v1beta2-rev1-2.0.0'
+    compile ':cdyne'
+}
+
+gae {
+    daemon = true
+    jvmFlags = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000']
+    downloadSdk = true
+
+    appcfg {
+        email = 'gert.cuykens@gmail.com'
+
+        logs {
+            severity = 1
+            outputFile = file('log.txt')
+        }
+
+        app {
+            id = 'gcl-11'
+        }
+    }
+}
+
+/*
+ ~/jdk1.7.0_40/bin/wsimport -d build/libs -clientjar cdyne.jar http://ws.cdyne.com/emailverify/Emailvernotestemail.asmx?wsdl
+wsimport -d build/libs -clientjar build/libs/cdyne.jar http://ws.cdyne.com/emailverify/Emailvernotestemail.asmx?wsdl
+rm -r build/libs/com
+
+//    flatDir {
+//        dirs 'token/build/libs'
+//    }
+
+    //compile 'com.google.protobuf:protobuf-java:2.5.0'
+    //compile 'com.google.oauth-client:google-oauth-client-appengine:1.17.0-rc'
+    //compile 'com.google.api.client:google-api-client-protobuf:1.17.0-rc'
+    //compile 'com.google.api.client:google-api-client:1.17.0-rc'
+    //compile 'org.apache.httpcomponents:httpclient:4.1.2'
+    //compile 'com.google.protobuf:protobuf-java:2.5.0'
+    //compile 'com.google.oauth-client:google-oauth-client-appengine:1.17.0-rc'
+    //compile 'com.google.apis:google-api-services-oauth2:v2-rev51-1.17.0-rc'
+    //compile ':token:0'
+    //compile project(':token')
+    //testCompile group: 'junit', name: 'junit', version: '4.11'
+
+apply plugin: 'idea'
+
+task print << {
+    println "$System.env.API_ID"
+    println "$System.env.API_KEY"
+}
+
+android {
+    buildTypes {
+        debug {
+            buildConfig "public final static String API_ID = $System.env.API_ID;"
+            buildConfig "public final static String API_KEY = $System.env.API_KEY;"
+        }
+    }
+}
+
+task generateSources {
+    outputDir = file("$buildDir/generated-src")
+    outputs.dir outputDir
+    doFirst {
+        outputDir.exists() || outputDir.mkdirs()
+        new File(outputDir, "Generated.java").write(
+            "public final static String API_ID = $System.env.API_ID;\
+             public final static String API_KEY = $System.env.API_KEY;"
+        )
+    }
+}
+compileJava.source generateSources.outputs.files, sourceSets.main.java
+
+task generateSource(type: Copy) {
+    from 'src/main/mpfw'
+    into 'build/generated-src/main/java'
+}
+compileJava.dependsOn generateSource
+
+File generatedDir = new File(buildDir.toString() + '/generated-src')
+sourceSets.main.java { srcDir generatedDir }
+*/

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+    <servlet>
+        <servlet-name>soap</servlet-name>
+        <servlet-class>SoapServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>soap2</servlet-name>
+        <servlet-class>SoapServlet2</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>datastore</servlet-name>
+        <servlet-class>DataStoreServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>openid</servlet-name>
+        <servlet-class>OpenIdServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>soap</servlet-name>
+        <url-pattern>/soap</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>soap2</servlet-name>
+        <url-pattern>/soap2</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>datastore</servlet-name>
+        <url-pattern>/datastore</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>openid</servlet-name>
+        <url-pattern>/openid</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>soap2.htm</welcome-file>
+    </welcome-file-list>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>profile</web-resource-name>
+            <url-pattern>/profile/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>admin</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+</web-app>
