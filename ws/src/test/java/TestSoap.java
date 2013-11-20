@@ -1,6 +1,8 @@
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.cdyne.ws.EmailVerNoTestEmail;
+import com.cdyne.ws.EmailVerNoTestEmailSoap;
+import org.testng.annotations.Test;
+
+import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
@@ -14,34 +16,15 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
-import java.io.IOException;
-//import java.io.PrintStream;
-import java.io.PrintWriter;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
 
-public class SoapServlet extends HttpServlet {
-    @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        //resp.setContentType("application/soap+xml");
-        resp.setContentType("text/plain");
-        //PrintStream printer = new PrintStream (resp.getOutputStream());
-        PrintWriter printer = resp.getWriter();
-        try {
-            SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-            SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-            String url = "http://ws.cdyne.com/emailverify/Emailvernotestemail.asmx?wsdl";
-            printer.println("Request SOAP Message = ");
-            SOAPMessage soapRequest = createSOAPRequest();
-            printSOAPMessage(soapRequest, printer);
-            printer.println();
-            printer.println("Response SOAP Message = ");
-            SOAPMessage soapResponse = soapConnection.call(soapRequest, url);
-            printSOAPMessage(soapResponse, printer);
-            soapConnection.close();
-        } catch (Exception e) {
-            printer.println("Error occurred while sending SOAP Request to Server");
-            e.printStackTrace(printer);
-        }
-    }
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.Map;
+
+public class TestSoap {
 
     private static SOAPMessage createSOAPRequest() throws Exception {
         MessageFactory messageFactory = MessageFactory.newInstance();
@@ -84,7 +67,8 @@ public class SoapServlet extends HttpServlet {
         transformer.transform(sourceContent, result);
     }
 
-    public static void main(String args[]) {
+    @Test
+    public static void test1() {
         PrintWriter printer = new PrintWriter(System.out);
         try {
             SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
@@ -98,6 +82,36 @@ public class SoapServlet extends HttpServlet {
             SOAPMessage soapResponse = soapConnection.call(soapRequest, url);
             printSOAPMessage(soapResponse, printer);
             soapConnection.close();
+        } catch (Exception e) {
+            System.err.println("Error occurred while sending SOAP Request to Server");
+            e.printStackTrace(System.err);
+        }
+    }
+
+    @Test
+    public static void test2() {
+        try {
+            URL url = new URL("http://ws.cdyne.com/emailverify/Emailvernotestemail.asmx?wsdl");
+            QName qname = new QName("http://ws.cdyne.com/", "EmailVerNoTestEmail");
+            Service service = Service.create(url, qname);
+            EmailVerNoTestEmailSoap port = service.getPort(EmailVerNoTestEmailSoap.class);
+            System.out.println(port.verifyEmail("gert.cuykens@gmail.com", "123").getResponseText());
+        } catch (Exception e) {
+            System.err.println("Error occurred while sending SOAP Request to Server");
+            e.printStackTrace(System.err);
+        }
+    }
+
+    @Test
+    public static void test3() {
+        try {
+            String url="http://ws.cdyne.com/emailverify/Emailvernotestemail.asmx?wsdl";
+            QName qname = new QName("http://ws.cdyne.com/", "EmailVerNoTestEmail");
+            EmailVerNoTestEmail service = new EmailVerNoTestEmail(null, qname);
+            EmailVerNoTestEmailSoap port = service.getPort(EmailVerNoTestEmailSoap.class);
+            Map<String, Object> ctx = ((BindingProvider) port).getRequestContext();
+            ctx.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
+            System.out.println(port.verifyEmail("gert.cuykens@gmail.com", "123").getResponseText());
         } catch (Exception e) {
             System.err.println("Error occurred while sending SOAP Request to Server");
             e.printStackTrace(System.err);

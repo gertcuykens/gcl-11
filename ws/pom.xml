@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.google.appengine.gcl.gcl-11</groupId>
+    <artifactId>ws</artifactId>
+    <version>0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.google.appengine.gcl</groupId>
+        <artifactId>gcl-11</artifactId>
+        <version>0.0-SNAPSHOT</version>
+    </parent>
+
+    <build>
+        <plugins>
+
+            <plugin>
+              <groupId>org.jvnet.jax-ws-commons</groupId>
+              <artifactId>jaxws-maven-plugin</artifactId>
+              <version>2.2</version>
+              <configuration>
+                  <wsdlUrls>
+                      <wsdlUrl>http://ws.cdyne.com/emailverify/emailvernotestemail.asmx?wsdl</wsdlUrl>
+                  </wsdlUrls>
+              </configuration>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>wsimport</goal>
+                      </goals>
+                  </execution>
+              </executions>
+            </plugin>
+
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>build-helper-maven-plugin</artifactId>
+              <version>1.8</version>
+              <configuration>
+                  <sources>
+                      <source>target/generated-sources/wsimport</source>
+                  </sources>
+              </configuration>
+              <executions>
+                  <execution>
+                      <phase>generate-sources</phase>
+                      <goals>
+                          <goal>add-source</goal>
+                      </goals>
+                  </execution>
+              </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <executable>wget</executable>
+                    <workingDirectory>src/main/resources/META-INF/wsdl</workingDirectory>
+                    <arguments>
+                        <argument>http://ws.cdyne.com/emailverify/emailvernotestemail.asmx?wsdl</argument>
+                        <argument>-OEmailVerNoTestEmail.wsdl</argument>
+                    </arguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.1.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
+
