@@ -81,7 +81,7 @@ google.devrel.samples.hello.auth = function() {
  * param {Object} greeting Greeting to print.
  */
 google.devrel.samples.hello.print = function(greeting) {
-  var element = document.createElement('div');
+  var element = document.createElement('span');
   element.classList.add('row');
   element.innerHTML = greeting.message;
   document.getElementById('outputLog').appendChild(element);
@@ -92,7 +92,7 @@ google.devrel.samples.hello.print = function(greeting) {
  * @param {string} id ID of the greeting.
  */
 google.devrel.samples.hello.getGreeting = function(id) {
-  gapi.client.helloworld.greetings.getGreeting({'id': id}).execute(
+  gapi.client.rest1.greetings.getGreeting({'id': id}).execute(
       function(resp) {
         if (!resp.code) {
           google.devrel.samples.hello.print(resp);
@@ -104,7 +104,7 @@ google.devrel.samples.hello.getGreeting = function(id) {
  * Lists greetings via the API.
  */
 google.devrel.samples.hello.listGreeting = function() {
-  gapi.client.helloworld.greetings.listGreeting().execute(
+  gapi.client.rest1.greetings.listGreeting().execute(
       function(resp) {
         if (!resp.code) {
           resp.items = resp.items || [];
@@ -120,9 +120,8 @@ google.devrel.samples.hello.listGreeting = function() {
  * @param {string} greeting Greeting to repeat.
  * @param {string} count Number of times to repeat it.
  */
-google.devrel.samples.hello.multiplyGreeting = function(
-    greeting, times) {
-  gapi.client.helloworld.greetings.multiply({
+google.devrel.samples.hello.multiplyGreeting = function(greeting, times) {
+  gapi.client.rest1.greetings.multiply({
       'message': greeting,
       'times': times
     }).execute(function(resp) {
@@ -135,8 +134,22 @@ google.devrel.samples.hello.multiplyGreeting = function(
 /**
  * Greets the current user via the API.
  */
-google.devrel.samples.hello.authedGreeting = function(id) {
-  gapi.client.helloworld.greetings.authed().execute(
+google.devrel.samples.hello.authedGreeting = function() {
+  gapi.client.rest1.greetings.authed().execute(
+      function(resp) {
+        google.devrel.samples.hello.print(resp);
+      });
+};
+
+google.devrel.samples.hello.soap = function() {
+  gapi.client.rest1.greetings.soap().execute(
+      function(resp) {
+        google.devrel.samples.hello.print(resp);
+      });
+};
+
+google.devrel.samples.hello.datastore = function() {
+  gapi.client.rest1.greetings.datastore().execute(
       function(resp) {
         google.devrel.samples.hello.print(resp);
       });
@@ -147,8 +160,7 @@ google.devrel.samples.hello.authedGreeting = function(id) {
  */
 google.devrel.samples.hello.enableButtons = function() {
   document.getElementById('getGreeting').onclick = function() {
-    google.devrel.samples.hello.getGreeting(
-        document.getElementById('id').value);
+    google.devrel.samples.hello.getGreeting(document.getElementById('id').value);
   }
 
   document.getElementById('listGreeting').onclick = function() {
@@ -156,9 +168,7 @@ google.devrel.samples.hello.enableButtons = function() {
   }
 
   document.getElementById('multiplyGreetings').onclick = function() {
-    google.devrel.samples.hello.multiplyGreeting(
-        document.getElementById('greeting').value,
-        document.getElementById('count').value);
+    google.devrel.samples.hello.multiplyGreeting(document.getElementById('greeting').value, document.getElementById('count').value);
   }
 
   document.getElementById('authedGreeting').onclick = function() {
@@ -168,6 +178,15 @@ google.devrel.samples.hello.enableButtons = function() {
   document.getElementById('signinButton').onclick = function() {
     google.devrel.samples.hello.auth();
   }
+
+  document.getElementById('soap').onclick = function() {
+    google.devrel.samples.hello.soap();
+  }
+
+  document.getElementById('datastore').onclick = function() {
+    google.devrel.samples.hello.datastore();
+  }
+
 };
 
 /**
@@ -175,18 +194,17 @@ google.devrel.samples.hello.enableButtons = function() {
  * @param {string} apiRoot Root of the API's path.
  */
 google.devrel.samples.hello.init = function(apiRoot) {
-  // Loads the OAuth and helloworld APIs asynchronously, and triggers login
+  // Loads the OAuth and rest1 APIs asynchronously, and triggers login
   // when they have completed.
   var apisToLoad;
   var callback = function() {
     if (--apisToLoad == 0) {
       google.devrel.samples.hello.enableButtons();
-      google.devrel.samples.hello.signin(true,
-          google.devrel.samples.hello.userAuthed);
+      google.devrel.samples.hello.signin(true, google.devrel.samples.hello.userAuthed);
     }
   }
 
   apisToLoad = 2; // must match number of calls to gapi.client.load()
-  gapi.client.load('helloworld', '0', callback, apiRoot);
+  gapi.client.load('rest1', '0', callback, apiRoot);
   gapi.client.load('oauth2', 'v2', callback);
 };

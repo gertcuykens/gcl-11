@@ -1,12 +1,12 @@
-package rest1;
+package common;
 
-public class HelloGreeting {
+public class Response {
 
   public String message;
 
-  public HelloGreeting() {};
+  public Response() {};
 
-  public HelloGreeting(String message) {
+  public Response(String message) {
     this.message = message;
   }
 

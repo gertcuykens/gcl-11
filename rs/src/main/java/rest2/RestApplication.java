@@ -13,7 +13,6 @@ public class RestApplication extends ResourceConfig {
     }
 }
 
-
 /*
 @ApplicationPath("/")
 public class rest2.RestApplication extends Application {

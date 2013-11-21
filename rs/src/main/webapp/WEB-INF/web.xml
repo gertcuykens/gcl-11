@@ -9,7 +9,7 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>rest1.RestGreetings</param-value>
+            <param-value>rest1.Greetings</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -23,50 +23,18 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
-    <!--filter>
-    <http-header name="Access-Control-Allow-Origin" value="" />
-        <filter-name>cross-origin</filter-name>
-        <filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
-        <init-param>
-            <param-name>allowedOrigins</param-name>
-            <param-value>*</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowedMethods</param-name>
-            <param-value>*</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowedHeaders</param-name>
-            <param-value>*</param-value>
-        </init-param>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>cross-origin</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping-->
-
-    <!--security-constraint>
-        <web-resource-collection>
-            <web-resource-name>profile</web-resource-name>
-            <url-pattern>/profile/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>*</role-name>
-        </auth-constraint>
-    </security-constraint>
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>admin</web-resource-name>
-            <url-pattern>/admin/*</url-pattern>
+            <web-resource-name>https</web-resource-name>
+            <url-pattern>/*</url-pattern>
         </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint-->
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 
     <!--servlet>
-        <servlet-name>rest1</servlet-name>
+        <servlet-name>rest2</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
             <init-param>
                 <param-name>javax.ws.rs.Application</param-name>
@@ -74,49 +42,10 @@
             </init-param>
             <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>rest1</servlet-name>
-        <url-pattern>/rest1/*</url-pattern>
-    </servlet-mapping-->
-
-    <!--servlet>
-        <servlet-name>soap</servlet-name>
-        <servlet-class>SoapServlet</servlet-class>
-    </servlet>
 
     <servlet-mapping>
-        <servlet-name>soap</servlet-name>
-        <url-pattern>/soap</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>soap2</servlet-name>
-        <servlet-class>SoapServlet2</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>soap2</servlet-name>
-        <url-pattern>/soap2</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>datastore</servlet-name>
-        <servlet-class>DataStoreServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>datastore</servlet-name>
-        <url-pattern>/datastore</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>openid</servlet-name>
-        <servlet-class>OpenIdServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>openid</servlet-name>
-        <url-pattern>/openid</url-pattern>
+        <servlet-name>rest2</servlet-name>
+        <url-pattern>/rest2/*</url-pattern>
     </servlet-mapping-->
 
 </web-app>
