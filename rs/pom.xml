@@ -5,16 +5,16 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.google.appengine.gcl.gcl-11</groupId>
+    <groupId>com.google.appengine.gcl-11</groupId>
     <artifactId>rs</artifactId>
     <version>0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <parent>
-        <groupId>com.google.appengine.gcl</groupId>
+    <!--parent>
+        <groupId>com.google.appengine</groupId>
         <artifactId>gcl-11</artifactId>
         <version>0.0-SNAPSHOT</version>
-    </parent>
+    </parent-->
 
     <build>
         <plugins>
@@ -146,7 +146,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.appengine.gcl.gcl-11</groupId>
+            <groupId>com.google.appengine.gcl-11</groupId>
             <artifactId>ws</artifactId>
             <version>0.0-SNAPSHOT</version>
             <scope>compile</scope>
