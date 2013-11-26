@@ -16,14 +16,8 @@ public abstract class EndpointsRequest<T> extends AbstractGoogleJsonClientReques
      * @param content A POJO that can be serialized into JSON or {@code null} for none
      * @param responseClass response class to parse into
      */
-    public EndpointsRequest(
-            Endpoints client, String method, String uriTemplate, Object content, Class<T> responseClass) {
-        super(
-                client,
-                method,
-                uriTemplate,
-                content,
-                responseClass);
+    public EndpointsRequest(Endpoints client, String method, String uriTemplate, Object content, Class<T> responseClass) {
+        super(client, method, uriTemplate, content, responseClass);
     }
 
     /** Data format for the response. */
