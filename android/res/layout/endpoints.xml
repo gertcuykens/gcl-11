@@ -10,10 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp">
 
         <TextView
-            android:id="@+id/userText"
+            android:id="@+id/userStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -23,18 +24,11 @@
 
         <Button
             android:id="@+id/userButton"
-            android:layout_width="100dp"
+            android:layout_width="108dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:text="Sign In"/>
-
-        <!--com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"/-->
 
     </RelativeLayout>
 
@@ -70,7 +64,7 @@
 
         <Button
             android:id="@+id/getGreetingButton"
-            android:layout_width="100dp"
+            android:layout_width="108dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"

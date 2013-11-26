@@ -4,7 +4,7 @@
     android:versionName="0"
     package="my.endpoints">
 
-    <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="18"/>
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
@@ -13,12 +13,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name">
         <meta-data android:name="com.google.android.gms.version"
-                   android:value="@integer/google_play_services_version" />
+                   android:value="@integer/google_play_services_version"/>
         <activity android:name=".EndpointsActivity"
                   android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>
