@@ -63,8 +63,8 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         protected String doInBackground(Void... unused) {
             String message = null;
             try {
-                Endpoints.Builder endpoint = new Endpoints.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
-                Endpoints service = endpoint.build();
+                Endpoints.Builder endpoints = new Endpoints.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
+                Endpoints service = endpoints.build();
                 EndpointsResponse response = service.rest().getGreeting("0").execute();
                 message=response.getMessage();
             } catch (IOException e) {
