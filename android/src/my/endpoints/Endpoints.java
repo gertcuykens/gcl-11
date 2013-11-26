@@ -12,7 +12,7 @@ public class Endpoints extends AbstractGoogleJsonClient {
     public static final String SERVICE_PATH = "rest1/0/";
 
     public Endpoints(HttpTransport transport, JsonFactory jsonFactory, HttpRequestInitializer httpRequestInitializer) {
-        super (new Builder(transport, jsonFactory, httpRequestInitializer));
+        super (new Builder(transport, jsonFactory, httpRequestInitializer).setApplicationName("gcl-11"));
     }
 
     @Override
@@ -22,20 +22,12 @@ public class Endpoints extends AbstractGoogleJsonClient {
 
     public static final class Builder extends AbstractGoogleJsonClient.Builder {
         public Builder(HttpTransport transport, JsonFactory jsonFactory, HttpRequestInitializer httpRequestInitializer) {
-            super(
-                    transport,
-                    jsonFactory,
-                    ROOT_URL,
-                    SERVICE_PATH,
-                    httpRequestInitializer,
-                    false);
+            super(transport, jsonFactory, ROOT_URL, SERVICE_PATH, httpRequestInitializer, false);
         }
 
         @Override
         public Endpoints build() {
-            return new Endpoints(getTransport(),
-                getJsonFactory(),
-                getHttpRequestInitializer());
+            return new Endpoints(getTransport(), getJsonFactory(), getHttpRequestInitializer());
         }
 
         @Override
@@ -64,8 +56,7 @@ public class Endpoints extends AbstractGoogleJsonClient {
         }
 
         @Override
-        public Builder setGoogleClientRequestInitializer(
-                GoogleClientRequestInitializer googleClientRequestInitializer) {
+        public Builder setGoogleClientRequestInitializer(GoogleClientRequestInitializer googleClientRequestInitializer) {
             return (Builder) super.setGoogleClientRequestInitializer(googleClientRequestInitializer);
         }
     }
