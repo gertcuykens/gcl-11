@@ -78,11 +78,18 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
             try {
                 EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
                 EndpointsClient service = endpoints.build();
-                Message response = service.rest().getGreeting("response/0").execute();
-                //Message message = new Message();
-                //message.setMessage("hello ");
-                //Message response = service.rest().postMultiply("response/2",message).execute();
+                Message message = new Message();
+                message.setMessage("hello ");
+
+                Message response = service.get("response/0").execute();
+                //Message response = service.get("response").execute();
+                //Message response = service.post("response/2",message).execute();
+                //Message response = service.post("greetings/authed",message).execute();
+                //Message response = service.get("greetings/soap").execute()
+                //Message response = service.get("greetings/datastore").execute();
+
                 text=response.getMessage();
+                //text=response.getItems().toString();
             } catch (IOException e) {
                 e.printStackTrace();
             }
