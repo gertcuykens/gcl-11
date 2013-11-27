@@ -11,16 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
-import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
-
-import java.io.IOException;
 
 public class EndpointsActivity extends Activity implements View.OnClickListener {
     private GoogleAccountCredential credential;
@@ -82,32 +75,23 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         protected String doInBackground(Void... unused) {
             String text = null;
             try {
-                String scope = "oauth2:https://www.googleapis.com/auth/userinfo.email";
-                token = GoogleAuthUtil.getToken(mContext, "gert.cuykens@gmail.com", scope);
-
                 EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
                 EndpointsClient service = endpoints.build();
-                Message message = new Message();
-                message.setMessage("hello ");
 
+                //Message message = new Message();
+                //message.setMessage("hello ");
                 //Message response = service.get("response/0").execute();
                 //Message response = service.get("response").execute();
                 //Message response = service.post("response/2",message).execute();
-                Message response = service.post("greetings/authed", null).setOauthToken(token).execute();
+                Message response = service.post("greetings/authed", null).execute();
                 //Message response = service.get("greetings/soap").execute();
                 //Message response = service.get("greetings/datastore").execute();
 
                 text=response.getMessage();
                 //text=response.getItems().toString();
-                //text=token;
-            } catch (GooglePlayServicesAvailabilityException playEx) {
-                GooglePlayServicesUtil.getErrorDialog(playEx.getConnectionStatusCode(), getParent(), 2).show();
-            } catch (UserRecoverableAuthException userAuthEx) {
-                startActivityForResult(userAuthEx.getIntent(), 3);
-            } catch (IOException transientEx) {
-                transientEx.printStackTrace();
-            } catch (GoogleAuthException authEx) {
-                authEx.printStackTrace();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return text;
         }
