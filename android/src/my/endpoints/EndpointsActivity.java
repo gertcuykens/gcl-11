@@ -56,26 +56,6 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         }
     }
 
-    private class RestTask extends AsyncTask<Void, Void, String> {
-        private Context mContext;
-        public RestTask(Context context) {mContext = context;}
-        @Override
-        protected String doInBackground(Void... unused) {
-            String message = null;
-            try {
-                Endpoints.Builder endpoints = new Endpoints.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
-                Endpoints service = endpoints.build();
-                EndpointsResponse response = service.rest().getGreeting("0").execute();
-                message=response.getMessage();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return message;
-        }
-        @Override
-        protected void onPostExecute(String message) {toaster(mContext, message);}
-    }
-
     @Override
     public void onClick(View view) {
         Context context = view.getContext();
@@ -87,6 +67,29 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                 new RestTask(context).execute();
                 break;
         }
+    }
+
+    private class RestTask extends AsyncTask<Void, Void, String> {
+        private Context mContext;
+        public RestTask(Context context) {mContext = context;}
+        @Override
+        protected String doInBackground(Void... unused) {
+            String text = null;
+            try {
+                EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
+                EndpointsClient service = endpoints.build();
+                Message response = service.rest().getGreeting("response/0").execute();
+                //Message message = new Message();
+                //message.setMessage("hello ");
+                //Message response = service.rest().postMultiply("response/2",message).execute();
+                text=response.getMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return text;
+        }
+        @Override
+        protected void onPostExecute(String text) {toaster(mContext, text);}
     }
 
     private void toaster(Context c, String s) {
