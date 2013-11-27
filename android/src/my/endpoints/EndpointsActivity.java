@@ -13,12 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.gson.GsonFactory;
 
 public class EndpointsActivity extends Activity implements View.OnClickListener {
     private GoogleAccountCredential credential;
-    private TextView userStatus;
+    private HttpRequestInitializer noCredential;
     private String token;
+    private TextView userStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,19 +77,23 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         protected String doInBackground(Void... unused) {
             String text = null;
             try {
-                EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
+                EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), noCredential);
                 EndpointsClient service = endpoints.build();
+
+                EndpointsClient.Builder endpointsC = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential);
+                EndpointsClient serviceC = endpointsC.build();
 
                 //Message message = new Message();
                 //message.setMessage("hello ");
-                //Message response = service.get("response/0").execute();
+                Message response = service.get("response/0").execute();
                 //Message response = service.get("response").execute();
                 //Message response = service.post("response/2",message).execute();
-                Message response = service.post("greetings/authed", null).execute();
+                Message responseC = serviceC.post("greetings/authed", null).execute();
                 //Message response = service.get("greetings/soap").execute();
                 //Message response = service.get("greetings/datastore").execute();
 
                 text=response.getMessage();
+                //text=responseC.getMessage(); <-- credential DOES NOT GENERATE A USER ON SERVER
                 //text=response.getItems().toString();
 
             } catch (Exception e) {
