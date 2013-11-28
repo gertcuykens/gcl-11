@@ -19,7 +19,6 @@ import com.google.api.client.json.gson.GsonFactory;
 public class EndpointsActivity extends Activity implements View.OnClickListener {
     private GoogleAccountCredential credential;
     private HttpRequestInitializer noCredential;
-    private String token;
     private TextView userStatus;
 
     @Override
