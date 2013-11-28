@@ -92,8 +92,8 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                 //Message response = service.get("greetings/soap").execute();
                 //Message response = service.get("greetings/datastore").execute();
 
-                text=response.getMessage();
-                //text=responseC.getMessage(); <-- credential DOES NOT GENERATE A USER ON SERVER
+                //text=response.getMessage();
+                text=responseC.getMessage();
                 //text=response.getItems().toString();
 
             } catch (Exception e) {
