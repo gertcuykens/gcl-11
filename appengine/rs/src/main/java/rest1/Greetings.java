@@ -4,14 +4,13 @@ import com.cdyne.ws.EmailVerNoTestEmail;
 import com.cdyne.ws.EmailVerNoTestEmailSoap;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.config.Named;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.User;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Named;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
@@ -34,8 +33,6 @@ public class Greetings {
         greetings.add(new Response("hello"));
         greetings.add(new Response("goodbye"));
     }
-
-
 
     public Response getGreeting(@Named("id") Integer id) {
         return greetings.get(id);
