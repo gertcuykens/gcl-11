@@ -18,7 +18,6 @@ import com.google.api.client.json.gson.GsonFactory;
 
 public class EndpointsActivity extends Activity implements View.OnClickListener {
     private GoogleAccountCredential credential;
-    private HttpRequestInitializer noCredential;
     private TextView userStatus;
 
     @Override
@@ -29,6 +28,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         String AUDIENCE = "server:client_id:522156758812-09f5qv0e4gqjdjqfocerqcud5m5jutau.apps.googleusercontent.com";
         credential = GoogleAccountCredential.usingAudience(this, AUDIENCE);
         credential.setSelectedAccountName("gert.cuykens@gmail.com");
+        //credential = null;
 
         userStatus = (TextView) findViewById(R.id.userStatus);
         userStatus.setText("gert.cuykens@gmail.com");
