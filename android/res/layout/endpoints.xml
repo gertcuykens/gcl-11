@@ -139,7 +139,7 @@
                 android:layout_toRightOf="@+id/greetingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:inputType="text"
                 android:layout_centerVertical="true"
                 android:autoText="false"
                 android:text="hello "/>
