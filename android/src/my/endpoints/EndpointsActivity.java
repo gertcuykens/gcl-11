@@ -18,7 +18,6 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.gson.GsonFactory;
 
 public class EndpointsActivity extends Activity implements View.OnClickListener {
-    private String AUDIENCE = "server:client_id:522156758812-09f5qv0e4gqjdjqfocerqcud5m5jutau.apps.googleusercontent.com";
     private GoogleAccountCredential user;
     private EndpointsClient service;
     private TextView userStatus;
@@ -31,6 +30,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.endpoints);
 
+        String AUDIENCE = "server:client_id:522156758812-09f5qv0e4gqjdjqfocerqcud5m5jutau.apps.googleusercontent.com";
         user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
 
         EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);

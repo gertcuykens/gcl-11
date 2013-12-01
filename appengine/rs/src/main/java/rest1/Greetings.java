@@ -20,7 +20,7 @@ import common.Response;
 @Api(name = "rest1",
      version = "0",
      scopes = {Id.EMAIL_SCOPE},
-     clientIds = {Id.WEB_CLIENT_ID, Id.ANDROID_CLIENT_ID, Id.IOS_CLIENT_ID, Id.EXPLORER_ID},
+     clientIds = {Id.WEB_CLIENT_ID, Id.ANDROID_CLIENT_IDd, Id.ANDROID_CLIENT_IDr, Id.EXPLORER_ID},
      audiences = {Id.ANDROID_AUDIENCE})
 public class Greetings {
 
