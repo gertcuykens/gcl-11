@@ -142,7 +142,6 @@
                 android:inputType="numberDecimal"
                 android:layout_centerVertical="true"
                 android:autoText="false"
-                android:numeric="integer"
                 android:text="hello "/>
 
         <Button
