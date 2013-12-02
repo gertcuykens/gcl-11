@@ -193,7 +193,7 @@ google.devrel.samples.hello.enableButtons = function() {
  * Initializes the application.
  * @param {string} apiRoot Root of the API's path.
  */
-google.devrel.samples.hello.init = function(apiRoot) {
+init = function() {
   // Loads the OAuth and rest1 APIs asynchronously, and triggers login
   // when they have completed.
   var apisToLoad;
@@ -205,6 +205,6 @@ google.devrel.samples.hello.init = function(apiRoot) {
   }
 
   apisToLoad = 2; // must match number of calls to gapi.client.load()
-  gapi.client.load('rest1', '0', callback, apiRoot);
+  gapi.client.load('rest1', '0', callback, '//'+ window.location.host+'/_ah/api');
   gapi.client.load('oauth2', 'v2', callback);
 };

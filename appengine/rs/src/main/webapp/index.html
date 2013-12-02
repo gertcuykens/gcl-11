@@ -3,6 +3,7 @@
 <head>
     <title>Hello Endpoints!</title>
     <script type="text/javascript" src="./js/base.js"></script>
+    <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=init"></script>
     <link type="text/css" rel="stylesheet" href="./bootstrap/css/bootstrap.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <style type="text/css">
@@ -95,13 +96,6 @@
         <div><input id="datastore" type="submit" class="btn btn-small" value="Submit"/></div>
     </form>
 
-    <script type="text/javascript">
-        function init() {
-            google.devrel.samples.hello.init('//' + window.location.host + '/_ah/api');
-        }
-    </script>
-
-    <script src="https://apis.google.com/js/client.js?onload=init"></script>
 </div>
 
 </body>
