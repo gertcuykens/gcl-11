@@ -20,6 +20,7 @@ import com.google.api.client.json.gson.GsonFactory;
 public class EndpointsActivity extends Activity implements View.OnClickListener {
     private GoogleAccountCredential user;
     private EndpointsClient service;
+    private Button userButton;
     private TextView userStatus;
     private EditText getGreetingValue;
     private EditText greetingValue;
@@ -41,7 +42,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         greetingValue = (EditText) findViewById(R.id.greetingValue);
         multiplyValue = (EditText) findViewById(R.id.multiplyValue);
 
-        Button userButton = (Button) findViewById(R.id.userButton);
+        userButton = (Button) findViewById(R.id.userButton);
         userButton.setOnClickListener(this);
 
         Button getGreetingButton = (Button) findViewById(R.id.getGreetingButton);
@@ -67,7 +68,16 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
     public void onClick(View view) {
         Context context = view.getContext();
         switch(view.getId()) {
-            case R.id.userButton: startActivityForResult(user.newChooseAccountIntent(),1); break;
+            case R.id.userButton:
+                if (userButton.getText().equals("Sign Out")) {
+                    EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
+                    service = endpoints.build();
+                    userStatus.setText("Not signed in");
+                    userButton.setText("Sign In");
+                }else{
+                    startActivityForResult(user.newChooseAccountIntent(), 1);
+                }
+                break;
             case R.id.getGreetingButton: new RestTask().execute(Pair.create(context, 1)); break;
             case R.id.getListButton: new RestTask().execute(Pair.create(context, 2)); break;
             case R.id.multiplyButton: new RestTask().execute(Pair.create(context, 3)); break;
@@ -86,9 +96,10 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                     String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         user.setSelectedAccountName(accountName);
-                        userStatus.setText(user.getSelectedAccountName());
                         EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user);
                         service = endpoints.build();
+                        userStatus.setText(user.getSelectedAccountName());
+                        userButton.setText("Sign Out");
                     }
                 }
                 break;
