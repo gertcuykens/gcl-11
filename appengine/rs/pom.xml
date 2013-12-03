@@ -66,10 +66,17 @@
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-endpoints</artifactId>
             <version>1.8.8</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client-jackson2</artifactId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.17.0-rc</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client</artifactId>
             <version>1.17.0-rc</version>
             <scope>compile</scope>
         </dependency>
