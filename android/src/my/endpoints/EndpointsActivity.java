@@ -13,13 +13,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.appspot.gcl_11.rest1.Rest1;
+import com.appspot.gcl_11.rest1.model.Multiply;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
 
 public class EndpointsActivity extends Activity implements View.OnClickListener {
     private GoogleAccountCredential user;
-    private EndpointsClient service;
+    private Rest1 service;
     private Button userButton;
     private TextView userStatus;
     private EditText getGreetingValue;
@@ -34,7 +36,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         String AUDIENCE = "server:client_id:522156758812-09f5qv0e4gqjdjqfocerqcud5m5jutau.apps.googleusercontent.com";
         user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
 
-        EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
+        Rest1.Builder endpoints = new Rest1.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
         service = endpoints.build();
 
         userStatus = (TextView) findViewById(R.id.userStatus);
@@ -70,7 +72,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         switch(view.getId()) {
             case R.id.userButton:
                 if (userButton.getText().equals("Sign Out")) {
-                    EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
+                    Rest1.Builder endpoints = new Rest1.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
                     service = endpoints.build();
                     userStatus.setText("Not signed in");
                     userButton.setText("Sign In");
@@ -96,7 +98,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                     String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         user.setSelectedAccountName(accountName);
-                        EndpointsClient.Builder endpoints = new EndpointsClient.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user);
+                        Rest1.Builder endpoints = new Rest1.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user);
                         service = endpoints.build();
                         userStatus.setText(user.getSelectedAccountName());
                         userButton.setText("Sign Out");
@@ -110,14 +112,19 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         @Override
         protected Pair doInBackground(Pair<Context,Integer>... p) {
             String text = null;
+            int i1 = Integer.parseInt(getGreetingValue.getText().toString());
+            int i2 = Integer.parseInt(multiplyValue.getText().toString());
+            Multiply m = new Multiply();
+            m.setMessage(greetingValue.getText().toString());
+            m.setTimes(i2);
             try {
                 switch(p[0].second) {
-                    case 1: text = service.get("response/"+getGreetingValue.getText()).execute().getMessage(); break;
-                    case 2: text = service.get("response").execute().getItems().toString(); break;
-                    case 3: text = service.post("response/"+multiplyValue.getText(), new Message().setMessage(""+greetingValue.getText())).execute().getMessage(); break;
-                    case 4: text = service.post("greetings/authed", null).execute().getMessage(); break;
-                    case 5: text = service.get("greetings/soap").execute().getMessage(); break;
-                    case 6: text = service.get("greetings/datastore").execute().getMessage(); break;
+                    case 1: text = service.greetings().getGreeting(i1).execute().getMessage(); break;
+                    case 2: text = service.greetings().listGreeting().execute().getItems().toString(); break;
+                    case 3: text = service.greetings().multiply(m).execute().getMessage(); break;
+                    case 4: text = service.greetings().authed().execute().getMessage(); break;
+                    case 5: text = service.greetings().soap().execute().getMessage(); break;
+                    case 6: text = service.greetings().datastore().execute().getMessage(); break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

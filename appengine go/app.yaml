@@ -55,6 +55,7 @@ handlers:
  - url: /
    static_files: www/index.html
    upload: www/index.html
+   secure: always
 
  - url: /favicon.ico
    static_files: www/favicon.ico
@@ -70,7 +71,6 @@ inbound_services:
 #http_headers:
 # Access-Control-Allow-Origin: https://gcl-12.appspot.com
 
-#secure: always
 #login: admin
 
 #http_headers:

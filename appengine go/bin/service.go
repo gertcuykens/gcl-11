@@ -35,7 +35,7 @@ func (gs *GreetingService) List(r *http.Request, req *NoRequest, resp *ResponseL
     return nil
 }
 
-func (gs *GreetingService) Login(r *http.Request, req *Request, resp *Response) error {
+func (gs *GreetingService) Login(r *http.Request, req *NoRequest, resp *Response) error {
     c := endpoints.NewContext(r)
     u, err := endpoints.CurrentUser(c, SCOPES, AUDIENCES, CLIENTIDS)
     if err != nil {return err}
