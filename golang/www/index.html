@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+
+<span id="signinButton">
+  <span
+    class="g-signin"
+    data-callback="signinCallback"
+    data-clientid="...apps.googleusercontent.com"
+    data-cookiepolicy="single_host_origin"
+    data-requestvisibleactions="http://schemas.google.com/AddActivity"
+    data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email">
+  </span>
+  <script>
+      signinCallback = function (authResult) {
+          if (authResult['status']['signed_in']) {document.getElementById('signinButton').setAttribute('style', 'display: none')} 
+          else {console.log('Sign-in state: ' + authResult['error'])}
+      }
+  </script>
+</span>
+
+<div id="fb-root"></div>
+<fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
+
+<script>
+window.fbAsyncInit = function() {
+  FB.init({appId:'...', status:true, cookie:true, xfbml:true});
+  FB.Event.subscribe('auth.authResponseChange', function(response) {
+    if (response.status === 'connected') {} 
+    else if (response.status === 'not_authorized') {FB.login();} 
+    else {}
+  });
+};
+
+init = function () {
+  var apisToLoad = 2;
+  var callback = function() {if (--apisToLoad == 0) {}}
+  gapi.client.load('rest', 'v0', callback, '//'+window.location.host+'/_ah/api');
+  gapi.client.load('oauth2', 'v2', callback);
+};
+
+(function(d) {
+    var script = d.getElementsByTagName('script')[0];
+
+    var js1 = d.createElement('script'); 
+    js1.id = 'facebook-jssdk'; 
+    js1.async = true;
+    js1.src = "//connect.facebook.net/en_US/all.js";
+
+    var js2 = d.createElement('script');
+    js2.id = 'google-jssdk'; 
+    js2.async = true;
+    js2.src = '//apis.google.com/js/client:plusone.js?onload=init';
+
+    script.parentNode.insertBefore(js1, script);
+    script.parentNode.insertBefore(js2, script);
+
+})(document);
+
+  function testAPI() {
+    console.log('Facebook,  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Good to see you, '+response.name+'.');
+    });
+    console.log('Google,  Fetching your information.... ');
+    gapi.client.oauth2.userinfo.get().execute(function(response) {
+     console.log('Good to see you, '+response.email+'.');
+    });
+    console.log('Server, Fetching your information.... ');
+    gapi.client.rest.login({token:FB.getAccessToken()}).execute(function(response){
+     console.log('Server message, '+response.message)
+    });
+  }
+</script>
+
+</body>
+</html>
+
+<!--
+var options = {client_id: "...apps.googleusercontent.com", 
+               scope: "https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email", 
+               immediate: true}
+gapi.auth.authorize(options, testAPI);
+
+var options = {callback : signinCallback,
+               //approvalprompt : 'auto',
+               clientid : '...apps.googleusercontent.com',
+               scope: "https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email",
+               //'requestvisibleactions' : 'http://schemas.google.com/CommentActivity http://schemas.google.com/ReviewActivity',
+               cookiepolicy : 'single_host_origin'}
+gapi.auth.signIn(options)
+
+gapi.signin.render('signinButton',  {'theme' : 'dark'});
+
+<a href="/_ah/api/explorer">Server api</a></br>
+-->
