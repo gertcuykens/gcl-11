@@ -56,6 +56,9 @@
 <fb:login-button autologoutlink="true" size="large" show-faces="false" max-rows="1"></fb:login-button>
 <div id="fb-root"></div>
 
+<a href="/_ah/api/explorer">Server api</a></br>
+<a href="https://github.com/gertcuykens/token">Source code</a></br>
+
 <script>
 window.fbAsyncInit = function() {
   FB.Event.subscribe('auth.authResponseChange', function(response) {
@@ -150,7 +153,6 @@ function signout() {
 }
 
 FB.init({appId:'...', status:true, cookie:true, xfbml:true});
-<a href="/_ah/api/explorer">Server api</a></br>
 var c=b.cloneNode(true);
 var p=b.parentNode
 p.replaceChild(c,b);
