@@ -1,4 +1,4 @@
-application: ...
+application: gcl-12
 version: 0
 runtime: go
 api_version: go1
@@ -44,10 +44,13 @@ handlers:
    static_files: www/index.html
    upload: www/index.html
    secure: always
+   #login: admin
+   #http_headers:
+   # Access-Control-Allow-Origin: https://accounts.google.com
 
  - url: /favicon.ico
-   static_files: www/favicon.ico
-   upload: www/favicon.ico
+   static_files: www/img/favicon.ico
+   upload: www/img/favicon.ico
 
  - url: /_ah/spi/.*
    script: _go_app
@@ -57,11 +60,6 @@ handlers:
 
  - url: /bin/.*
    script: _go_app
-
-   #login: admin
-   #secure: always
-   #http_headers:
-   # Access-Control-Allow-Origin: "*"
 
 inbound_services:
  - warmup

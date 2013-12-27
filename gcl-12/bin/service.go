@@ -12,13 +12,18 @@ func GetUser(c endpoints.Context, token string) (*User, error) {
     var u *User
     httpClient := urlfetch.Client(c)
     resp, err := httpClient.Get("https://graph.facebook.com/me?access_token="+token)
-    if err != nil {}
     b, err := ioutil.ReadAll(resp.Body)
-    if err != nil {}
     err = json.Unmarshal(b, &u)
-    if err != nil {}
     resp.Body.Close()
     return u, err
+}
+
+func RevokeUser(c endpoints.Context, token string) (string, error){
+    httpClient := urlfetch.Client(c)
+    resp, err := httpClient.Get("https://accounts.google.com/o/oauth2/revoke?token="+token)
+    b, err := ioutil.ReadAll(resp.Body)
+    resp.Body.Close()
+    return string(b),err
 }
 
 func (s *Service) Welcome(r *http.Request, req *Request, resp *Response) error {
@@ -26,7 +31,13 @@ func (s *Service) Welcome(r *http.Request, req *Request, resp *Response) error {
     g, err := endpoints.CurrentUser(c, SCOPES, AUDIENCES, CLIENTIDS)
     f, err := GetUser(c, req.Token)
     if err == nil {resp.Message="Google:"+g.String()+" Facebook:"+f.Name}
-    //c.Infof("-------------------")
+    return err
+}
+
+func (s *Service) Bye(r *http.Request, req *Request, resp *Response) error {
+    c := endpoints.NewContext(r)
+    b, err := RevokeUser(c, req.Token)
+    if err == nil {resp.Message=b}
     return err
 }
 
@@ -35,7 +46,9 @@ func init() {
   api, err := endpoints.RegisterService(service, "rest", "v0", "Login API", true)
   if err != nil {panic(err.Error())}
   info1 := api.MethodByName("Welcome").Info()
-  info1.Name, info1.HttpMethod, info1.Path, info1.Desc, info1.Scopes = "login", "POST", "welcome", "Login.", SCOPES
+  info1.Name, info1.HttpMethod, info1.Path, info1.Desc, info1.Scopes = "login", "POST", "welcome", "Log in.", SCOPES
+  info2 := api.MethodByName("Bye").Info()
+  info2.Name, info2.HttpMethod, info2.Path, info2.Desc = "logout", "POST", "bye", "Log out."
   endpoints.HandleHttp()
 }
 
@@ -63,4 +76,5 @@ func redirect(path string) func(http.ResponseWriter, *http.Request) {
 func hello(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "Hello, world!")
 }
+//c.Infof("-------------------")
 */
