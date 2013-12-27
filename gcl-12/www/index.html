@@ -19,7 +19,7 @@
     }
     #signinButton:hover {
       background: #e74b37;
-      cursor: hand;
+      cursor: pointer;
     }
     span.label {
       font-weight: bold;
@@ -39,14 +39,12 @@
       font-weight: bold;
       font-family: 'Helvetica Neue', Helvetica, Arial, 'lucida grande',tahoma,verdana,arial,sans-serif;
     }
-    #login {text-align:right;}
-    #gSignInWrapper {text-align:left;display: inline-block; vertical-align: top;float:right;}
-    .fb_iframe_widget {display: inline-block; vertical-align: top;}
+    
+    #gSignInWrapper {text-align:left;display: inline-block; vertical-align: top; float:right;}
+    .fb_iframe_widget {display: inline-block; vertical-align: top; float:right;}
 
   </style>
 
-<div id="login">
- <fb:login-button autologoutlink="true" size="large" show-faces="false" max-rows="1"></fb:login-button>
  <div id="gSignInWrapper">
     <span class="label"></span>
     <div id="signinButton" class="customGPlusSignIn">
@@ -54,9 +52,10 @@
       <span class="buttonText">Log In</span>
     </div>
  </div>
-<div>
 
+<fb:login-button autologoutlink="true" size="large" show-faces="false" max-rows="1"></fb:login-button>
 <div id="fb-root"></div>
+
 <script>
 window.fbAsyncInit = function() {
   FB.Event.subscribe('auth.authResponseChange', function(response) {
