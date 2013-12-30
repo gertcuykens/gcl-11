@@ -2,57 +2,54 @@
 <html>
 <head>
     <title>Hello Endpoints!</title>
-    <script type="text/javascript" src="./js/base.js"></script>
-    <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=init"></script>
-    <link type="text/css" rel="stylesheet" href="./css/bootstrap.css" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="./css/bootstrap-responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
     <style type="text/css">
-        body {
-            padding-top: 40px;
-            padding-bottom: 40px;
-            background-color: #f5f5f5;
-        }
-        blockquote {
-            margin-bottom: 10px;
-            border-left-color: #bbb;
-        }
+
         form {
             padding: 0px 10px 10px 10px;
             border:5px solid grey;
             margin-top: 20px;
         }
-        .form-signin input[type="text"] {
-            font-size: 16px;
-            height: auto;
-            margin-bottom: 15px;
-            padding: 7px 9px;
-        }
+
         .row {
-            margin-left: 0px;
-            margin-top: 10px;
+            margin:0px;
+            padding:0px;
             overflow: scroll;
         }
+
+        h2 {
+            margin:5px 0px;
+        }
+
+        .navbar {
+            margin:10px 0px 0px 0px;
+        }
+
     </style>
 </head>
 <body>
 
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+<div class="container">
+
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="brand" href="#">Hello Endpoints</a>
-            <div class="nav-collapse collapse pull-right">
-                <a href="javascript:void(0);" class="btn" id="signinButton">Sign in</a>
-            </div>
+            <a class="navbar-brand" href="">Hello Endpoints</a>
         </div>
-    </div>
-</div>
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+            <form class="navbar-form navbar-right" role="sign in">
+                <button type="submit" class="btn btn-default" id="signinButton">Sign in</button>
+            </form>
+        </div>
+    </nav>
 
-<div class="container">
     <ul style="padding-top:10px;">
         <li><a href="https://play.google.com/store/apps/details?id=my.endpoints">Android Client</a></li>
         <li><a href="_ah/api/explorer">API Web Interface</a></li>
@@ -95,6 +92,9 @@
     </form>
 
 </div>
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/base.js"></script>
+<script type="text/javascript" src="https://apis.google.com/js/client.js?onload=init"></script>
 </body>
 </html>
