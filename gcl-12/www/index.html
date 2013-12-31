@@ -72,36 +72,36 @@
   </style>
 
   <div id="fb-root"></div>
+  <div class="container">
+      <nav class="navbar navbar-default" role="navigation">
 
-  <nav class="navbar navbar-default" role="navigation">
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="">Login</a>
+          </div>
 
-      <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="">Login</a>
-      </div>
+          <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+             <div class="navbar-right" id="gSignInWrapper">
+                <span class="label"></span>
+                <div id="signinButton" class="customGPlusSignIn">
+                  <span class="icon"></span>
+                  <span class="buttonText">Log In</span>
+                </div>
+             </div>
+             <fb:login-button class="navbar-right" autologoutlink="true" size="large" show-faces="false" max-rows="1"></fb:login-button>
+          </div>
+      </nav>
 
-      <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-         <div class="navbar-right" id="gSignInWrapper">
-            <span class="label"></span>
-            <div id="signinButton" class="customGPlusSignIn">
-              <span class="icon"></span>
-              <span class="buttonText">Log In</span>
-            </div>
-         </div>
-         <fb:login-button class="navbar-right" autologoutlink="true" size="large" show-faces="false" max-rows="1"></fb:login-button>
-      </div>
-  </nav>
-
-  <ul style="padding-top:10px;">
-      <li><a href="_ah/api/explorer">API Web Interface</a></li>
-      <li><a href="https://github.com/gertcuykens/token">Source Code</a></li>
-  </ul>
-
+      <ul style="padding-top:10px;">
+          <li><a href="_ah/api/explorer">API Web Interface</a></li>
+          <li><a href="https://github.com/gertcuykens/token">Source Code</a></li>
+      </ul>
+  </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="./js/endpoints.js"></script>
