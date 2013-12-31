@@ -1,14 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:fb="http://ogp.me/ns/fb#">
     <head>
-        <title>Login</title>
+        <title>Endpoints</title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
     </head>
     <body>
 
   <style type="text/css">
-    .fb_iframe_widget{margin:13px 10px 13px 0px;}
+    .fb_iframe_widget{
+        display: inline-block;
+        background: #5f78ab;
+        width: 88px;}
 
     #signinButton {
       display: inline-block;
@@ -17,7 +20,6 @@
       width: 88px;
       height: 25px;
       border: 1px solid #6E0000;
-      margin:13px 10px 0px 0px;
       /*border-radius: 1px;*/
       /*white-space: nowrap;*/
     }
@@ -69,6 +71,8 @@
         margin:10px 0px 0px 0px;
     }
 
+    .login {padding:0px; margin:0px; min-width:88px;width: 88px}
+
   </style>
 
   <div id="fb-root"></div>
@@ -82,18 +86,27 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="">Login</a>
+              <a class="navbar-brand" href="">Endpoints</a>
           </div>
 
           <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-             <div class="navbar-right" id="gSignInWrapper">
-                <span class="label"></span>
-                <div id="signinButton" class="customGPlusSignIn">
-                  <span class="icon"></span>
-                  <span class="buttonText">Log In</span>
-                </div>
-             </div>
-             <fb:login-button class="navbar-right" autologoutlink="true" size="large" show-faces="false" max-rows="1"></fb:login-button>
+              <ul class="navbar-nav navbar-right nav">
+                  <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign in <b class="caret"></b></a>
+                      <ul class="dropdown-menu login">
+                          <li class="login"><fb:login-button autologoutlink="true" size="large" show-faces="false" max-rows="1"></fb:login-button></li>
+                          <li class="login">
+                              <div  id="gSignInWrapper">
+                                  <span class="label"></span>
+                                  <div id="signinButton" class="customGPlusSignIn">
+                                      <span class="icon"></span>
+                                      <span class="buttonText">Log In</span>
+                                  </div>
+                              </div>
+                          </li>
+                      </ul>
+                  </li>
+              </ul>
           </div>
       </nav>
 
