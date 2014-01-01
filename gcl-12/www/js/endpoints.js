@@ -1,7 +1,7 @@
 $('#logindropdown').on('hidden.bs.dropdown', function () {border()})
 $('#logindropdown').on('shown.bs.dropdown', function () {border()})
 
-token=null
+var token=null;
 
 window.fbAsyncInit = function() {
     FB.Event.subscribe('auth.authResponseChange', function(response) {
@@ -95,7 +95,6 @@ function signout() {
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
     document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
-    //document.getElementById('login').style.borderBottom='0px solid #dd4b39'
     token=null
 }
 
@@ -105,7 +104,7 @@ function border() {
     var f=FB.getAccessToken()
     if(token && !m) {if (token.access_token){ b.style.borderBottom='1px solid #dd4b39'; return}}
     if(f && !m) {b.style.borderBottom='1px solid #5f78ab'; return}
-    b.style.borderBottom='0px solid #dd4b39'
+    b.style.borderBottom='1px solid transparent'
 }
 
 function testAPI() {
