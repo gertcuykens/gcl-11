@@ -1,9 +1,31 @@
+$('#logindropdown').on('hidden.bs.dropdown', function () {border()})
+$('#logindropdown').on('shown.bs.dropdown', function () {border()})
+
+token=null
+
 window.fbAsyncInit = function() {
     FB.Event.subscribe('auth.authResponseChange', function(response) {
-        if (response.status === 'connected') {}
-        else if (response.status === 'not_authorized') {FB.login();}
-        else {}
+        if (response.status === 'connected') {
+            var b=document.getElementById('fsigninButton')
+            b.removeEventListener('click', fsignin);
+            b.addEventListener('click',fsignout)
+            document.getElementsByClassName("buttonText")[0].innerHTML='Log Out'
+        }
+        else if (response.status === 'not_authorized') {}
+        else {
+            var b=document.getElementById('fsigninButton')
+            b.removeEventListener('click', fsignout);
+            b.addEventListener('click',fsignin)
+            document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+        }
+        border()
     });
+
+    var b=document.getElementById('fsigninButton')
+    b.removeEventListener('click', fsignout);
+    b.addEventListener('click',fsignin)
+    document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+
 };
 
 init = function () {
@@ -28,12 +50,18 @@ init = function () {
 
 })(document,document.getElementsByTagName('script')[0]);
 
+function fsignin() {FB.login()}
+
+function fsignout() {FB.logout()}
+
 function signin() {
-    var options = { callback : autosignin,
+    var options = {
+        callback : autosignin,
         clientid : '1034966141188-b4cup6jccsjqpdc14c9218fhb488e515.apps.googleusercontent.com',
         requestvisibleactions : 'http://schemas.google.com/AddActivity',
         cookiepolicy : 'single_host_origin',
-        scope: 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'}
+        scope: 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
+    }
     gapi.auth.signIn(options)
 }
 
@@ -41,14 +69,18 @@ function autosignin() {
     var b=document.getElementById('signinButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
-    document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+    document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
 
-    var callback = function (token) { if (!token) return false
+    var callback = function (t) {
+        if (!t) return false
         var b=document.getElementById("signinButton")
         b.removeEventListener('click', signin);
         b.addEventListener('click', signout)
-        document.getElementsByClassName("buttonText")[0].innerHTML='Log Out'
-        console.log('Sign-in state: '+ token['status']['signed_in']) }
+        document.getElementsByClassName("buttonText")[1].innerHTML='Log Out'
+        console.log('Sign-in state: '+ t['status']['signed_in'])
+        token=t
+        border()
+    }
 
     var options = { client_id: "1034966141188-b4cup6jccsjqpdc14c9218fhb488e515.apps.googleusercontent.com",
         scope: "https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email",
@@ -58,11 +90,22 @@ function autosignin() {
 }
 
 function signout() {
-    gapi.client.rest.logout({token:gapi.auth.getToken().access_token}).execute(function(response){console.log('Server, Bye, '+response.message)})
+    gapi.client.rest.logout(token).execute(function(response){console.log('Server, Bye, '+response.message)})
     var b=document.getElementById('signinButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
-    document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+    document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
+    //document.getElementById('login').style.borderBottom='0px solid #dd4b39'
+    token=null
+}
+
+function border() {
+    var b=document.getElementById('login')
+    var m=document.getElementById('login-menu').classList.contains('open')
+    var f=FB.getAccessToken()
+    if(token && !m) {if (token.access_token){ b.style.borderBottom='1px solid #dd4b39'; return}}
+    if(f && !m) {b.style.borderBottom='1px solid #5f78ab'; return}
+    b.style.borderBottom='0px solid #dd4b39'
 }
 
 function testAPI() {
@@ -71,5 +114,5 @@ function testAPI() {
     console.log('Google,  Fetching your information.... ');
     gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, Good to see you, '+response.email+'.')})
     console.log('Server, Fetching your information.... ');
-    gapi.client.rest.login({token:FB.getAccessToken()}).execute(function(response){console.log('Server, Good to see you, '+response.message)})
+    gapi.client.rest.login({access_token:FB.getAccessToken()}).execute(function(response){console.log('Server, Good to see you, '+response.message)})
 }

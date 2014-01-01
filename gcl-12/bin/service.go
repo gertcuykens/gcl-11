@@ -8,19 +8,19 @@ import (
     "io/ioutil"
 )
 
-func GetUser(c endpoints.Context, token string) (*User, error) {
+func GetUser(c endpoints.Context, access_token string) (*User, error) {
     var u *User
     httpClient := urlfetch.Client(c)
-    resp, err := httpClient.Get("https://graph.facebook.com/me?access_token="+token)
+    resp, err := httpClient.Get("https://graph.facebook.com/me?access_token="+access_token)
     b, err := ioutil.ReadAll(resp.Body)
     err = json.Unmarshal(b, &u)
     resp.Body.Close()
     return u, err
 }
 
-func RevokeUser(c endpoints.Context, token string) (string, error){
+func RevokeUser(c endpoints.Context, access_token string) (string, error){
     httpClient := urlfetch.Client(c)
-    resp, err := httpClient.Get("https://accounts.google.com/o/oauth2/revoke?token="+token)
+    resp, err := httpClient.Get("https://accounts.google.com/o/oauth2/revoke?token="+access_token)
     b, err := ioutil.ReadAll(resp.Body)
     resp.Body.Close()
     return string(b),err
@@ -29,14 +29,14 @@ func RevokeUser(c endpoints.Context, token string) (string, error){
 func (s *Service) Welcome(r *http.Request, req *Request, resp *Response) error {
     c := endpoints.NewContext(r)
     g, err := endpoints.CurrentUser(c, SCOPES, AUDIENCES, CLIENTIDS)
-    f, err := GetUser(c, req.Token)
+    f, err := GetUser(c, req.Access_token)
     if err == nil {resp.Message="Google:"+g.String()+" Facebook:"+f.Name}
     return err
 }
 
 func (s *Service) Bye(r *http.Request, req *Request, resp *Response) error {
     c := endpoints.NewContext(r)
-    b, err := RevokeUser(c, req.Token)
+    b, err := RevokeUser(c, req.Access_token)
     if err == nil {resp.Message=b}
     return err
 }

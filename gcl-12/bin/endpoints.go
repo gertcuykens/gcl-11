@@ -1,18 +1,18 @@
 package bin
 
 type Request struct {
-  Token string `json:"token"`
+	Access_token string `json:"access_token"`
 }
 
 type Response struct {
-  Message string `json:"message"`
+	Message string `json:"message"`
 }
 
 type Service struct {
 }
 
 type User struct {
- Name string
- Id string
+	Name string
+	Id string
 }
 
