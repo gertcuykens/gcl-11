@@ -14,7 +14,6 @@ func (s *Service) Oauth(r *http.Request, req *NoRequest, resp *ResponseOauth) er
 	requestToken, url, err := TwitterOauth()
 	resp.RequestToken=requestToken
 	resp.Url=url
-	//resp.MessageOauth="{token:\""+requestToken.Token+"\", secret:\""+requestToken.Secret+"\", url:\""+url+"\"}"
 	return err
 }
 
@@ -22,7 +21,7 @@ func (s *Service) Twitter(r *http.Request, req *RequestOauth, resp *Response) er
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	b, err := TwitterApi(req.RequestToken, req.VerificationCode)
-	resp.Message=b
+	resp.Message=b.Name
 	return err
 }
 
@@ -30,9 +29,9 @@ func GetUser(c endpoints.Context, access_token string) (*User, error) {
     var u *User
     httpClient := urlfetch.Client(c)
     resp, err := httpClient.Get("https://graph.facebook.com/me?access_token="+access_token)
+	defer resp.Body.Close()
     b, err := ioutil.ReadAll(resp.Body)
     err = json.Unmarshal(b, &u)
-    resp.Body.Close()
     return u, err
 }
 

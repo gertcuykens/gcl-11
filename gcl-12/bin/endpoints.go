@@ -27,6 +27,11 @@ type User struct {
 	Id string
 }
 
+type UserT struct {
+	Name string
+	Id int64
+}
+
 type NoRequest struct {}
 
 
