@@ -2,6 +2,7 @@ $('#logindropdown').on('hidden.bs.dropdown', function () {border()})
 $('#logindropdown').on('shown.bs.dropdown', function () {border()})
 
 var token=null;
+var user=null;
 
 window.fbAsyncInit = function() {
     FB.Event.subscribe('auth.authResponseChange', function(response) {
@@ -113,5 +114,5 @@ function testAPI() {
     console.log('Google,  Fetching your information.... ');
     gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, Good to see you, '+response.email+'.')})
     console.log('Server, Fetching your information.... ');
-    gapi.client.rest.login({access_token:FB.getAccessToken()}).execute(function(response){console.log('Server, Good to see you, '+response.message)})
+    gapi.client.rest.google.user({access_token:FB.getAccessToken()}).execute(function(response){console.log('Server, Good to see you, '+response.message)})
 }

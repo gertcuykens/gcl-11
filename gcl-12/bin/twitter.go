@@ -51,8 +51,8 @@ func (s *Service) TwitterCallbackOob(r *http.Request, req *RequestOob, resp *Res
 }
 
 func Oauth() (requestToken *oauth.RequestToken, url string, err error) {
-	//tokenUrl := "https://gcl-12.appspot.com/_ah/api/rest/v0/oauth_callback"
-	tokenUrl := "http://localhost:8080/_ah/api/rest/v0/oauth_callback"
+	//tokenUrl := "https://gcl-12.appspot.com/_ah/api/rest/v0/twitter/callback"
+	tokenUrl := "http://localhost:8080/_ah/api/rest/v0/twitter/callback"
 	requestToken, url, err = consumer.GetRequestTokenAndUrl(tokenUrl)
 	if err != nil {log.Fatal(err)}
 	return

@@ -13,14 +13,14 @@ type UserF struct {
 	Id string
 }
 
-func (s *Service) FacebookOauth2(r *http.Request, req *Request, resp *Response) error {
+func (s *Service) FacebookUser(r *http.Request, req *Request, resp *Response) error {
 	c := endpoints.NewContext(r)
-	f, err := FacebookUser(c, req.Access_token)
-	if err == nil {resp.Message="FacebookOauth2: "+f.Name}
+	f, err := FacebookOauth2(c, req.Access_token)
+	if err == nil {resp.Message="Facebook user: "+f.Name}
 	return err
 }
 
-func FacebookUser(c endpoints.Context, access_token string) (*UserF, error) {
+func FacebookOauth2 (c endpoints.Context, access_token string) (*UserF, error) {
 	var u *UserF
 	httpClient := urlfetch.Client(c)
 	resp, err := httpClient.Get("https://graph.facebook.com/me?access_token="+access_token)
