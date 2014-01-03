@@ -7,8 +7,13 @@ type Request struct {
 }
 
 type RequestOauth struct {
+	Oauth_token string `endpoints:"oauth_token"`
+	Oauth_verifier string `endpoints:"oauth_verifier"`
+}
+
+type RequestOob struct {
 	RequestToken *oauth.RequestToken `json:"requestToken"`
-    VerificationCode string `json:"verificationCode"`
+	VerificationCode string `json:"verificationCode"`
 }
 
 type Response struct {
@@ -19,19 +24,4 @@ type ResponseOauth struct {
 	RequestToken *oauth.RequestToken `json:"requestToken"`
 	Url string `json:"url"`
 }
-
-type Service struct {}
-
-type User struct {
-	Name string
-	Id string
-}
-
-type UserT struct {
-	Name string
-	Id int64
-}
-
-type NoRequest struct {}
-
 

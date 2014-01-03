@@ -1,76 +1,31 @@
 package bin
 
 import (
-	"net/http"
-    "encoding/json"
 	"github.com/crhym3/go-endpoints/endpoints"
-    "appengine/urlfetch"
-    "io/ioutil"
+	"github.com/mrjones/oauth"
 )
 
-func (s *Service) Oauth(r *http.Request, req *NoRequest, resp *ResponseOauth) error {
-	c := endpoints.NewContext(r)
-	consumer.HttpClient=urlfetch.Client(c)
-	requestToken, url, err := TwitterOauth()
-	resp.RequestToken=requestToken
-	resp.Url=url
-	return err
-}
+type Service struct {}
+type NoRequest struct {}
 
-func (s *Service) Twitter(r *http.Request, req *RequestOauth, resp *Response) error {
-	c := endpoints.NewContext(r)
-	consumer.HttpClient=urlfetch.Client(c)
-	b, err := TwitterApi(req.RequestToken, req.VerificationCode)
-	resp.Message=b.Name
-	return err
-}
-
-func GetUser(c endpoints.Context, access_token string) (*User, error) {
-    var u *User
-    httpClient := urlfetch.Client(c)
-    resp, err := httpClient.Get("https://graph.facebook.com/me?access_token="+access_token)
-	defer resp.Body.Close()
-    b, err := ioutil.ReadAll(resp.Body)
-    err = json.Unmarshal(b, &u)
-    return u, err
-}
-
-func RevokeUser(c endpoints.Context, access_token string) (string, error){
-    httpClient := urlfetch.Client(c)
-    resp, err := httpClient.Get("https://accounts.google.com/o/oauth2/revoke?token="+access_token)
-	defer resp.Body.Close()
-    b, err := ioutil.ReadAll(resp.Body)
-    return string(b),err
-}
-
-func (s *Service) Welcome(r *http.Request, req *Request, resp *Response) error {
-    c := endpoints.NewContext(r)
-    g, err := endpoints.CurrentUser(c, SCOPES, AUDIENCES, CLIENTIDS)
-    f, err := GetUser(c, req.Access_token)
-    if err == nil {resp.Message="Google:"+g.String()+" Facebook:"+f.Name}
-    return err
-}
-
-func (s *Service) Bye(r *http.Request, req *Request, resp *Response) error {
-    c := endpoints.NewContext(r)
-    b, err := RevokeUser(c, req.Access_token)
-    if err == nil {resp.Message=b}
-    return err
-}
-
+var consumer = oauth.NewConsumer(TWITTER_ID, TWITTER_SECRET, TWITTER_SERVER)
 func init() {
 	consumer.Debug(true)
 	service := &Service{}
 	api, err := endpoints.RegisterService(service, "rest", "v0", "Login API", true)
 	if err != nil {panic(err.Error())}
-	info1 := api.MethodByName("Welcome").Info()
+	info1 := api.MethodByName("GoogleUser").Info()
 	info1.Name, info1.HttpMethod, info1.Path, info1.Desc, info1.Scopes = "login", "POST", "welcome", "Log in.", SCOPES
-	info2 := api.MethodByName("Bye").Info()
+	info2 := api.MethodByName("GoogleRevoke").Info()
 	info2.Name, info2.HttpMethod, info2.Path, info2.Desc = "logout", "POST", "bye", "Log out."
-	info3 := api.MethodByName("Oauth").Info()
+	info3 := api.MethodByName("TwitterOauth").Info()
 	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "oauth", "GET", "oauth", "Oauth url."
-	info4 := api.MethodByName("Twitter").Info()
-	info4.Name, info4.HttpMethod, info4.Path, info4.Desc = "twitter", "POST", "twitter", "Twitter."
+	info4 := api.MethodByName("TwitterCallback").Info()
+	info4.Name, info4.HttpMethod, info4.Path, info4.Desc = "callback", "GET", "oauth_callback", "Oauth callback url."
+	info5 := api.MethodByName("TwitterOauthOob").Info()
+	info5.Name, info5.HttpMethod, info5.Path, info5.Desc = "oauth_oob", "GET", "oauth_oob", "Oauth url."
+	info6 := api.MethodByName("TwitterCallbackOob").Info()
+	info6.Name, info6.HttpMethod, info6.Path, info6.Desc = "callback_oob", "POST", "oauth_callback_oob", "Oauth callback url."
 	endpoints.HandleHttp()
 }
 
