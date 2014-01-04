@@ -114,5 +114,5 @@ function testAPI() {
     console.log('Google,  Fetching your information.... ');
     gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, Good to see you, '+response.email+'.')})
     console.log('Server, Fetching your information.... ');
-    gapi.client.rest.google.user({access_token:FB.getAccessToken()}).execute(function(response){console.log('Server, Good to see you, '+response.message)})
+    gapi.client.rest.google.callback({access_token:FB.getAccessToken()}).execute(function(response){console.log('Server, Good to see you, '+response.message)})
 }

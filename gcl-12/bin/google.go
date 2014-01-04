@@ -7,9 +7,17 @@ import (
 	"net/http"
 )
 
-func (s *Service) GoogleUser(r *http.Request, req *Request, resp *Response) error {
+const WEB_CLIENT_ID string = "1034966141188-b4cup6jccsjqpdc14c9218fhb488e515.apps.googleusercontent.com"
+const ANDROID_CLIENT_ID_d string = ""
+const ANDROID_CLIENT_ID_r string = ""
+
+var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID_d, ANDROID_CLIENT_ID_r, endpoints.ApiExplorerClientId}
+var audiences = []string{WEB_CLIENT_ID}
+var google_scopes = []string{"https://www.googleapis.com/auth/userinfo.email"}
+
+func (s *Service) GoogleCallback(r *http.Request, req *Request, resp *Response) error {
 	c := endpoints.NewContext(r)
-	g, err := endpoints.CurrentUser(c, SCOPES, AUDIENCES, CLIENTIDS)
+	g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids)
 	if err == nil {resp.Message="GoogleOauth2: "+g.String()}
 	return err
 }

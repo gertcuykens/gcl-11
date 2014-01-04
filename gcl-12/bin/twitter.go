@@ -15,6 +15,16 @@ type UserT struct {
 	Id int64
 }
 
+const TWITTER_ID = "PrTNrRxkWs6dw9XOr95A"
+
+var TWITTER_SERVER = oauth.ServiceProvider{
+	RequestTokenUrl:   "http://api.twitter.com/oauth/request_token",
+	AuthorizeTokenUrl: "https://api.twitter.com/oauth/authorize",
+	AccessTokenUrl:    "https://api.twitter.com/oauth/access_token",
+}
+
+var consumer = oauth.NewConsumer(TWITTER_ID, TWITTER_SECRET, TWITTER_SERVER)
+
 func (s *Service) TwitterOauth(r *http.Request, req *NoRequest, resp *ResponseOauth) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)

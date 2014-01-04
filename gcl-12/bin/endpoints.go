@@ -2,8 +2,15 @@ package bin
 
 import "github.com/mrjones/oauth"
 
+type NoRequest struct {}
+
 type Request struct {
 	Access_token string `json:"access_token"`
+}
+
+type RequestCallback struct {
+	Code string `json:"code"`
+	State string `json:"state"`
 }
 
 type RequestOauth struct {
@@ -24,4 +31,8 @@ type ResponseOauth struct {
 	RequestToken *oauth.RequestToken `json:"requestToken"`
 	Url string `json:"url"`
 }
+
+type Service struct {}
+
+
 
