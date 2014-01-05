@@ -1,13 +1,56 @@
 package bin
 
 import (
-    "fmt"
-    "net/http"
-    "appengine"
-    "appengine/user"
-    "facebook"
+	"crypto/sha1"
+	"time"
+	"fmt"
+	"net/http"
+	"encoding/hex"
+	//"errors"
+	//"log"
 )
 
+
+type UserError struct {
+	Description string
+}
+
+func (e UserError) Error() string {
+	return e.Description
+}
+
+func User(id string, group string) Token{
+	h := sha1.New()
+	e := time.Now().Add(time.Duration(3600)*time.Second)
+	a :=id+group+e.String()+SERVER_SECRET
+	s := hex.EncodeToString(h.Sum([]byte(a)))
+	//log.Print(a)
+	t := Token{
+		AccessToken: s,
+		Expiry: e,
+		Extra : map[string]string{"user":id, "group":group},
+	}
+	return t
+}
+
+func (t *Token) CheckSum() (bool, error) {
+	h := sha1.New()
+	a := t.Extra["user"]+t.Extra["group"]+t.Expiry.String()+SERVER_SECRET
+	s := hex.EncodeToString(h.Sum([]byte(a)))
+	//log.Print(a)
+	if t.Expired() {return false, UserError{Description:"Error: Expired"}}
+	if t.AccessToken != s {return false, UserError{Description:"Error: CheckSum"}}
+	return true, nil
+}
+
+func Test(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-type", "text/html; charset=utf-8")
+	u:=User("gert","admin")
+	b, err := u.CheckSum()
+    fmt.Fprintf(w, "Token %+v</br> is %t, %s!</br> The time is now %v", u, b, err, time.Now())
+}
+
+/*
 func welcome(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-type", "text/html; charset=utf-8")
     c := appengine.NewContext(r)
@@ -18,7 +61,7 @@ func welcome(w http.ResponseWriter, r *http.Request) {
         return
     }
     url, _ := user.LogoutURL(c, "/")
-    fmt.Fprintf(w, `Welcome, %s! (<a href="%s">sign out</a>)`, u, url)
+    fmt.Fprintf(w, `Welcome, %s! (<a href="%s">Sign out google</a>)`, u, url)
 }
 
 func welcome2(w http.ResponseWriter, r *http.Request) {
@@ -28,26 +71,13 @@ func welcome2(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "OAuth Authorization header required", http.StatusUnauthorized)
         return
     }
-    /*if !u.Admin {
+    if !u.Admin {
         http.Error(w, "Admin login only", http.StatusUnauthorized)
         return
-    }*/
+    }
     fmt.Fprintf(w, `Welcome, %s!`, u)
 }
-
-func welcome3(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-type", "text/html; charset=utf-8")
-    c := appengine.NewContext(r)
-    g := user.Current(c)
-    if g != nil {
-        url, _ := user.LogoutURL(c, "/")
-        fmt.Fprintf(w, `Welcome, %s! (<a href="%s">sign out</a>)</br>`, g, url)
-    }
-
-    t:= facebook.AccessToken{Token:"token", Expiry:123}
-    f:= facebook.GetMe(t)
-    fmt.Fprintf(w, `Welcome, %s! from facebook</br>`, f)
-}
+*/
 
 /*
 func init() {

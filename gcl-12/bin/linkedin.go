@@ -13,6 +13,7 @@ import (
 
 type UserL struct {
 	XMLName xml.Name `xml:"email-address"`
+	Email string `xml:",chardata"`
 }
 
 var transport = &Transport{
@@ -47,7 +48,7 @@ func (s *Service) LinkedInCallback(r *http.Request, req *RequestCallback, resp *
 	token, err := transport.Exchange(req.Code)
 	transport.Token = token
 	u, err := LinkedinUser(transport)
-	resp.Message="LinkedIn email: "+u.XMLName.Space
+	resp.Message="LinkedIn email: "+u.Email
 	return err
 }
 

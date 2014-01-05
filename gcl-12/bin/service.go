@@ -2,6 +2,7 @@ package bin
 
 import (
 	"github.com/crhym3/go-endpoints/endpoints"
+	"net/http"
 )
 
 func init() {
@@ -29,6 +30,7 @@ func init() {
 	info9 := api.MethodByName("FacebookCallback").Info()
 	info9.Name, info9.HttpMethod, info9.Path, info9.Desc = "facebook.callback", "GET", "facebook/callback", "Oauth callback."
 	endpoints.HandleHttp()
+	http.HandleFunc("/bin/test", Test)
 }
 
 /*
