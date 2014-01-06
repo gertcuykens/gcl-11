@@ -91,7 +91,7 @@ function autosignin() {
 }
 
 function signout() {
-    gapi.client.rest.logout(token).execute(function(response){console.log('Server, Bye, '+response.message)})
+    gapi.client.rest.google.revoke(token).execute(function(response){console.log('Server, Bye, '+response.message)})
     var b=document.getElementById('signinButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)

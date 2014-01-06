@@ -1,53 +1,90 @@
 package bin
 
 import (
+	"appengine"
+	"appengine/datastore"
 	"crypto/sha1"
 	"time"
-	"fmt"
-	"net/http"
 	"encoding/hex"
-	//"errors"
-	//"log"
+	"net/http"
+	"fmt"
+	"log"
+	"encoding/json"
 )
 
-
-type UserError struct {
-	Description string
+type User struct {
+	Key *datastore.Key `datastore:"-"`
+	Group []byte `datastore:"group"`
+	Status string `datastore:"-"`
+	Token *Token `datastore:"-"`
 }
 
-func (e UserError) Error() string {
-	return e.Description
+func (u *User) Error() string {
+	return u.Status
 }
 
-func User(id string, group string) Token{
+func (u *User) Store(c appengine.Context) error{
+	key, err := datastore.Put(c, u.Key, u);
+	if err != nil {u.Status="Datastore put error! "+err.Error(); return u}
+	u.Status="Stored "+key.StringID()+"."
+	return nil
+}
+
+func (u *User) Get(c appengine.Context) (err error){
+	err = datastore.Get(c, u.Key, u);
+	if err != nil {u.Status="Datastore get error! "+err.Error(); return u}
+	err = json.Unmarshal(u.Group,&u.Token.Extra)
+	if err != nil {u.Status="Datastore get error! "+err.Error(); return u}
+	u.Status="Fetched "+u.Key.StringID()+"."
+	return nil
+}
+
+func (u *User) Login() (err error){
+	u.Group, err = json.Marshal(u.Token.Extra)
+	if err != nil {u.Status="Login error! "+err.Error(); return u}
 	h := sha1.New()
 	e := time.Now().Add(time.Duration(3600)*time.Second)
-	a :=id+group+e.String()+SERVER_SECRET
+	a := string(u.Group)+e.String()+SERVER_SECRET
 	s := hex.EncodeToString(h.Sum([]byte(a)))
-	//log.Print(a)
-	t := Token{
-		AccessToken: s,
-		Expiry: e,
-		Extra : map[string]string{"user":id, "group":group},
-	}
-	return t
+	u.Token.AccessToken = s
+	u.Token.Expiry = e
+	u.Status="In."
+	return nil
 }
 
-func (t *Token) CheckSum() (bool, error) {
+func (u *User) Logout() error{
+	u.Status="Out."
+	u.Token=nil
+	return nil
+}
+
+func (u *User) CheckSum() error {
+	if u.Token == nil {u.Status="No token!"; return u}
+	b, err := json.Marshal(u.Token.Extra)
+	if err != nil {u.Status="Token error! "+err.Error(); return u}
 	h := sha1.New()
-	a := t.Extra["user"]+t.Extra["group"]+t.Expiry.String()+SERVER_SECRET
+	a := string(b)+u.Token.Expiry.String()+SERVER_SECRET
 	s := hex.EncodeToString(h.Sum([]byte(a)))
-	//log.Print(a)
-	if t.Expired() {return false, UserError{Description:"Error: Expired"}}
-	if t.AccessToken != s {return false, UserError{Description:"Error: CheckSum"}}
-	return true, nil
+	if u.Token.Expired() {u.Status="Expired!"; return u}
+	if u.Token.AccessToken != s {u.Status="CheckSum error!"; return u}
+	return nil
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-type", "text/html; charset=utf-8")
-	u:=User("gert","admin")
-	b, err := u.CheckSum()
-    fmt.Fprintf(w, "Token %+v</br> is %t, %s!</br> The time is now %v", u, b, err, time.Now())
+	c := appengine.NewContext(r)
+	u := new(User)
+	u.Key= datastore.NewKey(c, "User", "gert", 0, nil)
+	u.Token= &Token{Extra:map[string]string{"key":u.Key.StringID(),"group":"admin"}}
+	u.Login()
+	u.Store(c)
+	u.Get(c)
+	u.CheckSum()
+	//u.Logout()
+	log.Print(u.Key.StringID())
+	log.Print(string(u.Group))
+	t, _ :=json.Marshal(u.Token)
+	w.Header().Set("Content-type", "text/html; charset=utf-8")
+    fmt.Fprintf(w, "User status %+v</br>Token %s</br>The time is now %v", u, string(t), time.Now())
 }
 
 /*
