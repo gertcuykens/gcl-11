@@ -8,8 +8,8 @@ import (
 	"encoding/hex"
 	"net/http"
 	"fmt"
-	"log"
 	"encoding/json"
+	//"log"
 )
 
 type User struct {
@@ -24,6 +24,7 @@ func (u *User) Error() string {
 }
 
 func (u *User) Store(c appengine.Context) error{
+	if u.Key == nil {u.Status="Datastore no Key!"; return u}
 	key, err := datastore.Put(c, u.Key, u);
 	if err != nil {u.Status="Datastore put error! "+err.Error(); return u}
 	u.Status="Stored "+key.StringID()+"."
@@ -31,6 +32,7 @@ func (u *User) Store(c appengine.Context) error{
 }
 
 func (u *User) Get(c appengine.Context) (err error){
+	if u.Key == nil {u.Status="Datastore no Key!"; return u}
 	err = datastore.Get(c, u.Key, u);
 	if err != nil {u.Status="Datastore get error! "+err.Error(); return u}
 	err = json.Unmarshal(u.Group,&u.Token.Extra)
@@ -39,7 +41,9 @@ func (u *User) Get(c appengine.Context) (err error){
 	return nil
 }
 
-func (u *User) Login() (err error){
+func (u *User) Login(c appengine.Context) (err error){
+	if u.Token == nil {u.Status="No token!"; return u}
+	u.Key= datastore.NewKey(c, "User", u.Token.Extra["key"], 0, nil)
 	u.Group, err = json.Marshal(u.Token.Extra)
 	if err != nil {u.Status="Login error! "+err.Error(); return u}
 	h := sha1.New()
@@ -65,23 +69,22 @@ func (u *User) CheckSum() error {
 	h := sha1.New()
 	a := string(b)+u.Token.Expiry.String()+SERVER_SECRET
 	s := hex.EncodeToString(h.Sum([]byte(a)))
-	if u.Token.Expired() {u.Status="Expired!"; return u}
-	if u.Token.AccessToken != s {u.Status="CheckSum error!"; return u}
+	if u.Token.Expired() {u.Status="Token expired!"; return u}
+	if u.Token.AccessToken != s {u.Status="Token checkSum error!"; return u}
 	return nil
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	u := new(User)
-	u.Key= datastore.NewKey(c, "User", "gert", 0, nil)
-	u.Token= &Token{Extra:map[string]string{"key":u.Key.StringID(),"group":"admin"}}
-	u.Login()
+	u.Token= &Token{Extra:map[string]string{"key":"gert","group":"admin"}}
+	u.Login(c)
 	u.Store(c)
 	u.Get(c)
 	u.CheckSum()
 	//u.Logout()
-	log.Print(u.Key.StringID())
-	log.Print(string(u.Group))
+	//log.Print(u.Key.StringID())
+	//log.Print(string(u.Group))
 	t, _ :=json.Marshal(u.Token)
 	w.Header().Set("Content-type", "text/html; charset=utf-8")
     fmt.Fprintf(w, "User status %+v</br>Token %s</br>The time is now %v", u, string(t), time.Now())
