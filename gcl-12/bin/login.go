@@ -9,11 +9,9 @@ import (
 )
 
 func (s *Service) UserCreate(r *http.Request, req *Token, resp *Token) (err error) {
-	p:=Property{Key:"group",Value:"user"}
 	u := new(User)
 	u.Context = appengine.NewContext(r)
-	u.Token = &Token{Id:req.Id, Extra:[]Property{p}}
-	u.Refresh=[]byte(req.Refresh)
+	u.Token = req
 	if err = u.Init(); err !=nil {return}
 	if err = u.Store(); err !=nil {return}
 	resp = u.Token
@@ -27,7 +25,7 @@ func (s *Service) UserRefresh(r *http.Request, req *Token, resp *Token) (err err
 	u.Token= &Token{Id:req.Id, Extra:[]Property{p}}
 	if err = u.Init(); err !=nil {return}
 	if err = u.Get(); err !=nil {return}
-	if err = u.Login([]byte(req.Refresh)); err !=nil {return}
+    if u.Token.Refresh != req.Refresh {u.Token.Status="Wrong refresh token!"; return u}
 	resp = u.Token
 	return err
 }
@@ -35,11 +33,7 @@ func (s *Service) UserRefresh(r *http.Request, req *Token, resp *Token) (err err
 func (s *Service) UserToken(r *http.Request, req *Token, resp *Response) (err error) {
 	u := new(User)
 	u.Context = appengine.NewContext(r)
-	u.Token = &Token{
-		Access: req.Access,
-		Expiry: req.Expiry,
-		Extra: req.Extra,
-    }
+	u.Token = req
 	if err = u.Token.CheckSum(); err !=nil {return}
 	resp.Message="OK"
 	return err
@@ -49,20 +43,18 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	p := Property{Key:"group", Value:"user"}
 	u := new(User)
 	u.Context = appengine.NewContext(r)
-	u.Token= &Token{Id:"gert", Extra:[]Property{p}}
-	u.Refresh=[]byte("password")
+	u.Token= &Token{Id:"gert", Refresh:"password", Extra:[]Property{p}}
 	u.Init()
 	u.Store()
-	u.Get()
-	u.Login([]byte("password"))
-	u.Token.CheckSum()
+	//u.Get()
+	//u.Token.CheckSum()
 	//u.Logout()
 	//log.Print(u.Key.StringID())
 	//log.Print(string(u.Group))
 	//log.Print(u.Equals([]byte("password")))
-	t, _ :=json.Marshal(u.Token)
+	j, _ :=json.Marshal(u)
 	w.Header().Set("Content-type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, "User status %+v</br>Token %s</br>The time is now %v", u, string(t), time.Now())
+	fmt.Fprintf(w, "Status: %+v</br> %s</br>The time is now %v", u, string(j), time.Now())
 }
 
 /*
