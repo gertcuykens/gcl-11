@@ -7,12 +7,19 @@ import (
 	"time"
 )
 
+type Property struct {
+	Key string `json:"key"`
+	Value string `json:"value"`
+}
+
 type Token struct {
-	AccessToken string
-	RefreshToken string
-	Expiry time.Time
-	Extra map[string]string
-	Status string
+	Access string `json:"access_token"`
+	Refresh string `json:"refresh_token"`
+	ExpiresIn time.Duration `json:"expires_in"`
+	Expiry time.Time `json:"expiry"`
+	Id string `json:"id_token"`
+	Extra []Property `json:"extra"`
+	Status string `json:"status"`
 }
 
 func (t *Token) Error() string {
@@ -32,6 +39,6 @@ func (t *Token) CheckSum() error {
 	a := string(b)+t.Expiry.String()+SERVER_SECRET
 	s := hex.EncodeToString(h.Sum([]byte(a)))
 	if t.Expired() {t.Status="Token expired!"; return t}
-	if t.AccessToken != s {t.Status="Token checkSum error!"; return t}
+	if t.Access != s {t.Status="Token checkSum error!"; return t}
 	return nil
 }

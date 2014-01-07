@@ -39,7 +39,7 @@ func (t *Transport) Refresh() error {
 	tok, expiry, err := appengine.AccessToken(t.Context, t.Scopes...)
 	if err != nil {return err}
 	t.Token = &Token{
-		AccessToken: tok,
+		Access: tok,
 		Expiry: expiry,
 	}
 	if t.TokenCache != nil {t.TokenCache.PutToken(t.Token)}
@@ -75,12 +75,7 @@ func (t *Transport) UpdateToken(tok *Token, v url.Values) error {
 	if err != nil {return err}
 	defer r.Body.Close()
 	if r.StatusCode != 200 {return OAuthError{"updateToken", r.Status}}
-	var b struct {
-		Access    string        `json:"access_token"`
-		Refresh   string        `json:"refresh_token"`
-		ExpiresIn time.Duration `json:"expires_in"`
-		Id        string        `json:"id_token"`
-	}
+    var b Token
 	content, _, _ := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	switch content {
 		case "application/x-www-form-urlencoded", "text/plain":
@@ -96,10 +91,10 @@ func (t *Transport) UpdateToken(tok *Token, v url.Values) error {
 			if err = json.NewDecoder(r.Body).Decode(&b); err != nil {return err}
 			b.ExpiresIn *= time.Second
 	}
-	tok.AccessToken = b.Access
-	if len(b.Refresh) > 0 {tok.RefreshToken = b.Refresh}
+	tok.Access = b.Access
+	if len(b.Refresh) > 0 {tok.Refresh = b.Refresh}
 	if b.ExpiresIn == 0 {tok.Expiry = time.Time{}} else { tok.Expiry = time.Now().Add(b.ExpiresIn) }
-	if b.Id != "" {if tok.Extra == nil {tok.Extra = make(map[string]string)}; tok.Extra["id_token"] = b.Id}
+	if b.Id != "" {tok.Id = b.Id}
 	return nil
 }
 

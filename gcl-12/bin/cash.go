@@ -14,13 +14,13 @@ type Cache struct {
 func (m Cache) Token() (*Token, error) {
 	item, err := memcache.Get(m.Context, m.Key)
 	if err != nil {return nil, err}
-	return &Token{AccessToken: string(item.Value), Expiry: time.Now().Add(item.Expiration),}, nil
+	return &Token{Access: string(item.Value), Expiry: time.Now().Add(item.Expiration),}, nil
 }
 
 func (m Cache) PutToken(tok *Token) error {
 	return memcache.Set(m.Context, &memcache.Item{
 		Key: m.Key,
-		Value: []byte(tok.AccessToken),
+		Value: []byte(tok.Access),
 		Expiration: tok.Expiry.Sub(time.Now()),
 	})
 }

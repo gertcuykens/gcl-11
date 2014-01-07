@@ -1,6 +1,8 @@
 package bin
 
-import "github.com/mrjones/oauth"
+import (
+	"github.com/mrjones/oauth"
+)
 
 type NoRequest struct {}
 
@@ -33,6 +35,5 @@ type ResponseOauth struct {
 }
 
 type Service struct {}
-
 
 

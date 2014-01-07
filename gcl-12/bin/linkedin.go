@@ -47,7 +47,7 @@ func (s *Service) LinkedInCallback(r *http.Request, req *RequestCallback, resp *
 }
 
 func LinkedinUser(transport *Transport) (u *UserL, err error) {
-	r, err := transport.Client.Get("https://api.linkedin.com/v1/people/~/email-address?oauth2_access_token="+transport.Token.AccessToken)
+	r, err := transport.Client.Get("https://api.linkedin.com/v1/people/~/email-address?oauth2_access_token="+transport.Token.Access)
 	defer r.Body.Close()
 	b, err := ioutil.ReadAll(r.Body)
 	log.Print(string(b))

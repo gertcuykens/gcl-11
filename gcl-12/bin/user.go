@@ -1,59 +1,55 @@
 package bin
 
 import (
-	"appengine"
 	"appengine/datastore"
+	"appengine"
+	"encoding/json"
 	"crypto/sha1"
 	"time"
 	"encoding/hex"
-	"net/http"
-	"fmt"
-	"encoding/json"
-	//"log"
 )
 
 type User struct {
 	Key *datastore.Key `datastore:"-"`
 	Group []byte `datastore:"group"`
-	RefreshToken []byte `datastore:"refresh_token"`
+	Refresh []byte `datastore:"refresh_token"`
 	Status string `datastore:"-"`
 	Token *Token `datastore:"-"`
+	Context appengine.Context `datastore:"-"`
 }
 
 func (u *User) Error() string {
 	return u.Status
 }
 
-func (u *User) Store(c appengine.Context) error{
+func (u *User) Store() error{
 	if u.Key == nil {u.Status="Datastore no Key!"; return u}
-	key, err := datastore.Put(c, u.Key, u);
+	key, err := datastore.Put(u.Context, u.Key, u);
 	if err != nil {u.Status="Datastore put error! "+err.Error(); return u}
 	u.Status="Stored "+key.StringID()+"."
 	return nil
 }
 
-func (u *User) Get(c appengine.Context) (err error){
+func (u *User) Get() (err error){
 	if u.Key == nil {u.Status="Datastore no Key!"; return u}
-	err = datastore.Get(c, u.Key, u);
-	if err != nil {u.Status="Datastore get error! "+err.Error(); return u}
-	err = json.Unmarshal(u.Group,&u.Token.Extra)
-	if err != nil {u.Status="Datastore get error! "+err.Error(); return u}
+	if err = datastore.Get(u.Context, u.Key, u); err != nil {u.Status="Datastore get error! "+err.Error(); return u}
+	if err = json.Unmarshal(u.Group, &u.Token.Extra); err != nil {u.Status="Datastore get error! "+err.Error(); return u}
 	u.Status="Fetched "+u.Key.StringID()+"."
 	return nil
 }
 
-func (u *User) Login(c appengine.Context) (err error){
+func (u *User) Init() (err error){
 	if u.Token == nil {u.Status="No token!"; return u}
-	u.Key= datastore.NewKey(c, "User", u.Token.Extra["key"], 0, nil)
-	u.Group, err = json.Marshal(u.Token.Extra)
-	if err != nil {u.Status="Login error! "+err.Error(); return u}
+	u.Key= datastore.NewKey(u.Context, "User", u.Token.Id, 0, nil)
+	if u.Group, err = json.Marshal(u.Token.Extra); err != nil {u.Status="Login error! "+err.Error(); return u}
 	h := sha1.New()
 	e := time.Now().Add(time.Duration(3600)*time.Second)
 	a := string(u.Group)+e.String()+SERVER_SECRET
 	s := hex.EncodeToString(h.Sum([]byte(a)))
-	u.Token.AccessToken = s
+	u.Token.Access = s
 	u.Token.Expiry = e
-	u.Status="In."
+	u.Token.Status="OK"
+	u.Status="OK"
 	return nil
 }
 
@@ -63,13 +59,13 @@ func (u *User) Logout() error{
 	return nil
 }
 
-func (u *User) Refresh(b []byte) error {
-	if u.RefreshToken == nil {u.Status="No refresh token!"; return u}
-	if len(u.RefreshToken) != len(b) {
+func (u *User) Login(b []byte) error {
+	if u.Refresh == nil {u.Status="No refresh token!"; return u}
+	if len(u.Refresh) != len(b) {
 		u.Status="Refresh not equal!";
 		return u
 	}
-	for i, v := range u.RefreshToken {
+	for i, v := range u.Refresh {
 		if v != b[i] {
 			u.Status="Refresh not equal!";
 			return u
@@ -77,61 +73,3 @@ func (u *User) Refresh(b []byte) error {
 	}
 	return nil
 }
-
-func Test(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-	u := new(User)
-	u.Token= &Token{Extra:map[string]string{"key":"gert","group":"admin"}}
-	u.RefreshToken=[]byte("password")
-	u.Login(c)
-	u.Store(c)
-	u.Get(c)
-	u.Refresh([]byte("password"))
-	u.Token.CheckSum()
-	//u.Logout()
-	//log.Print(u.Key.StringID())
-	//log.Print(string(u.Group))
-	//log.Print(u.Equals([]byte("password")))
-	t, _ :=json.Marshal(u.Token)
-	w.Header().Set("Content-type", "text/html; charset=utf-8")
-    fmt.Fprintf(w, "User status %+v</br>Token %s</br>The time is now %v", u, string(t), time.Now())
-}
-
-/*
-func welcome(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-type", "text/html; charset=utf-8")
-    c := appengine.NewContext(r)
-    u := user.Current(c)
-    if u == nil {
-        url, _ := user.LoginURL(c, "/")
-        fmt.Fprintf(w, `<a href="%s">Sign in google</a>`, url)
-        return
-    }
-    url, _ := user.LogoutURL(c, "/")
-    fmt.Fprintf(w, `Welcome, %s! (<a href="%s">Sign out google</a>)`, u, url)
-}
-
-func welcome2(w http.ResponseWriter, r *http.Request) {
-    c := appengine.NewContext(r)
-    u, err := user.CurrentOAuth(c, "https://www.googleapis.com/auth/userinfo.email")
-    if err != nil {
-        http.Error(w, "OAuth Authorization header required", http.StatusUnauthorized)
-        return
-    }
-    if !u.Admin {
-        http.Error(w, "Admin login only", http.StatusUnauthorized)
-        return
-    }
-    fmt.Fprintf(w, `Welcome, %s!`, u)
-}
-*/
-
-/*
-func init() {
-    http.HandleFunc("/_ah/login_required", openIdHandler)
-}
-
-func openIdHandler(w http.ResponseWriter, r *http.Request) {
-    // ...
-}
-*/
