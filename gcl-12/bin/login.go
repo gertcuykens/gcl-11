@@ -46,8 +46,8 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	u.Token= &Token{Id:"gert", Refresh:"password", Extra:[]Property{p}}
 	u.Init()
 	u.Store()
-	//u.Get()
-	//u.Token.CheckSum()
+	u.Get()
+	u.Token.CheckSum()
 	//u.Logout()
 	//log.Print(u.Key.StringID())
 	//log.Print(string(u.Group))

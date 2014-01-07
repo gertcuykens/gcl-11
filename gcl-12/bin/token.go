@@ -1,7 +1,6 @@
 package bin
 
 import (
-	"encoding/json"
 	"crypto/sha1"
 	"encoding/hex"
 	"time"
@@ -33,10 +32,8 @@ func (t *Token) Expired() bool {
 
 func (t *Token) CheckSum() error {
 	if t.Extra == nil {t.Status="No group set!"; return t}
-	b, err := json.Marshal(t.Extra)
-	if err != nil {t.Status="Token error! "+err.Error(); return t}
 	h := sha1.New()
-	a := string(b)+t.Expiry.String()+SERVER_SECRET
+	a := t.Extra[0].Value+t.Expiry.String()+SERVER_SECRET
 	s := hex.EncodeToString(h.Sum([]byte(a)))
 	if t.Expired() {t.Status="Token expired!"; return t}
 	if t.Access != s {t.Status="Token checkSum error!"; return t}

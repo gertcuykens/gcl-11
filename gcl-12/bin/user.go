@@ -10,11 +10,10 @@ import (
 
 type User struct {
 	Key *datastore.Key `datastore:"-"`
-	Token *Token `datastore:"token"`
+	Refresh []byte `datastore:"refresh"`
+	Extra []Property `datastore:"extra"`
+	Token *Token `datastore:"-"`
 	Context appengine.Context `datastore:"-"`
-	//Group []byte `datastore:"group"`
-	//Refresh []byte `datastore:"refresh_token"`
-	//Status string `datastore:"-"`
 }
 
 func (u *User) Error() string {
@@ -39,6 +38,8 @@ func (u *User) Get() (err error){
 func (u *User) Init() (err error){
 	if u.Token == nil {u.Token.Status="No token!"; return u}
 	u.Key= datastore.NewKey(u.Context, "User", u.Token.Id, 0, nil)
+	u.Extra=u.Token.Extra
+	u.Refresh=[]byte(u.Refresh)
 	h := sha1.New()
 	e := time.Now().Add(time.Duration(3600)*time.Second)
 	a := u.Token.Extra[0].Value+e.String()+SERVER_SECRET
@@ -54,8 +55,8 @@ func (u *User) Logout() error{
 	return nil
 }
 
-/*
-func (u *User) Login(b []byte) error {
+func (u *User) Login() error {
+	b:=[]byte(u.Token.Refresh)
 	if u.Refresh == nil {u.Token.Status="No refresh token!"; return u}
 	if len(u.Refresh) != len(b) {
 		u.Token.Status="Refresh not equal!";
@@ -69,4 +70,4 @@ func (u *User) Login(b []byte) error {
 	}
 	return nil
 }
-*/
+
