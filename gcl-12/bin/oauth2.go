@@ -2,21 +2,14 @@ package bin
 
 import (
 	"appengine"
-	"net/http"
-	"time"
 	"net/url"
-	"io/ioutil"
+	"net/http"
 	"mime"
+	"io/ioutil"
 	"encoding/json"
+	"time"
 	"strings"
 )
-
-type Token struct {
-	AccessToken string
-	RefreshToken string
-	Expiry time.Time
-	Extra map[string]string
-}
 
 type Transport struct {
 	*Token
@@ -28,7 +21,6 @@ type Transport struct {
 	Context appengine.Context
 	Client *http.Client
 	Scopes []string
-	Transport http.RoundTripper
 	TokenCache *Cache
 	ApprovalPrompt string
 	AccessType string
@@ -41,19 +33,6 @@ type OAuthError struct {
 
 func (oe OAuthError) Error() string {
 	return "OAuthError: " + oe.prefix + ": " + oe.msg
-}
-
-func cloneRequest(r *http.Request) *http.Request {
-	r2 := new(http.Request)
-	*r2 = *r
-	r2.Header = make(http.Header)
-	for k, s := range r.Header {r2.Header[k] = s}
-	return r2
-}
-
-func (t *Token) Expired() bool {
-	if t.Expiry.IsZero() {return false}
-	return t.Expiry.Before(time.Now())
 }
 
 func (t *Transport) Refresh() error {
@@ -71,13 +50,6 @@ func (t *Transport) FetchToken() error {
 	if t.Token == nil && t.TokenCache != nil {t.Token, _ = t.TokenCache.Token()}
 	if t.Token == nil || t.Expired() {if err := t.Refresh(); err != nil {return err}}
 	return nil
-}
-
-func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
-	if err := t.FetchToken(); err != nil {return nil, err}
-	newReq := cloneRequest(req)
-	newReq.Header.Set("Authorization", "Bearer "+t.AccessToken)
-	return t.Transport.RoundTrip(newReq)
 }
 
 func (t *Transport) Exchange(code string) (*Token, error) {
@@ -99,7 +71,6 @@ func (t *Transport) Exchange(code string) (*Token, error) {
 func (t *Transport) UpdateToken(tok *Token, v url.Values) error {
 	v.Set("client_id", t.ClientId)
 	v.Set("client_secret", t.ClientSecret)
-	//r, err := (&http.Client{Transport: t.transport()}).PostForm(t.TokenURL, v)
 	r, err := t.Client.PostForm(t.TokenURL, v)
 	if err != nil {return err}
 	defer r.Body.Close()
@@ -147,3 +118,23 @@ func (t *Transport) AuthCodeURL(state string) string {
 	if u.RawQuery == "" {u.RawQuery = q} else {u.RawQuery += "&" + q}
 	return u.String()
 }
+
+/*
+//Transport http.RoundTripper
+//r, err := (&http.Client{Transport: t.transport()}).PostForm(t.TokenURL, v)
+
+func cloneRequest(r *http.Request) *http.Request {
+	r2 := new(http.Request)
+	*r2 = *r
+	r2.Header = make(http.Header)
+	for k, s := range r.Header {r2.Header[k] = s}
+	return r2
+}
+
+func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
+	if err := t.FetchToken(); err != nil {return nil, err}
+	newReq := cloneRequest(req)
+	newReq.Header.Set("Authorization", "Bearer "+t.AccessToken)
+	return t.Transport.RoundTrip(newReq)
+}
+*/

@@ -32,11 +32,6 @@ func (s *Service) LinkedInOauth(r *http.Request, req *NoRequest, resp *ResponseO
 
 func (s *Service) LinkedInCallback(r *http.Request, req *RequestCallback, resp *Response) error {
 	context := endpoints.NewContext(r)
-	transport.Transport=&urlfetch.Transport{
-		Context: context,
-		Deadline: 0,
-		AllowInvalidServerCertificate: false,
-	}
 	transport.TokenCache=&Cache{
 		Context: context,
 		Key: "oauth2_basicprofile_emailaddress",
@@ -44,7 +39,6 @@ func (s *Service) LinkedInCallback(r *http.Request, req *RequestCallback, resp *
 	transport.Client= urlfetch.Client(context)
 	transport.Context=context
 
-	//if err := transport.FetchToken(); err != nil {return err}
 	token, err := transport.Exchange(req.Code)
 	transport.Token = token
 	u, err := LinkedinUser(transport)
@@ -60,3 +54,12 @@ func LinkedinUser(transport *Transport) (u *UserL, err error) {
 	err = xml.Unmarshal(b, &u)
 	return
 }
+
+/*
+//if err := transport.FetchToken(); err != nil {return err}
+transport.Transport=&urlfetch.Transport{
+	Context: context,
+	Deadline: 0,
+	AllowInvalidServerCertificate: false,
+}
+*/

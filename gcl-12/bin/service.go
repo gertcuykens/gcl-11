@@ -6,8 +6,6 @@ import (
 )
 
 func init() {
-	consumer.Debug(true)
-	//if err := transport.FetchToken(); err != nil {return nil, err}
 	service := &Service{}
 	api, err := endpoints.RegisterService(service, "rest", "v0", "API", true)
 	if err != nil {panic(err.Error())}

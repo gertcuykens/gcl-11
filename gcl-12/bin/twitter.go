@@ -24,6 +24,7 @@ var TWITTER_SERVER = oauth.ServiceProvider{
 }
 
 var consumer = oauth.NewConsumer(TWITTER_ID, TWITTER_SECRET, TWITTER_SERVER)
+//consumer.Debug(true)
 
 func (s *Service) TwitterOauth(r *http.Request, req *NoRequest, resp *ResponseOauth) error {
 	c := endpoints.NewContext(r)

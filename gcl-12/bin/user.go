@@ -15,6 +15,7 @@ import (
 type User struct {
 	Key *datastore.Key `datastore:"-"`
 	Group []byte `datastore:"group"`
+	RefreshToken []byte `datastore:"refresh_token"`
 	Status string `datastore:"-"`
 	Token *Token `datastore:"-"`
 }
@@ -62,15 +63,18 @@ func (u *User) Logout() error{
 	return nil
 }
 
-func (u *User) CheckSum() error {
-	if u.Token == nil {u.Status="No token!"; return u}
-	b, err := json.Marshal(u.Token.Extra)
-	if err != nil {u.Status="Token error! "+err.Error(); return u}
-	h := sha1.New()
-	a := string(b)+u.Token.Expiry.String()+SERVER_SECRET
-	s := hex.EncodeToString(h.Sum([]byte(a)))
-	if u.Token.Expired() {u.Status="Token expired!"; return u}
-	if u.Token.AccessToken != s {u.Status="Token checkSum error!"; return u}
+func (u *User) Refresh(b []byte) error {
+	if u.RefreshToken == nil {u.Status="No refresh token!"; return u}
+	if len(u.RefreshToken) != len(b) {
+		u.Status="Refresh not equal!";
+		return u
+	}
+	for i, v := range u.RefreshToken {
+		if v != b[i] {
+			u.Status="Refresh not equal!";
+			return u
+		}
+	}
 	return nil
 }
 
@@ -78,13 +82,16 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	u := new(User)
 	u.Token= &Token{Extra:map[string]string{"key":"gert","group":"admin"}}
+	u.RefreshToken=[]byte("password")
 	u.Login(c)
 	u.Store(c)
 	u.Get(c)
-	u.CheckSum()
+	u.Refresh([]byte("password"))
+	u.Token.CheckSum()
 	//u.Logout()
 	//log.Print(u.Key.StringID())
 	//log.Print(string(u.Group))
+	//log.Print(u.Equals([]byte("password")))
 	t, _ :=json.Marshal(u.Token)
 	w.Header().Set("Content-type", "text/html; charset=utf-8")
     fmt.Fprintf(w, "User status %+v</br>Token %s</br>The time is now %v", u, string(t), time.Now())
