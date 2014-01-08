@@ -12,11 +12,12 @@ type Property struct {
 }
 
 type Token struct {
+	Id string `json:"id_token"`
+	Type string `json:"type_token"`
 	Access string `json:"access_token"`
 	Refresh string `json:"refresh_token"`
-	ExpiresIn time.Duration `json:"expires_in"`
-	Expiry time.Time `json:"expiry"`
-	Id string `json:"id_token"`
+	ExpiresIn time.Duration `json:"-"`
+	Expiry time.Time `json:"-"`
 	Extra []Property `json:"extra"`
 	Status string `json:"status"`
 }

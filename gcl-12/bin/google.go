@@ -5,6 +5,7 @@ import (
 	"appengine/urlfetch"
 	"github.com/crhym3/go-endpoints/endpoints"
 	"net/http"
+	"log"
 )
 
 const WEB_CLIENT_ID string = "1034966141188-b4cup6jccsjqpdc14c9218fhb488e515.apps.googleusercontent.com"
@@ -15,22 +16,22 @@ var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID_d, ANDROID_CLIENT_ID_r
 var audiences = []string{WEB_CLIENT_ID}
 var google_scopes = []string{"https://www.googleapis.com/auth/userinfo.email"}
 
-func (s *Service) GoogleCallback(r *http.Request, req *Request, resp *Response) error {
+func (s *Service) GoogleCallback(r *http.Request, req *NoRequest, resp *Response) error {
 	c := endpoints.NewContext(r)
-	g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids)
-	if err == nil {resp.Message="GoogleOauth2: "+g.String()}
-	return err
+	if g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids); err != nil {return err} else {resp.Message="Google: "+g.String()}
+	return nil
 }
 
-func (s *Service) GoogleRevoke(r *http.Request, req *Request, resp *Response) error {
+func (s *Service) GoogleRevoke(r *http.Request, req *Token, resp *Response) error {
 	c := endpoints.NewContext(r)
-	b, err := Revoke(c, req.Access_token)
-	if err == nil {resp.Message=b}
-	return err
+	if b, err := Revoke(c, req.Access); err != nil {return err} else {resp.Message=b}
+	return nil
 }
 
 func Revoke(c endpoints.Context, access_token string) (string, error){
 	httpClient := urlfetch.Client(c)
+	log.Print("----------")
+	log.Print(access_token)
 	resp, err := httpClient.Get("https://accounts.google.com/o/oauth2/revoke?token="+access_token)
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)

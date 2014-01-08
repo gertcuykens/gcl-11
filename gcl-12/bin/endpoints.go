@@ -6,10 +6,6 @@ import (
 
 type NoRequest struct {}
 
-type Request struct {
-	Access_token string `json:"access_token"`
-}
-
 type RequestCallback struct {
 	Code string `json:"code"`
 	State string `json:"state"`

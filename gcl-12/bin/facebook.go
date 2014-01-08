@@ -13,12 +13,11 @@ type UserF struct {
 	Id string
 }
 
-func (s *Service) FacebookCallback(r *http.Request, req *Request, resp *Response) error {
+func (s *Service) FacebookCallback(r *http.Request, req *Token, resp *Response) error {
 	c := endpoints.NewContext(r)
 	httpClient := urlfetch.Client(c)
-	f, err := FacebookUser(httpClient, req.Access_token)
-	if err == nil {resp.Message="Facebook user: "+f.Name}
-	return err
+	if f, err := FacebookUser(httpClient, req.Access); err != nil {return err} else {resp.Message="Facebook: "+f.Name}
+	return nil
 }
 
 func  FacebookUser(httpClient *http.Client, access_token string) (u *UserF, err error) {

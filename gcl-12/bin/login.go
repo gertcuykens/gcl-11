@@ -43,7 +43,7 @@ func Test(w http.ResponseWriter, r *http.Request) {
 	p := Property{Key:"group", Value:"user"}
 	u := new(User)
 	u.Context = appengine.NewContext(r)
-	u.Token= &Token{Id:"gert", Refresh:"password", Extra:[]Property{p}}
+	u.Token= &Token{Id:"gert", Type:"test", Refresh:"password", Extra:[]Property{p}}
 	u.Init()
 	u.Store()
 	u.Get()
