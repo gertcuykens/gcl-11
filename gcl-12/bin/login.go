@@ -6,11 +6,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+	//"github.com/crhym3/go-endpoints/endpoints"
 )
 
 func (s *Service) UserCreate(r *http.Request, req *Token, resp *Token) (err error) {
+	c := appengine.NewContext(r)
+	//g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids);
+	//if err != nil {return}
+	//g.Email......check for admin..........
 	u := new(User)
-	u.Context = appengine.NewContext(r)
+	u.Context = c
+	//req.Type
+	//req.Access
+	//.............check token type fetch id from oauth
 	u.Token = req
 	if err = u.Init(); err !=nil {return}
 	if err = u.Store(); err !=nil {return}

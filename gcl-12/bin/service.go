@@ -28,7 +28,7 @@ func init() {
 	info9 := api.MethodByName("FacebookCallback").Info()
 	info9.Name, info9.HttpMethod, info9.Path, info9.Desc = "facebook.callback", "GET", "facebook/callback", "Oauth callback."
 	info10 := api.MethodByName("UserCreate").Info()
-	info10.Name, info10.HttpMethod, info10.Path, info10.Desc, info1.Scopes = "user.new", "POST", "user/new", "Create user.", google_scopes
+	info10.Name, info10.HttpMethod, info10.Path, info10.Desc = "user.new", "POST", "user/new", "Create user."
 	info11 := api.MethodByName("UserRefresh").Info()
 	info11.Name, info11.HttpMethod, info11.Path, info11.Desc = "user.refresh", "POST", "user/refresh", "Refresh user."
 	info12 := api.MethodByName("UserToken").Info()

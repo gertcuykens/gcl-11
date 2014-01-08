@@ -5,7 +5,7 @@ import (
 	"appengine/urlfetch"
 	"github.com/crhym3/go-endpoints/endpoints"
 	"net/http"
-	"log"
+	//"log"
 )
 
 const WEB_CLIENT_ID string = "1034966141188-b4cup6jccsjqpdc14c9218fhb488e515.apps.googleusercontent.com"
@@ -30,8 +30,6 @@ func (s *Service) GoogleRevoke(r *http.Request, req *Token, resp *Response) erro
 
 func Revoke(c endpoints.Context, access_token string) (string, error){
 	httpClient := urlfetch.Client(c)
-	log.Print("----------")
-	log.Print(access_token)
 	resp, err := httpClient.Get("https://accounts.google.com/o/oauth2/revoke?token="+access_token)
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)

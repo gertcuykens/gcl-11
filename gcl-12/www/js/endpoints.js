@@ -4,6 +4,9 @@ Facebook.type_token="facebook"
 Google=new Token()
 Google.type_token="google"
 
+Server=new Token()
+Server.type_token="server"
+
 window.fbAsyncInit = function() {
     FB.Event.subscribe('auth.authResponseChange', function(response) {
         if (response.status === 'connected') {
@@ -94,7 +97,7 @@ function autosignin() {
 }
 
 function signout() {
-    gapi.client.rest.google.revoke(Google).execute(function(response){console.log('Server, Bye, '+response.message);Google.access_token=null})
+    gapi.client.rest.google.revoke(Google).execute(function(response){console.log('Server, Bye, '+response.message);Google.access_token=null;border()})
     var b=document.getElementById('signinButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
@@ -112,13 +115,15 @@ function border() {
     b.style.borderBottom='1px solid transparent'
 }
 
-function testAPI() {
-    console.log('Facebook,  Fetching your information... ');
+function testAPI1() {
+    console.log('Browser, Fetching your Facebook information... ');
     FB.api('/me', function(response) {console.log('Facebook, '+response.name+'.')})
 
-    console.log('Google,  Fetching your information... ');
+    console.log('Browser, Fetching your Google information... ');
     gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, '+response.email+'.')})
+}
 
+function testAPI2() {
     console.log('Server, Fetching your Facebook information... ');
     gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.message)})
 
@@ -126,3 +131,24 @@ function testAPI() {
     gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response.message)})
 }
 
+function testAPI3() {
+    console.log('Server, Create user... ');
+    gapi.client.rest.user.new(Facebook).execute(function(response){console.log('Server, '+response)})
+
+    /*console.log('Server, Login user... ');
+    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})
+
+    console.log('Server, Get user... ');
+    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})*/
+}
+
+function testAPI4() {
+    /*console.log('Server, Store data... ');
+    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})
+
+    console.log('Server, Get data... ');
+    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})
+
+    console.log('Server, Query data... ');
+    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})*/
+}
