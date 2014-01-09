@@ -39,7 +39,7 @@ func (u *User) Init() (err error){
 	u.Key= datastore.NewKey(u.Token.Context, "User", u.Token.Id, 0, nil)
 	u.Type= u.Token.Type
 	u.Extra=u.Token.Extra
-	u.Refresh=[]byte(u.Refresh)
+	u.Refresh=[]byte(u.Token.Refresh)
 	h := sha1.New()
 	e := time.Now().Add(time.Duration(3600)*time.Second)
 	a := u.Token.Id+e.String()+SERVER_SECRET

@@ -2,6 +2,7 @@ package bin
 
 import (
 	"appengine/datastore"
+	"net/http"
 )
 
 type Data struct {
@@ -26,5 +27,9 @@ func (d *Data) Get() (err error){
 }
 
 func (d *Data) Query() (err error){
+	return nil
+}
+
+func (s *Service) DataService(r *http.Request, req *Token, res *Token) (err error) {
 	return nil
 }
