@@ -1,10 +1,6 @@
 package bin
 
-import (
-	"github.com/mrjones/oauth"
-)
-
-type NoRequest struct {}
+import "github.com/mrjones/oauth"
 
 type RequestCallback struct {
 	Code string `json:"code"`
@@ -21,15 +17,9 @@ type RequestOob struct {
 	VerificationCode string `json:"verificationCode"`
 }
 
-type Response struct {
-	Message string `json:"message"`
-}
-
 type ResponseOauth struct {
 	RequestToken *oauth.RequestToken `json:"requestToken"`
 	Url string `json:"url"`
 }
 
-type Service struct {}
-
-
+type NoRequest struct {}

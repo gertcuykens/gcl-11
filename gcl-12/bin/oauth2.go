@@ -1,9 +1,7 @@
 package bin
 
 import (
-	"appengine"
 	"net/url"
-	"net/http"
 	"mime"
 	"io/ioutil"
 	"encoding/json"
@@ -12,16 +10,14 @@ import (
 )
 
 type Transport struct {
-	*Token
+	Token *Token
+	TokenCache *Cache
     ClientId string
     ClientSecret string
     RedirectURL string
     AuthURL string
     TokenURL string
-	Context appengine.Context
-	Client *http.Client
 	Scopes []string
-	TokenCache *Cache
 	ApprovalPrompt string
 	AccessType string
 }
@@ -35,66 +31,17 @@ func (oe OAuthError) Error() string {
 	return "OAuthError: " + oe.prefix + ": " + oe.msg
 }
 
-func (t *Transport) Refresh() error {
-	tok, expiry, err := appengine.AccessToken(t.Context, t.Scopes...)
-	if err != nil {return err}
-	t.Token = &Token{
-		Access: tok,
-		Expiry: expiry,
-	}
-	if t.TokenCache != nil {t.TokenCache.PutToken(t.Token)}
-	return nil
-}
-
-func (t *Transport) FetchToken() error {
+func (t *Transport) Exchange(code string) (err error) {
 	if t.Token == nil && t.TokenCache != nil {t.Token, _ = t.TokenCache.Token()}
-	if t.Token == nil || t.Expired() {if err := t.Refresh(); err != nil {return err}}
-	return nil
-}
-
-func (t *Transport) Exchange(code string) (*Token, error) {
-	tok := t.Token
-	if tok == nil && t.TokenCache != nil {tok, _ = t.TokenCache.Token()}
-	if tok == nil {tok = new(Token)}
-	err := t.UpdateToken(tok, url.Values{
+	if t.Token == nil {t.Token = new(Token)}
+	err = t.UpdateToken(url.Values{
 		"grant_type":   {"authorization_code"},
 		"redirect_uri": {t.RedirectURL},
 		"scope":        {strings.Join(t.Scopes, " ")},
 		"code":         {code},
 	})
-	if err != nil {return nil, err}
-	t.Token = tok
-	if t.TokenCache != nil {return tok, t.TokenCache.PutToken(tok)}
-	return tok, nil
-}
-
-func (t *Transport) UpdateToken(tok *Token, v url.Values) error {
-	v.Set("client_id", t.ClientId)
-	v.Set("client_secret", t.ClientSecret)
-	r, err := t.Client.PostForm(t.TokenURL, v)
 	if err != nil {return err}
-	defer r.Body.Close()
-	if r.StatusCode != 200 {return OAuthError{"updateToken", r.Status}}
-    var b Token
-	content, _, _ := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	switch content {
-		case "application/x-www-form-urlencoded", "text/plain":
-			body, err := ioutil.ReadAll(r.Body)
-			if err != nil {return err}
-			vals, err := url.ParseQuery(string(body))
-			if err != nil {return err}
-			b.Access = vals.Get("access_token")
-			b.Refresh = vals.Get("refresh_token")
-			b.ExpiresIn, _ = time.ParseDuration(vals.Get("expires_in") + "s")
-			b.Id = vals.Get("id_token")
-		default:
-			if err = json.NewDecoder(r.Body).Decode(&b); err != nil {return err}
-			b.ExpiresIn *= time.Second
-	}
-	tok.Access = b.Access
-	if len(b.Refresh) > 0 {tok.Refresh = b.Refresh}
-	if b.ExpiresIn == 0 {tok.Expiry = time.Time{}} else { tok.Expiry = time.Now().Add(b.ExpiresIn) }
-	if b.Id != "" {tok.Id = b.Id}
+	if t.TokenCache != nil {return t.TokenCache.PutToken(t.Token)}
 	return nil
 }
 
@@ -114,9 +61,70 @@ func (t *Transport) AuthCodeURL(state string) string {
 	return u.String()
 }
 
+func (t *Transport) Refresh() error {
+	if t.Token == nil {return OAuthError{"Refresh", "no existing Token"}}
+	if t.Token.Refresh == "" {return OAuthError{"Refresh", "Token expired; no Refresh Token"}}
+
+	err := t.UpdateToken(url.Values{
+		"grant_type":    {"refresh_token"},
+		"refresh_token": {t.Token.Refresh},
+	})
+
+	if err != nil {return err}
+	if t.TokenCache != nil {return t.TokenCache.PutToken(t.Token)}
+	return nil
+}
+
+func (t *Transport) UpdateToken(v url.Values) error {
+	v.Set("client_id", t.ClientId)
+	v.Set("client_secret", t.ClientSecret)
+	r, err := t.Token.Client.PostForm(t.TokenURL, v)
+	if err != nil {return err}
+	defer r.Body.Close()
+	if r.StatusCode != 200 {return OAuthError{"updateToken", r.Status}}
+	var b Token
+	content, _, _ := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	switch content {
+	case "application/x-www-form-urlencoded", "text/plain":
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {return err}
+		vals, err := url.ParseQuery(string(body))
+		if err != nil {return err}
+		b.Access = vals.Get("access_token")
+		b.Refresh = vals.Get("refresh_token")
+		b.ExpiresIn, _ = time.ParseDuration(vals.Get("expires_in") + "s")
+		b.Id = vals.Get("id_token")
+	default:
+		if err = json.NewDecoder(r.Body).Decode(&b); err != nil {return err}
+		b.ExpiresIn *= time.Second
+	}
+	t.Token.Access = b.Access
+	if len(b.Refresh) > 0 {t.Token.Refresh = b.Refresh}
+	if b.ExpiresIn == 0 {t.Token.Expiry = time.Time{}} else { t.Token.Expiry = time.Now().Add(b.ExpiresIn) }
+	if b.Id != "" {t.Token.Id = b.Id}
+	return nil
+}
+
 /*
-//Transport http.RoundTripper
-//r, err := (&http.Client{Transport: t.transport()}).PostForm(t.TokenURL, v)
+func (t *Transport) FetchToken() error {
+	if t.Token == nil && t.TokenCache != nil {t.Token, _ = t.TokenCache.Token()}
+	if t.Token == nil || t.Token.Expired() {if err := t.Refresh(); err != nil {return err}}
+	return nil
+}
+
+func (t *Transport) Refresh() error {
+	tok, expiry, err := appengine.AccessToken(t.Token.Context, t.Scopes...)
+	if err != nil {return err}
+	t.Token = &Token{
+		Access: tok,
+		Expiry: expiry,
+	}
+	if t.TokenCache != nil {t.TokenCache.PutToken(t.Token)}
+	return nil
+}
+
+Transport http.RoundTripper
+r, err := (&http.Client{Transport: t.transport()}).PostForm(t.TokenURL, v)
 
 func cloneRequest(r *http.Request) *http.Request {
 	r2 := new(http.Request)
@@ -131,5 +139,13 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	newReq := cloneRequest(req)
 	newReq.Header.Set("Authorization", "Bearer "+t.AccessToken)
 	return t.Transport.RoundTrip(newReq)
+}
+
+if err := transport.FetchToken(); err != nil {return err}
+
+transport.Transport=&urlfetch.Transport{
+	Context: context,
+	Deadline: 0,
+	AllowInvalidServerCertificate: false,
 }
 */

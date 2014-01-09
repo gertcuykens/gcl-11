@@ -29,7 +29,8 @@ var consumer = oauth.NewConsumer(TWITTER_ID, TWITTER_SECRET, TWITTER_SERVER)
 func (s *Service) TwitterOauth(r *http.Request, req *NoRequest, resp *ResponseOauth) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
-	requestToken, url, err := Oauth()
+	requestToken, url, err := consumer.GetRequestTokenAndUrl("http://localhost:8080/_ah/api/rest/v0/twitter/callback")
+	if err != nil {log.Fatal(err)}
 	resp.RequestToken=requestToken
 	resp.Url=url
 	return err
@@ -38,41 +39,30 @@ func (s *Service) TwitterOauth(r *http.Request, req *NoRequest, resp *ResponseOa
 func (s *Service) TwitterOauthOob(r *http.Request, req *NoRequest, resp *ResponseOauth) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
-	requestToken, url, err := Oauth()
+	requestToken, url, err := consumer.GetRequestTokenAndUrl("oob")
+	if err != nil {log.Fatal(err)}
 	resp.RequestToken=requestToken
 	resp.Url=url
 	return err
 }
 
-func (s *Service) TwitterCallback(r *http.Request, req *RequestOauth, resp *Response) error {
+func (s *Service) TwitterCallback(r *http.Request, req *RequestOauth, resp *Token) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	requestToken := &oauth.RequestToken{Token:req.Oauth_token}
 	b, err := TwitterUser(requestToken, req.Oauth_verifier)
-	resp.Message=b.Name
+	resp.Name=b.Name
+	resp.Id64=b.Id
 	return err
 }
 
-func (s *Service) TwitterCallbackOob(r *http.Request, req *RequestOob, resp *Response) error {
+func (s *Service) TwitterCallbackOob(r *http.Request, req *RequestOob, resp *Token) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	b, err := TwitterUser(req.RequestToken, req.VerificationCode)
-	resp.Message=b.Name
+	resp.Name=b.Name
+	resp.Id64=b.Id
 	return err
-}
-
-func Oauth() (requestToken *oauth.RequestToken, url string, err error) {
-	//tokenUrl := "https://gcl-12.appspot.com/_ah/api/rest/v0/twitter/callback"
-	tokenUrl := "http://localhost:8080/_ah/api/rest/v0/twitter/callback"
-	requestToken, url, err = consumer.GetRequestTokenAndUrl(tokenUrl)
-	if err != nil {log.Fatal(err)}
-	return
-}
-
-func OauthOob() (requestToken *oauth.RequestToken, url string, err error) {
-	requestToken, url, err = consumer.GetRequestTokenAndUrl("oob")
-	if err != nil {log.Fatal(err)}
-	return
 }
 
 func TwitterUser(requestToken *oauth.RequestToken, verificationCode string) (u *UserT, err error) {

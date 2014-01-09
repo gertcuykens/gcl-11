@@ -2,7 +2,6 @@ package bin
 
 import (
 	"appengine/datastore"
-	"appengine"
 	"crypto/sha1"
 	"time"
 	"encoding/hex"
@@ -14,7 +13,6 @@ type User struct {
 	Refresh []byte `datastore:"refresh"`
 	Extra []Property `datastore:"extra"`
 	Token *Token `datastore:"-"`
-	Context appengine.Context `datastore:"-"`
 }
 
 func (u *User) Error() string {
@@ -23,7 +21,7 @@ func (u *User) Error() string {
 
 func (u *User) Store() error{
 	if u.Key == nil {u.Token.Status="Datastore no Key!"; return u}
-	key, err := datastore.Put(u.Context, u.Key, u);
+	key, err := datastore.Put(u.Token.Context, u.Key, u);
 	if err != nil {u.Token.Status="Datastore put error! "+err.Error(); return u}
 	u.Token.Status="Stored "+key.StringID()+"."
 	return nil
@@ -31,20 +29,20 @@ func (u *User) Store() error{
 
 func (u *User) Get() (err error){
 	if u.Key == nil {u.Token.Status="Datastore no Key!"; return u}
-	if err = datastore.Get(u.Context, u.Key, u); err != nil {u.Token.Status="Datastore get error! "+err.Error(); return u}
+	if err = datastore.Get(u.Token.Context, u.Key, u); err != nil {u.Token.Status="Datastore get error! "+err.Error(); return u}
 	u.Token.Status="Fetched "+u.Key.StringID()+"."
 	return nil
 }
 
 func (u *User) Init() (err error){
 	if u.Token == nil {u.Token.Status="No token!"; return u}
-	u.Key= datastore.NewKey(u.Context, "User", u.Token.Id, 0, nil)
+	u.Key= datastore.NewKey(u.Token.Context, "User", u.Token.Id, 0, nil)
 	u.Type= u.Token.Type
 	u.Extra=u.Token.Extra
 	u.Refresh=[]byte(u.Refresh)
 	h := sha1.New()
 	e := time.Now().Add(time.Duration(3600)*time.Second)
-	a := u.Token.Extra[0].Value+e.String()+SERVER_SECRET
+	a := u.Token.Id+e.String()+SERVER_SECRET
 	s := hex.EncodeToString(h.Sum([]byte(a)))
 	u.Token.Access = s
 	u.Token.Expiry = e
@@ -72,4 +70,3 @@ func (u *User) Login() error {
 	}
 	return nil
 }
-

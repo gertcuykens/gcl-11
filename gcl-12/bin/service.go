@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+type Service struct {}
+
 func init() {
 	service := &Service{}
 	api, err := endpoints.RegisterService(service, "rest", "v0", "API", true)
@@ -18,9 +20,9 @@ func init() {
 	info4 := api.MethodByName("TwitterCallback").Info()
 	info4.Name, info4.HttpMethod, info4.Path, info4.Desc = "twitter.callback", "GET", "twitter/callback", "Oauth callback."
 	info5 := api.MethodByName("TwitterOauthOob").Info()
-	info5.Name, info5.HttpMethod, info5.Path, info5.Desc = "twitter.oob", "GET", "twitter/oob", "Oauth url oob."
+	info5.Name, info5.HttpMethod, info5.Path, info5.Desc = "twitter.oauth.oob", "GET", "twitter/oauth/oob", "Oauth url oob."
 	info6 := api.MethodByName("TwitterCallbackOob").Info()
-	info6.Name, info6.HttpMethod, info6.Path, info6.Desc = "twitter.callback.oob", "POST", "twitter/callback", "Oauth callback oob."
+	info6.Name, info6.HttpMethod, info6.Path, info6.Desc = "twitter.callback.oob", "POST", "twitter/callback/oob", "Oauth callback oob."
 	info7 := api.MethodByName("LinkedInOauth").Info()
 	info7.Name, info7.HttpMethod, info7.Path, info7.Desc = "linkedin.oauth", "GET", "linkedin/oauth", "Oauth url."
 	info8 := api.MethodByName("LinkedInCallback").Info()

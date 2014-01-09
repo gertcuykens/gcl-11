@@ -8,22 +8,17 @@ import (
 	"github.com/crhym3/go-endpoints/endpoints"
 )
 
-type UserF struct {
-	Name string
-	Id string
-}
-
-func (s *Service) FacebookCallback(r *http.Request, req *Token, resp *Response) error {
-	c := endpoints.NewContext(r)
-	httpClient := urlfetch.Client(c)
-	if f, err := FacebookUser(httpClient, req.Access); err != nil {return err} else {resp.Message="Facebook: "+f.Name}
+func (s *Service) FacebookCallback(r *http.Request, t *Token, v *Token) error {
+	t.Client = urlfetch.Client(endpoints.NewContext(r))
+	if err := FacebookUser(t); err != nil {t.Status="Facebook User error!"; return err}
+	*v = *t
 	return nil
 }
 
-func  FacebookUser(httpClient *http.Client, access_token string) (u *UserF, err error) {
-	resp, err := httpClient.Get("https://graph.facebook.com/me?access_token="+access_token)
+func  FacebookUser(req *Token) (err error) {
+	resp, err := req.Client.Get("https://graph.facebook.com/me?access_token="+req.Access)
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)
-	err = json.Unmarshal(b, &u)
-	return u, err
+	err = json.Unmarshal(b, &req)
+	return err
 }

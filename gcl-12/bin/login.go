@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 	//"github.com/crhym3/go-endpoints/endpoints"
+	"appengine/urlfetch"
 )
 
 func (s *Service) UserCreate(r *http.Request, req *Token, resp *Token) (err error) {
@@ -15,42 +16,42 @@ func (s *Service) UserCreate(r *http.Request, req *Token, resp *Token) (err erro
 	//if err != nil {return}
 	//g.Email......check for admin..........
 	u := new(User)
-	u.Context = c
-	//req.Type
-	//req.Access
-	//.............check token type fetch id from oauth
 	u.Token = req
+	u.Token.Context = c
+	u.Token.Client = urlfetch.Client(c)
+	if err = u.Token.SelectId(); err !=nil {return}
 	if err = u.Init(); err !=nil {return}
 	if err = u.Store(); err !=nil {return}
-	resp = u.Token
+	*resp = *u.Token
 	return err
 }
 
 func (s *Service) UserRefresh(r *http.Request, req *Token, resp *Token) (err error) {
 	p := Property{Key:"group", Value:"user"}
 	u := new(User)
-	u.Context = appengine.NewContext(r)
+	u.Token.Context = appengine.NewContext(r)
 	u.Token= &Token{Id:req.Id, Extra:[]Property{p}}
 	if err = u.Init(); err !=nil {return}
 	if err = u.Get(); err !=nil {return}
     if u.Token.Refresh != req.Refresh {u.Token.Status="Wrong refresh token!"; return u}
-	resp = u.Token
+	*resp = *u.Token
 	return err
 }
 
-func (s *Service) UserToken(r *http.Request, req *Token, resp *Response) (err error) {
+func (s *Service) UserToken(r *http.Request, req *Token, resp *Token) (err error) {
 	u := new(User)
-	u.Context = appengine.NewContext(r)
 	u.Token = req
-	if err = u.Token.CheckSum(); err !=nil {return}
-	resp.Message="OK"
+	u.Token.Context = appengine.NewContext(r)
+	if err = u.Token.CheckSum(); err !=nil {return err}
+	u.Token.Status="OK"
+	*resp = *u.Token
 	return err
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
 	p := Property{Key:"group", Value:"user"}
 	u := new(User)
-	u.Context = appengine.NewContext(r)
+	u.Token.Context = appengine.NewContext(r)
 	u.Token= &Token{Id:"gert", Type:"test", Refresh:"password", Extra:[]Property{p}}
 	u.Init()
 	u.Store()

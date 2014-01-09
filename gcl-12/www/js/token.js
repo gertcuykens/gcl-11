@@ -10,7 +10,7 @@ Token = function() {
     this.access_token=null
     this.refresh_token=null
     this.expires_in=null
-    this.expiry=new Date()
+    this.expiry=new Date().toJSON()
     this.extra=[]
     this.status=null
 }

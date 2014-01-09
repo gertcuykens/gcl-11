@@ -2,12 +2,9 @@ package bin
 
 import (
 	"github.com/crhym3/go-endpoints/endpoints"
-	//"appengine"
 	"appengine/urlfetch"
 	"net/http"
 	"io/ioutil"
-	//"encoding/json"
-	"log"
     "encoding/xml"
 )
 
@@ -17,6 +14,7 @@ type UserL struct {
 }
 
 var transport = &Transport{
+	Token: &Token{},
 	ClientId:     "77snhv7ncbvs5f",
 	ClientSecret: LINKEDIN_SECRET,
 	RedirectURL:  "http://localhost:8080/_ah/api/rest/v0/linkedin/callback",
@@ -30,36 +28,25 @@ func (s *Service) LinkedInOauth(r *http.Request, req *NoRequest, resp *ResponseO
 	return nil
 }
 
-func (s *Service) LinkedInCallback(r *http.Request, req *RequestCallback, resp *Response) error {
-	context := endpoints.NewContext(r)
-	transport.TokenCache=&Cache{
-		Context: context,
-		Key: "oauth2_basicprofile_emailaddress",
-	}
-	transport.Client= urlfetch.Client(context)
-	transport.Context=context
-
-	token, err := transport.Exchange(req.Code)
-	transport.Token = token
-	u, err := LinkedinUser(transport)
-	resp.Message="LinkedIn email: "+u.Email
+func (s *Service) LinkedInCallback(r *http.Request, req *RequestCallback, resp *Token) (err error) {
+	c := endpoints.NewContext(r)
+	transport.TokenCache=&Cache{Context: c, Key: "linkedin"}
+	transport.Token.Context= c
+	transport.Token.Client= urlfetch.Client(c)
+	err = transport.Exchange(req.Code)
+	err = LinkedInUser(transport)
+	resp.Email=transport.Token.Email
 	return err
 }
 
-func LinkedinUser(transport *Transport) (u *UserL, err error) {
-	r, err := transport.Client.Get("https://api.linkedin.com/v1/people/~/email-address?oauth2_access_token="+transport.Token.Access)
+func LinkedInUser(transport *Transport) (err error) {
+	r, err := transport.Token.Client.Get("https://api.linkedin.com/v1/people/~/email-address?oauth2_access_token="+transport.Token.Access)
 	defer r.Body.Close()
 	b, err := ioutil.ReadAll(r.Body)
-	log.Print(string(b))
+	if err != nil {return err}
+	var u *UserL
 	err = xml.Unmarshal(b, &u)
-	return
+	if err != nil {return err}
+	transport.Token.Email=u.Email
+	return nil
 }
-
-/*
-//if err := transport.FetchToken(); err != nil {return err}
-transport.Transport=&urlfetch.Transport{
-	Context: context,
-	Deadline: 0,
-	AllowInvalidServerCertificate: false,
-}
-*/

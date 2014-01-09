@@ -16,22 +16,33 @@ var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID_d, ANDROID_CLIENT_ID_r
 var audiences = []string{WEB_CLIENT_ID}
 var google_scopes = []string{"https://www.googleapis.com/auth/userinfo.email"}
 
-func (s *Service) GoogleCallback(r *http.Request, req *NoRequest, resp *Response) error {
+func (s *Service) GoogleCallback(r *http.Request, req *Token, resp *Token) error {
 	c := endpoints.NewContext(r)
-	if g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids); err != nil {return err} else {resp.Message="Google: "+g.String()}
+	g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids);
+	if err != nil {return err}
+	resp.Status="Google: "+g.String()
 	return nil
 }
 
-func (s *Service) GoogleRevoke(r *http.Request, req *Token, resp *Response) error {
-	c := endpoints.NewContext(r)
-	if b, err := Revoke(c, req.Access); err != nil {return err} else {resp.Message=b}
+func (s *Service) GoogleRevoke(r *http.Request, req *Token, resp *Token) (err error) {
+	req.Client = urlfetch.Client(endpoints.NewContext(r))
+	if err = Revoke(req); err != nil {return err}
+	resp = req
 	return nil
 }
 
-func Revoke(c endpoints.Context, access_token string) (string, error){
-	httpClient := urlfetch.Client(c)
-	resp, err := httpClient.Get("https://accounts.google.com/o/oauth2/revoke?token="+access_token)
+func Revoke(t *Token) (err error){
+	resp, err := t.Client.Get("https://accounts.google.com/o/oauth2/revoke?token="+t.Access)
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)
-	return string(b),err
+	t.Status=string(b)
+	return err
+}
+
+func GoogleUser(t *Token) (error){
+	resp, err := t.Client.Get("https://accounts.google.com/o/oauth2/revoke?token="+t.Access)
+	defer resp.Body.Close()
+	b, err := ioutil.ReadAll(resp.Body)
+	t.Email=string(b)
+	return err
 }
