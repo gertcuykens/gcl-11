@@ -2,19 +2,18 @@ package bin
 
 import (
 	"net/http"
-	"appengine"
 	"encoding/json"
 	"fmt"
 	"time"
-	//"github.com/crhym3/go-endpoints/endpoints"
 	"appengine/urlfetch"
+	"github.com/crhym3/go-endpoints/endpoints"
 )
 
 func (s *Service) UserCreate(r *http.Request, req *Token, resp *Token) (err error) {
-	c := appengine.NewContext(r)
+	c := endpoints.NewContext(r)
 	//g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids);
 	//if err != nil {return}
-	//g.Email......check for admin..........
+	//......check for admin..........
 	u := new(User)
 	u.Token = req
 	u.Token.Context = c
@@ -29,7 +28,7 @@ func (s *Service) UserCreate(r *http.Request, req *Token, resp *Token) (err erro
 func (s *Service) UserRefresh(r *http.Request, req *Token, resp *Token) (err error) {
 	p := Property{Key:"group", Value:"user"}
 	u := new(User)
-	u.Token.Context = appengine.NewContext(r)
+	u.Token.Context = endpoints.NewContext(r)
 	u.Token= &Token{Id:req.Id, Extra:[]Property{p}}
 	if err = u.Init(); err !=nil {return}
 	if err = u.Get(); err !=nil {return}
@@ -41,7 +40,7 @@ func (s *Service) UserRefresh(r *http.Request, req *Token, resp *Token) (err err
 func (s *Service) UserToken(r *http.Request, req *Token, resp *Token) (err error) {
 	u := new(User)
 	u.Token = req
-	u.Token.Context = appengine.NewContext(r)
+	u.Token.Context = endpoints.NewContext(r)
 	if err = u.Token.CheckSum(); err !=nil {return err}
 	u.Token.Status="OK"
 	*resp = *u.Token
@@ -51,8 +50,8 @@ func (s *Service) UserToken(r *http.Request, req *Token, resp *Token) (err error
 func Test(w http.ResponseWriter, r *http.Request) {
 	p := Property{Key:"group", Value:"user"}
 	u := new(User)
-	u.Token.Context = appengine.NewContext(r)
-	u.Token= &Token{Id:"gert", Type:"test", Refresh:"password", Extra:[]Property{p}}
+	u.Token.Context = endpoints.NewContext(r)
+	u.Token= &Token{Id:1, Type:"test", Refresh:"password", Extra:[]Property{p}}
 	u.Init()
 	u.Store()
 	u.Get()

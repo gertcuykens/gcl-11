@@ -135,8 +135,8 @@ function testAPI3() {
     console.log('Server, Create user... ');
     gapi.client.rest.user.new(Facebook).execute(function(response){console.log('Server, '+response)})
 
-    /*console.log('Server, Create user... ');
-    gapi.client.rest.user.new(Google).execute(function(response){console.log('Server, '+response)})*/
+    console.log('Server, Create user... ');
+    gapi.client.rest.user.new(Google).execute(function(response){console.log('Server, '+response)})
 
     /*console.log('Server, Login user... ');
     gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})

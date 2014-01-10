@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"time"
 	"net/http"
-	"appengine"
+	"github.com/crhym3/go-endpoints/endpoints"
 )
 
 type Property struct {
@@ -14,11 +14,8 @@ type Property struct {
 }
 
 type Token struct {
-	Id string `json:"id_token"`
-	Idf string `json:"id"`
-	Id64 int64 `json:"id64_token"`
+	Id int64 `json:"id_token"`
 	Name string `json:"name_token"`
-	Namef string `json:"name"`
 	Email string `json:"email_token"`
 	Type string `json:"type_token"`
 	Access string `json:"access_token"`
@@ -29,7 +26,9 @@ type Token struct {
 	Status string `json:"status"`
 	Message string `json:"message"`
 	Client *http.Client `json:"-"`
-	Context appengine.Context `json:"-"`
+	Context endpoints.Context `json:"-"`
+	Oauth_token string `json:"oauth_token"`
+	Oauth_verifier string `json:"oauth_verifier"`
 }
 
 func (t *Token) Error() string {
@@ -57,7 +56,7 @@ func (t *Token) SelectId() (err error) {
 	switch t.Type {
 		case "facebook": FacebookUser(t)
 	    case "google": GoogleUser(t)
-	    //case "twitter": TwitterUser(t)
+	    case "twitter": TwitterUser(t)
 	    case "linkedin": LinkedInUser(transport)
 		default: t.Status="Unrecognized Id Type!"; return t
 	}

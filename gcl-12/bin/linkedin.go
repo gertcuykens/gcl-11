@@ -8,11 +8,6 @@ import (
     "encoding/xml"
 )
 
-type UserL struct {
-	XMLName xml.Name `xml:"email-address"`
-	Email string `xml:",chardata"`
-}
-
 var transport = &Transport{
 	Token: &Token{},
 	ClientId:     "77snhv7ncbvs5f",
@@ -44,7 +39,10 @@ func LinkedInUser(transport *Transport) (err error) {
 	defer r.Body.Close()
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {return err}
-	var u *UserL
+	var u struct {
+		XMLName xml.Name `xml:"email-address"`
+		Email string `xml:",chardata"`
+	}
 	err = xml.Unmarshal(b, &u)
 	if err != nil {return err}
 	transport.Token.Email=u.Email

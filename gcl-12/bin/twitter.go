@@ -10,11 +10,6 @@ import (
 	"appengine/urlfetch"
 )
 
-type UserT struct {
-	Name string
-	Id int64
-}
-
 const TWITTER_ID = "PrTNrRxkWs6dw9XOr95A"
 
 var TWITTER_SERVER = oauth.ServiceProvider{
@@ -49,30 +44,36 @@ func (s *Service) TwitterOauthOob(r *http.Request, req *NoRequest, resp *Respons
 func (s *Service) TwitterCallback(r *http.Request, req *RequestOauth, resp *Token) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
-	requestToken := &oauth.RequestToken{Token:req.Oauth_token}
-	b, err := TwitterUser(requestToken, req.Oauth_verifier)
-	resp.Name=b.Name
-	resp.Id64=b.Id
+	resp.Oauth_token = req.Oauth_token
+	resp.Oauth_verifier = req.Oauth_verifier
+	err := TwitterUser(resp)
 	return err
 }
 
 func (s *Service) TwitterCallbackOob(r *http.Request, req *RequestOob, resp *Token) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
-	b, err := TwitterUser(req.RequestToken, req.VerificationCode)
-	resp.Name=b.Name
-	resp.Id64=b.Id
+	resp.Oauth_token = req.RequestToken.Token
+	resp.Oauth_verifier = req.VerificationCode
+	err := TwitterUser(resp)
 	return err
 }
 
-func TwitterUser(requestToken *oauth.RequestToken, verificationCode string) (u *UserT, err error) {
-	accessToken, err := consumer.AuthorizeToken(requestToken, verificationCode)
+func TwitterUser(t *Token) (err error) {
+	var u struct {
+		Id int64
+		Name string
+	}
+	requestToken := &oauth.RequestToken{Token:t.Oauth_token}
+	accessToken, err := consumer.AuthorizeToken(requestToken, t.Oauth_verifier)
 	if err != nil {log.Fatal(err)}
 	response, err := consumer.Get("https://api.twitter.com/1.1/account/verify_credentials.json", nil, accessToken)
 	if err != nil {log.Fatal(err)}
 	defer response.Body.Close()
 	b, err := ioutil.ReadAll(response.Body)
 	err = json.Unmarshal(b, &u)
+	t.Id = u.Id
+	t.Name = u.Name
 	return
 }
 

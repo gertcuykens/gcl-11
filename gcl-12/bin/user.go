@@ -36,13 +36,13 @@ func (u *User) Get() (err error){
 
 func (u *User) Init() (err error){
 	if u.Token == nil {u.Token.Status="No token!"; return u}
-	u.Key= datastore.NewKey(u.Token.Context, "User", u.Token.Id, 0, nil)
+	u.Key= datastore.NewKey(u.Token.Context, u.Token.Type, "", u.Token.Id, nil)
 	u.Type= u.Token.Type
 	u.Extra=u.Token.Extra
 	u.Refresh=[]byte(u.Token.Refresh)
 	h := sha1.New()
 	e := time.Now().Add(time.Duration(3600)*time.Second)
-	a := u.Token.Id+e.String()+SERVER_SECRET
+	a := string(byte(u.Token.Id))+e.String()+SERVER_SECRET
 	s := hex.EncodeToString(h.Sum([]byte(a)))
 	u.Token.Access = s
 	u.Token.Expiry = e

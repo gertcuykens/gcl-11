@@ -93,7 +93,7 @@ func (t *Transport) UpdateToken(v url.Values) error {
 		b.Access = vals.Get("access_token")
 		b.Refresh = vals.Get("refresh_token")
 		b.ExpiresIn, _ = time.ParseDuration(vals.Get("expires_in") + "s")
-		b.Id = vals.Get("id_token")
+		//b.Id = vals.Get("id_token")
 	default:
 		if err = json.NewDecoder(r.Body).Decode(&b); err != nil {return err}
 		b.ExpiresIn *= time.Second
@@ -101,7 +101,7 @@ func (t *Transport) UpdateToken(v url.Values) error {
 	t.Token.Access = b.Access
 	if len(b.Refresh) > 0 {t.Token.Refresh = b.Refresh}
 	if b.ExpiresIn == 0 {t.Token.Expiry = time.Time{}} else { t.Token.Expiry = time.Now().Add(b.ExpiresIn) }
-	if b.Id != "" {t.Token.Id = b.Id}
+	//if b.Id != "" {t.Token.Id = b.Id}
 	return nil
 }
 
