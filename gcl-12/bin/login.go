@@ -29,9 +29,9 @@ func (s *Service) UserRefresh(r *http.Request, req *Token, resp *Token) (err err
 	p := Property{Key:"group", Value:"user"}
 	u := new(User)
 	u.Token.Context = endpoints.NewContext(r)
-	u.Token= &Token{Id:req.Id, Extra:[]Property{p}}
-	if err = u.Init(); err !=nil {return}
-	if err = u.Get(); err !=nil {return}
+	u.Token = &Token{Id:req.Id, Extra:[]Property{p}}
+	if err = u.Init(); err != nil {return}
+	if err = u.Get(); err != nil {return}
     if u.Token.Refresh != req.Refresh {u.Token.Status="Wrong refresh token!"; return u}
 	*resp = *u.Token
 	return err

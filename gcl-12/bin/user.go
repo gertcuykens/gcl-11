@@ -9,7 +9,6 @@ import (
 
 type User struct {
 	Key *datastore.Key `datastore:"-"`
-	Type string `datastore:"type"`
 	Refresh []byte `datastore:"refresh"`
 	Extra []Property `datastore:"extra"`
 	Token *Token `datastore:"-"`
@@ -36,9 +35,9 @@ func (u *User) Get() (err error){
 
 func (u *User) Init() (err error){
 	if u.Token == nil {u.Token.Status="No token!"; return u}
-	u.Key= datastore.NewKey(u.Token.Context, u.Token.Type, "", u.Token.Id, nil)
-	u.Type= u.Token.Type
-	u.Extra=u.Token.Extra
+	if u.Token.Id != 0 {u.Key= datastore.NewKey(u.Token.Context, u.Token.Type, "", u.Token.Id, nil)}
+	if u.Token.Email != "" {u.Key= datastore.NewKey(u.Token.Context, u.Token.Type, u.Token.Email, 0, nil)}
+	u.Extra = u.Token.Extra
 	u.Refresh=[]byte(u.Token.Refresh)
 	h := sha1.New()
 	e := time.Now().Add(time.Duration(3600)*time.Second)

@@ -5,8 +5,6 @@ import (
 	"appengine/urlfetch"
 	"github.com/crhym3/go-endpoints/endpoints"
 	"net/http"
-	"strconv"
-	"log"
 )
 
 const WEB_CLIENT_ID string = "1034966141188-b4cup6jccsjqpdc14c9218fhb488e515.apps.googleusercontent.com"
@@ -43,9 +41,6 @@ func Revoke(t *Token) (err error){
 func GoogleUser(t *Token) (error){
 	g, err := endpoints.CurrentUser(t.Context, google_scopes, audiences, clientids);
 	if err != nil {return err}
-	log.Print("-----------")
-	log.Print(g.ID)
-	t.Id, err =  strconv.ParseInt(g.ID,10,64)
 	t.Email = g.Email
 	return err
 }
