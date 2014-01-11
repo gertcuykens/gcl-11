@@ -15,7 +15,7 @@ var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID_d, ANDROID_CLIENT_ID_r
 var audiences = []string{WEB_CLIENT_ID}
 var google_scopes = []string{"https://www.googleapis.com/auth/userinfo.email"}
 
-func (s *Service) GoogleCallback(r *http.Request, req *Token, resp *Token) error {
+func (s *Service) GoogleCallback(r *http.Request, req *NoRequest, resp *Token) error {
 	c := endpoints.NewContext(r)
 	g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids);
 	if err != nil {return err}

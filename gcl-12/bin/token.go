@@ -58,6 +58,7 @@ func (t *Token) SelectId() (err error) {
 	    case "google": GoogleUser(t)
 	    case "twitter": TwitterUser(t)
 	    case "linkedin": LinkedInUser(transport)
+		//case "server": Server(transport)
 		default: t.Status = "Unrecognized Id Type!"; return t
 	}
 	return nil
