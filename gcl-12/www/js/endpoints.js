@@ -133,14 +133,13 @@ function testAPI2() {
 
 function testAPI3() {
     console.log('Server, Register Facebook user... ');
-    gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+response)})
+    gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
 
-    //console.log('Server, Register Google user... ');
-    //gapi.client.rest.register(Google).execute(function(response){console.log('Server, '+response)})
+    console.log('Server, Register Google user... ');
+    gapi.client.rest.register(Google).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
+}
 
-    //console.log('Server, CheckSum Facebook token... ');
-    //gapi.client.rest.checksum(Facebook).execute(function(response){console.log('Server, '+response)})
-
-    //console.log('Server, CheckSum Google token... ');
-    //gapi.client.rest.checksum(Google).execute(function(response){console.log('Server, '+response)})
+function testAPI4() {
+    console.log('Server, CheckSum Facebook token... ');
+    gapi.client.rest.checksum(Server).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
 }

@@ -32,7 +32,7 @@ func (s *Service) Register(r *http.Request, req *Token, resp *Token) (err error)
 		id.Value=u.Token.Email
 	}
 
-	if err = u.Get(); err !=nil {return}
+	if err = u.Get(); err !=nil {} //TODO
     if u.Group == nil {
 		var g = []Property{}
 		var group = Property{
@@ -44,6 +44,7 @@ func (s *Service) Register(r *http.Request, req *Token, resp *Token) (err error)
 		u.Group=g
 		if err = u.Put(); err !=nil {return}
 	}
+	u.Token.Extra = u.Group
 
 	h := sha1.New()
 	e := time.Now().Add(time.Duration(3600)*time.Second)
@@ -51,7 +52,6 @@ func (s *Service) Register(r *http.Request, req *Token, resp *Token) (err error)
 	x := hex.EncodeToString(h.Sum([]byte(a)))
 	u.Token.Access = x
 	u.Token.Expiry = e
-	u.Token.Extra = u.Group
 	u.Token.Status = "OK"
 	*resp = *u.Token
 	return
