@@ -1,9 +1,6 @@
 package bin
 
-import (
-	"github.com/crhym3/go-endpoints/endpoints"
-	"net/http"
-)
+import "github.com/crhym3/go-endpoints/endpoints"
 
 type Service struct {}
 
@@ -29,17 +26,16 @@ func init() {
 	info8.Name, info8.HttpMethod, info8.Path, info8.Desc = "linkedin.callback", "GET", "linkedin/callback", "Oauth callback."
 	info9 := api.MethodByName("FacebookCallback").Info()
 	info9.Name, info9.HttpMethod, info9.Path, info9.Desc = "facebook.callback", "GET", "facebook/callback", "Oauth callback."
-	info10 := api.MethodByName("UserCreate").Info()
-	info10.Name, info10.HttpMethod, info10.Path, info10.Desc = "user.new", "POST", "user/new", "Create user."
-	info11 := api.MethodByName("UserRefresh").Info()
-	info11.Name, info11.HttpMethod, info11.Path, info11.Desc = "user.refresh", "POST", "user/refresh", "Refresh user."
-	info12 := api.MethodByName("UserToken").Info()
-	info12.Name, info12.HttpMethod, info12.Path, info12.Desc = "user.token", "POST", "user/token", "Check user token."
+	info10 := api.MethodByName("Register").Info()
+	info10.Name, info10.HttpMethod, info10.Path, info10.Desc = "register", "POST", "register", "Register user."
+	info11 := api.MethodByName("CheckSum").Info()
+	info11.Name, info11.HttpMethod, info11.Path, info11.Desc = "checksum", "POST", "checkSum", "Check token."
 	endpoints.HandleHttp()
-	http.HandleFunc("/bin/test", Test)
 }
 
 /*
+
+	http.HandleFunc("/bin/test", Test)
 import (
     "fmt"
     "net/http"

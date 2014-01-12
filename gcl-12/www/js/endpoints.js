@@ -125,33 +125,22 @@ function testAPI1() {
 
 function testAPI2() {
     console.log('Server, Fetching your Facebook information... ');
-    gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.message)})
+    gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.name_token)})
 
     console.log('Server, Fetching your Google information... ');
-    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response.message)})
+    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response.email_token)})
 }
 
 function testAPI3() {
-    console.log('Server, Create user... ');
-    gapi.client.rest.user.new(Facebook).execute(function(response){console.log('Server, '+response)})
+    console.log('Server, Register Facebook user... ');
+    gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+response)})
 
-    console.log('Server, Create user... ');
-    gapi.client.rest.user.new(Google).execute(function(response){console.log('Server, '+response)})
+    //console.log('Server, Register Google user... ');
+    //gapi.client.rest.register(Google).execute(function(response){console.log('Server, '+response)})
 
-    /*console.log('Server, Login user... ');
-    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})
+    //console.log('Server, CheckSum Facebook token... ');
+    //gapi.client.rest.checksum(Facebook).execute(function(response){console.log('Server, '+response)})
 
-    console.log('Server, Get user... ');
-    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})*/
-}
-
-function testAPI4() {
-    /*console.log('Server, Store data... ');
-    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})
-
-    console.log('Server, Get data... ');
-    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})
-
-    console.log('Server, Query data... ');
-    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response)})*/
+    //console.log('Server, CheckSum Google token... ');
+    //gapi.client.rest.checksum(Google).execute(function(response){console.log('Server, '+response)})
 }

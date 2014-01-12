@@ -11,7 +11,7 @@ type Data struct {
     Token *Token `datastore:"-"`
 }
 
-func (d *Data) Store() error{
+func (d *Data) Put() error{
 	if d.Key == nil {d.Token.Status="Datastore no Key!"; return d.Token}
 	key, err := datastore.Put(d.Token.Context, d.Key, d);
 	if err != nil {d.Token.Status="Datastore put error! "+err.Error(); return d.Token}

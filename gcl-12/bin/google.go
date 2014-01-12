@@ -19,7 +19,7 @@ func (s *Service) GoogleCallback(r *http.Request, req *NoRequest, resp *Token) e
 	c := endpoints.NewContext(r)
 	g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids);
 	if err != nil {return err}
-	resp.Status="Google: "+g.String()
+	resp.Email=g.String()
 	return nil
 }
 
