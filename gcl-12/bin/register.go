@@ -32,7 +32,9 @@ func (s *Service) Register(r *http.Request, req *Token, resp *Token) (err error)
 		id.Value=u.Token.Email
 	}
 
-	if err = u.Get(); err !=nil {} //TODO
+	if err = u.Get(); err != nil && err != datastore.ErrNoSuchEntity {return}
+	err=nil
+
     if u.Group == nil {
 		var g = []Property{}
 		var group = Property{
@@ -70,7 +72,6 @@ func (s *Service) CheckSum(r *http.Request, req *Token, resp *Token) (err error)
 /*
 	"encoding/json"
 	"fmt"
-
 
 func Test(w http.ResponseWriter, r *http.Request) {
 	p := Property{Key:"group", Value:"user"}

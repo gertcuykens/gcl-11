@@ -22,7 +22,7 @@ func (u *User) Put() error{
 
 func (u *User) Get() (err error){
 	if u.Key == nil {u.Token.Status="Datastore no Key!"; return u}
-	if err = datastore.Get(u.Token.Context, u.Key, u); err != nil {u.Token.Status="Datastore get error! "+err.Error(); return u}
+	if err = datastore.Get(u.Token.Context, u.Key, u); err != nil {u.Token.Status="Datastore get error! "+err.Error(); return err}
 	u.Token.Status="Fetched "+u.Key.String()+"."
 	return nil
 }

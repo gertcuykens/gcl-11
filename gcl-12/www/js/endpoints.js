@@ -71,14 +71,14 @@ function signin() {
 }
 
 function autosignin() {
-    var b=document.getElementById('signinButton')
+    var b=document.getElementById('gsigninButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
     document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
 
     var callback = function (t) {
         if (!t) return false
-        var b=document.getElementById("signinButton")
+        var b=document.getElementById("gsigninButton")
         b.removeEventListener('click', signin);
         b.addEventListener('click', signout)
         document.getElementsByClassName("buttonText")[1].innerHTML='Log Out'
@@ -98,7 +98,7 @@ function autosignin() {
 
 function signout() {
     gapi.client.rest.google.revoke(Google).execute(function(response){console.log('Server, Bye, '+response.message);Google.access_token=null;border()})
-    var b=document.getElementById('signinButton')
+    var b=document.getElementById('gsigninButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
     document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
