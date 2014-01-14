@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/userLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="5dp"
+        android:background="@drawable/border">
+
+        <TextView
+            android:id="@+id/userStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:text="Not signed in"/>
+
+        <Button
+            android:id="@+id/userButton"
+            android:layout_width="108dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="Sign In"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/getGreetingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:background="@drawable/border">
+
+        <TextView
+            android:id="@+id/getGreetingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Get Greeting"/>
+
+        <EditText
+            android:id="@+id/getGreetingValue"
+            android:layout_toLeftOf="@+id/getGreetingButton"
+            android:layout_toRightOf="@+id/getGreetingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:layout_centerVertical="true"
+            android:autoText="false"
+            android:numeric="integer"
+            android:text="0"/>
+
+        <Button
+            android:id="@+id/getGreetingButton"
+            android:layout_width="108dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="Submit"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/getListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:background="@drawable/border">
+
+        <TextView
+                android:id="@+id/getListText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="List Greetings"/>
+
+        <Button
+                android:id="@+id/getListButton"
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:text="Submit"/>
+
+    </RelativeLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="100dp"
+                  android:layout_marginLeft="5dp"
+                  android:layout_marginRight="5dp"
+                  android:layout_marginBottom="10dp"
+                  android:baselineAligned="false"
+                  android:orientation="vertical"
+                  android:background="@drawable/border"
+                  android:padding="5dp">
+
+    <RelativeLayout
+            android:id="@+id/getGreetingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/greetingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Greeting"/>
+
+        <EditText
+                android:id="@+id/greetingValue"
+                android:layout_toLeftOf="@+id/greetingButton"
+                android:layout_toRightOf="@+id/greetingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_centerVertical="true"
+                android:autoText="false"
+                android:text="hello "/>
+
+        <Button
+                android:id="@+id/greetingButton"
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:text="Submit"
+                android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/multiplyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/multiplyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Multiply"/>
+
+        <EditText
+                android:id="@+id/multiplyValue"
+                android:layout_toLeftOf="@+id/multiplyButton"
+                android:layout_toRightOf="@+id/multiplyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:layout_centerVertical="true"
+                android:autoText="false"
+                android:numeric="integer"
+                android:text="2"/>
+
+        <Button
+                android:id="@+id/multiplyButton"
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:text="Submit"/>
+
+    </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+            android:id="@+id/authenticatedLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:background="@drawable/border">
+
+        <TextView
+                android:id="@+id/authenticatedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Authenticated Greeting"/>
+
+        <Button
+                android:id="@+id/authenticatedButton"
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:text="Submit"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/soapLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:background="@drawable/border">
+
+        <TextView
+                android:id="@+id/soapText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Soap"/>
+
+        <Button
+                android:id="@+id/soapButton"
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:text="Submit"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/datastoreLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:padding="5dp"
+            android:background="@drawable/border">
+
+        <TextView
+                android:id="@+id/datastoreText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Datastore"/>
+
+        <Button
+                android:id="@+id/datastoreButton"
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:text="Submit"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

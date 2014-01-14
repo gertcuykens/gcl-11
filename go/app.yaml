@@ -1,0 +1,66 @@
+application: gcl-13
+version: 0
+runtime: go
+api_version: go1
+threadsafe: true
+
+handlers:
+ - url: /css
+   static_dir: www/css
+
+ - url: /img
+   static_dir: www/img
+
+ - url: /js
+   static_dir: www/js
+
+ - url: /fonts/(.*\.woff)
+   static_files: home/fonts/\1
+   upload: home/fonts/(.*\.woff)
+   mime_type: font/woff
+
+ - url: /fonts/(.*\.svg)
+   static_files: home/fonts/\1
+   upload: home/fonts/(.*\.svg)
+   mime_type: image/svg+xml
+
+ - url: /fonts/(.*\.eot)
+   static_files: home/fonts/\1
+   upload: home/fonts/(.*\.eot)
+   mime_type: application/vnd.ms-fontobject
+
+
+ - url: /fonts/(.*\.ttf)
+   static_files: home/fonts/\1
+   upload: home/fonts/(.*\.ttf)
+   mime_type: application/x-font-ttf
+
+ - url: /fonts/(.*\.otf)
+   static_files: home/fonts/\1
+   upload: home/fonts/(.*\.otf)
+   mime_type: application/x-font-otf
+
+ - url: /
+   static_files: www/index.html
+   upload: www/index.html
+   secure: always
+   #login: admin
+   #http_headers:
+   # Access-Control-Allow-Origin: https://accounts.google.com
+
+ - url: /favicon.ico
+   static_files: www/img/favicon.ico
+   upload: www/img/favicon.ico
+
+ - url: /_ah/spi/.*
+   script: _go_app
+
+ - url: /_ah/api/.*
+   script: _go_app
+
+ - url: /bin/.*
+   script: _go_app
+
+inbound_services:
+ - warmup
+ #- mail
