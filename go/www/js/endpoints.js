@@ -1,5 +1,5 @@
-Facebook=new Token()
-Facebook.type_token="facebook"
+//Facebook=new Token()
+//Facebook.type_token="facebook"
 
 Google=new Token()
 Google.type_token="google"
@@ -7,6 +7,7 @@ Google.type_token="google"
 Server=new Token()
 Server.type_token="server"
 
+/*
 window.fbAsyncInit = function() {
     FB.Event.subscribe('auth.authResponseChange', function(response) {
         if (response.status === 'connected') {
@@ -32,6 +33,7 @@ window.fbAsyncInit = function() {
     b.addEventListener('click',fsignin)
     document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
 };
+*/
 
 init = function () {
     var apisToLoad = 2;
@@ -41,11 +43,11 @@ init = function () {
 };
 
 (function(d,s) {
-    var js1 = d.createElement('script');
-    js1.id = 'facebook-jssdk';
-    js1.async = true;
-    js1.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1379351942320920";
-    d.getElementById('fb-root').appendChild(js1);
+    //var js1 = d.createElement('script');
+    //js1.id = 'facebook-jssdk';
+    //js1.async = true;
+    //js1.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1379351942320920";
+    //d.getElementById('fb-root').appendChild(js1);
 
     var js2 = d.createElement('script');
     js2.id = 'google-jssdk';
@@ -55,14 +57,14 @@ init = function () {
 
 })(document,document.getElementsByTagName('script')[0]);
 
-function fsignin() {FB.login()}
+//function fsignin() {FB.login()}
 
-function fsignout() {FB.logout()}
+//function fsignout() {FB.logout()}
 
 function signin() {
     var options = {
         callback : autosignin,
-        clientid : '1034966141188-b4cup6jccsjqpdc14c9218fhb488e515.apps.googleusercontent.com',
+        clientid : '1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com',
         requestvisibleactions : 'http://schemas.google.com/AddActivity',
         cookiepolicy : 'single_host_origin',
         scope: 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
@@ -74,21 +76,21 @@ function autosignin() {
     var b=document.getElementById('gsigninButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
-    document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
+    document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
 
     var callback = function (t) {
         if (!t) return false
         var b=document.getElementById("gsigninButton")
         b.removeEventListener('click', signin);
         b.addEventListener('click', signout)
-        document.getElementsByClassName("buttonText")[1].innerHTML='Log Out'
+        document.getElementsByClassName("buttonText")[0].innerHTML='Log Out'
         console.log('Sign-in state: '+ t['status']['signed_in'])
         Google.access_token=gapi.auth.getToken().access_token
         border()
     }
 
     var options = {
-        client_id: "1034966141188-b4cup6jccsjqpdc14c9218fhb488e515.apps.googleusercontent.com",
+        client_id: "1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com",
         scope: "https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email",
         immediate: true
     }
@@ -101,7 +103,7 @@ function signout() {
     var b=document.getElementById('gsigninButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
-    document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
+    document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
 }
 
 $('#logindropdown').on('hidden.bs.dropdown', function () {border()})
@@ -111,35 +113,35 @@ function border() {
     var b=document.getElementById('login')
     if (document.getElementById('login-menu').classList.contains('open')){b.style.borderBottom='1px solid transparent'; return}
     if (Google.access_token) {b.style.borderBottom='1px solid #dd4b39'; return}
-    if (Facebook.access_token) {b.style.borderBottom='1px solid #5f78ab'; return}
+    //if (Facebook.access_token) {b.style.borderBottom='1px solid #5f78ab'; return}
     b.style.borderBottom='1px solid transparent'
 }
 
 function testAPI1() {
-    console.log('Browser, Fetching your Facebook information... ');
-    FB.api('/me', function(response) {console.log('Facebook, '+response.name+'.')})
+    //console.log('Browser, Fetching your Facebook information... ');
+    //FB.api('/me', function(response) {console.log('Facebook, '+response.name+'.')})
 
     console.log('Browser, Fetching your Google information... ');
     gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, '+response.email+'.')})
 }
 
 function testAPI2() {
-    console.log('Server, Fetching your Facebook information... ');
-    gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.name_token)})
+    //console.log('Server, Fetching your Facebook information... ');
+    //gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.name_token)})
 
     console.log('Server, Fetching your Google information... ');
     gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response.email_token)})
 }
 
 function testAPI3() {
-    console.log('Server, Register Facebook user... ');
-    gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
+    //console.log('Server, Register Facebook user... ');
+    //gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
 
     console.log('Server, Register Google user... ');
     gapi.client.rest.register(Google).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
 }
 
 function testAPI4() {
-    console.log('Server, CheckSum Facebook token... ');
+    console.log('Server, CheckSum token... ');
     gapi.client.rest.checksum(Server).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
 }
