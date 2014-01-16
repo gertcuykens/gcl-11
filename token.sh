@@ -1,6 +1,7 @@
 #!/bin/bash
 client_id="1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com"
 redirect_uri="https%3A%2F%2Fgcl-13.appspot.com%2Foauth2callback"
+approval_prompt=force
 
 url="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/androidpublisher&response_type=code&access_type=offline&redirect_uri=$redirect_uri&client_id=$client_id"
 echo $url
