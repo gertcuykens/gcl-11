@@ -2,7 +2,7 @@
 client_id="1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com"
 redirect_uri="https%3A%2F%2Fgcl-13.appspot.com%2Foauth2callback"
 approval_prompt=force
-
+token="123"
 url="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/androidpublisher&response_type=code&access_type=offline&redirect_uri=$redirect_uri&client_id=$client_id"
 echo $url
 
@@ -15,6 +15,11 @@ curl -X POST "https://accounts.google.com/o/oauth2/token"\
 curl -X POST "https://accounts.google.com/o/oauth2/token"\
     -H "Content-type: application/x-www-form-urlencoded"\
     -d "grant_type=refresh_token&client_id=$client_id&client_secret=$GCL_13_SECRET&refresh_token=$GCL_13_REFRESH"
+
+read bearer
+
+curl -X GET "https://www.googleapis.com/androidpublisher/v1.1/applications/com.appspot/inapp/gas/purchases/$token"\
+    -H "Authorization:  Bearer $bearer"
 
 #curl -s -X GET "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=$1"
 #curl -s -X GET "https://www.googleapis.com/oauth2/v2/userinfo?access_token=$1"
