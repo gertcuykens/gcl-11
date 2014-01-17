@@ -130,9 +130,18 @@ function testAPI2() {
     //gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.name_token)})
 
     console.log('Server, Fetching your Google information... ');
-    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response.email_token)})
+    gapi.client.rest.google.user().execute(function(response){console.log('Server, '+response.email_token)})
 }
 
+function testAPI3() {
+    //console.log('Server, Fetching your Facebook information... ');
+    //gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.name_token)})
+
+    console.log('Server, Fetching your Google information... ');
+    gapi.client.rest.google.purchases().execute(function(response){console.log('Server, '+JSON.stringify(response.result.status))})
+}
+
+/*
 function testAPI3() {
     //console.log('Server, Register Facebook user... ');
     //gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
@@ -145,3 +154,4 @@ function testAPI4() {
     console.log('Server, CheckSum token... ');
     gapi.client.rest.checksum(Server).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
 }
+*/
