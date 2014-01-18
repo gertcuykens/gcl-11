@@ -14,6 +14,8 @@ func init() {
 	info2.Name, info2.HttpMethod, info2.Path, info2.Desc = "google.revoke", "POST", "google/revoke", "Oauth2 google revoke."
 	info3 := api.MethodByName("GooglePurchasesService").Info()
 	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "google.purchases", "POST", "google/purchases", "Oauth2 google purchases."
+	info4 := api.MethodByName("GoogleCloudService").Info()
+	info4.Name, info4.HttpMethod, info4.Path, info4.Desc = "google.cloud", "PUT", "google/cloud", "Oauth2 google cloud."
 
 	/*info3 := api.MethodByName("TwitterOauth").Info()
 	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "twitter.oauth", "GET", "twitter/oauth", "Oauth url."

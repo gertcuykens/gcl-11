@@ -6,6 +6,9 @@ import (
 	"github.com/crhym3/go-endpoints/endpoints"
 	"net/http"
 	"log"
+	"cloud"
+	"code.google.com/p/goauth2/oauth"
+	"time"
 )
 
 const WEB_CLIENT_ID string = "1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com"
@@ -15,6 +18,21 @@ const ANDROID_CLIENT_ID_d string = "1093123836049-qusjpbhig5n371oosoohgh22s470lf
 var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID_d, ANDROID_CLIENT_ID_r, endpoints.ApiExplorerClientId}
 var audiences = []string{WEB_CLIENT_ID}
 var google_scopes = []string{"https://www.googleapis.com/auth/userinfo.email"}
+
+var config = &oauth.Config{
+	ClientId:     WEB_CLIENT_ID,
+	ClientSecret: "",
+	Scope:        "https://www.googleapis.com/auth/userinfo.email",
+	AuthURL:      "https://accounts.google.com/o/oauth2/auth",
+	TokenURL:     "https://accounts.google.com/o/oauth2/token",
+}
+
+var refresh = &oauth.Token{
+	AccessToken: "",
+	RefreshToken: "",
+	Expiry: time.Now(),
+	Extra: nil,
+}
 
 type NoRequest struct {}
 
@@ -71,4 +89,17 @@ func GooglePurchases(t *Token) (err error) {
 	t.Status=string(b)
 	log.Print("-----------------"+string(b))
 	return err
+}
+
+func (s *Service) GoogleCloudService(r *http.Request, req *NoRequest, resp *Token) (err error) {
+	t := &oauth.Transport{
+		//Token:     token,
+		Config:    config,
+		Transport: urlfetch.Client(endpoints.NewContext(r)).Transport,
+	}
+	var c = cloud.Cloud{}
+	c.New(t.Client())
+	c.Insert(r.Body)
+	resp.Status = "Saved"
+	return nil
 }
