@@ -1,7 +1,7 @@
 #!/bin/bash
 client_id="1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com"
 client_secret=$GCL_13_SECRET
-iab_token="..."
+iab_token=$GCL_13_IAB
 
 curl -X GET "https://www.googleapis.com/androidpublisher/v1.1/applications/com.appspot/inapp/gas/purchases/$iab_token"\
     -H "Authorization:  Bearer $1"
