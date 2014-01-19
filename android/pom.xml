@@ -27,6 +27,11 @@
             <artifactId>google-http-client-gson</artifactId>
             <version>1.17.0-rc</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-storage</artifactId>
+            <version>v1beta2-rev36-1.17.0-rc</version>
+        </dependency>
     </dependencies>
 
 </project>

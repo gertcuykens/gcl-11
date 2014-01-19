@@ -13,14 +13,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 //import com.appspot.gcl_13.rest.Rest1;
 //import com.appspot.gcl_13.rest.model.Multiply;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.storage.Storage;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 public class EndpointsActivity extends Activity implements View.OnClickListener {
     private GoogleAccountCredential user;
+    private GoogleAccountCredential user2;
     //private Rest service;
     private Button userButton;
     private TextView userStatus;
@@ -35,6 +45,9 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
 
         String AUDIENCE = "server:client_id:1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com";
         user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
+
+        String SCOPE="https://www.googleapis.com/auth/devstorage.read_only";
+        user2=GoogleAccountCredential.usingOAuth2(this, Arrays.asList(SCOPE.split(",")));
 
         //Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
         //service = endpoints.build();
@@ -64,6 +77,9 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
 
         Button datastoreButton = (Button) findViewById(R.id.datastoreButton);
         datastoreButton.setOnClickListener(this);
+
+        Button storageButton = (Button) findViewById(R.id.storageButton);
+        storageButton.setOnClickListener(this);
     }
 
     @Override
@@ -86,6 +102,23 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
             case R.id.authenticatedButton: new RestTask().execute(Pair.create(context, 4)); break;
             case R.id.soapButton: new RestTask().execute(Pair.create(context, 5)); break;
             case R.id.datastoreButton: new RestTask().execute(Pair.create(context, 6)); break;
+            case R.id.storageButton:
+                com.google.api.services.storage.Storage storageService = new com.google.api.services.storage.Storage.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user2).setApplicationName("myApp").build();
+                try {
+                    Storage.Objects.Get getObject = storageService.objects().get("myBucket", "myObject");
+                    String appPath = context.getFilesDir().getAbsolutePath();
+                    java.io.File parentDir = new java.io.File(appPath);
+                    OutputStream out = new FileOutputStream(new java.io.File(parentDir,"myFileName" ));
+                    getObject.getMediaHttpDownloader().setDirectDownloadEnabled(true);
+                    //getObject.download(out);
+                } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
+                    //showGooglePlayServicesAvailabilityErrorDialog(availabilityException.getConnectionStatusCode());
+                } catch (UserRecoverableAuthIOException userRecoverableException) {
+                    //startActivityForResult(userRecoverableException.getIntent(), 2);
+                } catch (IOException e) {
+
+                }
+                break;
         }
     }
 
@@ -97,10 +130,10 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                 if (data != null && data.getExtras() != null) {
                     String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
-                        user.setSelectedAccountName(accountName);
+                        user2.setSelectedAccountName(accountName);
                         //Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user);
                         //service = endpoints.build();
-                        userStatus.setText(user.getSelectedAccountName());
+                        userStatus.setText(user2.getSelectedAccountName());
                         userButton.setText("Sign Out");
                     }
                 }
