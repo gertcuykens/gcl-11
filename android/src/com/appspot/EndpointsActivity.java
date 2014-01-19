@@ -89,16 +89,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
     public void onClick(View view) {
         Context context = view.getContext();
         switch(view.getId()) {
-            case R.id.userButton:
-                if (userButton.getText().equals("Sign Out")) {
-                    //Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
-                    //service = endpoints.build();
-                    userStatus.setText("Not signed in");
-                    userButton.setText("Sign In");
-                }else{
-                    startActivityForResult(user2.newChooseAccountIntent(), 1);
-                }
-                break;
+            case R.id.userButton:startActivityForResult(user2.newChooseAccountIntent(), 1); break;
             case R.id.getGreetingButton: new RestTask().execute(Pair.create(context, 1)); break;
             case R.id.getListButton: new RestTask().execute(Pair.create(context, 2)); break;
             case R.id.multiplyButton: new RestTask().execute(Pair.create(context, 3)); break;
@@ -118,10 +109,9 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                     String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         user2.setSelectedAccountName(accountName);
-                        //Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user);
-                        //service = endpoints.build();
                         userStatus.setText(user2.getSelectedAccountName());
-                        userButton.setText("Sign Out");
+                        //Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user2);
+                        //service = endpoints.build();
                     }
                 }
                 break;
