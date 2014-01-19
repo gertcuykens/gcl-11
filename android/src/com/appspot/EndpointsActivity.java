@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 //import com.appspot.gcl_13.rest.Rest1;
 //import com.appspot.gcl_13.rest.model.Multiply;
+
+//import com.google.android.gms.common.AccountPicker;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
@@ -43,8 +45,8 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.endpoints);
 
-        String AUDIENCE = "server:client_id:1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com";
-        user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
+        //String AUDIENCE = "server:client_id:1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com";
+       // user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
 
         String SCOPE="https://www.googleapis.com/auth/devstorage.read_only";
         user2=GoogleAccountCredential.usingOAuth2(this, Arrays.asList(SCOPE.split(",")));
@@ -93,7 +95,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                     userStatus.setText("Not signed in");
                     userButton.setText("Sign In");
                 }else{
-                    startActivityForResult(user.newChooseAccountIntent(), 1);
+                    startActivityForResult(user2.newChooseAccountIntent(), 1);
                 }
                 break;
             case R.id.getGreetingButton: new RestTask().execute(Pair.create(context, 1)); break;
@@ -102,23 +104,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
             case R.id.authenticatedButton: new RestTask().execute(Pair.create(context, 4)); break;
             case R.id.soapButton: new RestTask().execute(Pair.create(context, 5)); break;
             case R.id.datastoreButton: new RestTask().execute(Pair.create(context, 6)); break;
-            case R.id.storageButton:
-                com.google.api.services.storage.Storage storageService = new com.google.api.services.storage.Storage.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user2).setApplicationName("myApp").build();
-                try {
-                    Storage.Objects.Get getObject = storageService.objects().get("myBucket", "myObject");
-                    String appPath = context.getFilesDir().getAbsolutePath();
-                    java.io.File parentDir = new java.io.File(appPath);
-                    OutputStream out = new FileOutputStream(new java.io.File(parentDir,"myFileName" ));
-                    getObject.getMediaHttpDownloader().setDirectDownloadEnabled(true);
-                    getObject.executeMediaAndDownloadTo(out);
-                } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
-                    //showGooglePlayServicesAvailabilityErrorDialog(availabilityException.getConnectionStatusCode());
-                } catch (UserRecoverableAuthIOException userRecoverableException) {
-                    //startActivityForResult(userRecoverableException.getIntent(), 2);
-                } catch (IOException e) {
-
-                }
-                break;
+            case R.id.storageButton: new StorageTask().execute(context); break;
         }
     }
 
@@ -163,6 +149,30 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                 e.printStackTrace();
             }
             return Pair.create(p[0].first, text);
+        }
+        @Override
+        protected void onPostExecute(Pair<Context,String> p) {toaster(p.first, p.second);}
+    }
+
+    private class StorageTask extends AsyncTask<Context, Void, Pair<Context,String>> {
+        @Override
+        protected Pair doInBackground(Context... c) {
+            com.google.api.services.storage.Storage storageService = new com.google.api.services.storage.Storage.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user2).setApplicationName("gcl-storage").build();
+            try {
+                Storage.Objects.Get getObject = storageService.objects().get("gcl-storage", "test.txt");
+                String appPath = c[0].getFilesDir().getAbsolutePath();
+                java.io.File parentDir = new java.io.File(appPath);
+                OutputStream out = new FileOutputStream(new java.io.File(parentDir,"GERT_TEST.TXT"));
+                getObject.getMediaHttpDownloader().setDirectDownloadEnabled(true);
+                getObject.executeMediaAndDownloadTo(out);
+            } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
+                //showGooglePlayServicesAvailabilityErrorDialog(availabilityException.getConnectionStatusCode());
+            } catch (UserRecoverableAuthIOException userRecoverableException) {
+                //startActivityForResult(userRecoverableException.getIntent(), 2);
+            } catch (IOException e) {
+
+            }
+            return Pair.create(c[0], "Download complete");
         }
         @Override
         protected void onPostExecute(Pair<Context,String> p) {toaster(p.first, p.second);}
