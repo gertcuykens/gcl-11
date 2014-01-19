@@ -18,6 +18,7 @@ import android.widget.Toast;
 //import com.appspot.gcl_13.rest.model.Multiply;
 
 //import com.google.android.gms.common.AccountPicker;
+//import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
@@ -46,10 +47,10 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
         setContentView(R.layout.endpoints);
 
         //String AUDIENCE = "server:client_id:1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com";
-       // user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
+        // user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
 
         String SCOPE="https://www.googleapis.com/auth/devstorage.read_only";
-        user2=GoogleAccountCredential.usingOAuth2(this, Arrays.asList(SCOPE.split(",")));
+        user2=GoogleAccountCredential.usingOAuth2(this, Arrays.asList(SCOPE.split(" ")));
 
         //Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
         //service = endpoints.build();
@@ -170,8 +171,10 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                 getObject.executeMediaAndDownloadTo(out);
                 err= "Download complete "+parentDir.getPath();
             } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
-                err= "GooglePlay Services not found!";
-                //showGooglePlayServicesAvailabilityErrorDialog(availabilityException.getConnectionStatusCode());
+                //int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c[0]);
+                //int statusCode = availabilityException.getConnectionStatusCode();
+                //GooglePlayServicesUtil.getErrorDialog(statusCode, this, 0).show();
+                err= "GooglePlay Services not found! "+availabilityException.getConnectionStatusCode();
             } catch (UserRecoverableAuthIOException userRecoverableException) {
                 startActivityForResult(userRecoverableException.getIntent(), 2);
                 err= "User Recoverable Auth IO Exception!";
