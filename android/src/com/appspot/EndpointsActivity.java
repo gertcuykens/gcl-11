@@ -124,6 +124,8 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                     }
                 }
                 break;
+            case 2: //TODO: ???
+                break;
         }
     }
 
@@ -157,6 +159,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
     private class StorageTask extends AsyncTask<Context, Void, Pair<Context,String>> {
         @Override
         protected Pair doInBackground(Context... c) {
+            String err;
             com.google.api.services.storage.Storage storageService = new com.google.api.services.storage.Storage.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user2).setApplicationName("gcl-storage").build();
             try {
                 Storage.Objects.Get getObject = storageService.objects().get("gcl-storage", "test.txt");
@@ -165,14 +168,17 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                 OutputStream out = new FileOutputStream(new java.io.File(parentDir,"GERT_TEST.TXT"));
                 getObject.getMediaHttpDownloader().setDirectDownloadEnabled(true);
                 getObject.executeMediaAndDownloadTo(out);
+                err= "Download complete "+parentDir.getPath();
             } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
+                err= "GooglePlay Services not found!";
                 //showGooglePlayServicesAvailabilityErrorDialog(availabilityException.getConnectionStatusCode());
             } catch (UserRecoverableAuthIOException userRecoverableException) {
-                //startActivityForResult(userRecoverableException.getIntent(), 2);
+                startActivityForResult(userRecoverableException.getIntent(), 2);
+                err= "User Recoverable Auth IO Exception!";
             } catch (IOException e) {
-
+                err= "IO Exception!";
             }
-            return Pair.create(c[0], "Download complete");
+            return Pair.create(c[0], err);
         }
         @Override
         protected void onPostExecute(Pair<Context,String> p) {toaster(p.first, p.second);}
