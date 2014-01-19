@@ -110,7 +110,7 @@ public class EndpointsActivity extends Activity implements View.OnClickListener 
                     java.io.File parentDir = new java.io.File(appPath);
                     OutputStream out = new FileOutputStream(new java.io.File(parentDir,"myFileName" ));
                     getObject.getMediaHttpDownloader().setDirectDownloadEnabled(true);
-                    //getObject.download(out);
+                    getObject.executeMediaAndDownloadTo(out);
                 } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
                     //showGooglePlayServicesAvailabilityErrorDialog(availabilityException.getConnectionStatusCode());
                 } catch (UserRecoverableAuthIOException userRecoverableException) {
