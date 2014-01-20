@@ -26,6 +26,7 @@ func (s *Storage) Set(entity string) (err error) {
 		Role: "READER",
 	}
 	result, err := s.Service.ObjectAccessControls.Insert(s.BucketName, s.ObjectName, s.ObjectAcl).Do()
+	if err != nil {return err}
 	log.Printf("---------------Result of inserting ACL for %s/%s:\n%v", s.BucketName, s.ObjectName, result)
 	return nil
 }
