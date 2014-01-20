@@ -8,101 +8,75 @@ import (
 	"log"
 	"cloud"
 	"code.google.com/p/goauth2/oauth"
-	"time"
 )
 
 const WEB_CLIENT_ID string = "1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com"
-const ANDROID_CLIENT_ID_r string = "1093123836049-g84t42bajg9dbu7q13m6eotii0hpdpd8.apps.googleusercontent.com"
-const ANDROID_CLIENT_ID_d string = "1093123836049-qusjpbhig5n371oosoohgh22s470lfsp.apps.googleusercontent.com"
+const ANDROID_CLIENT_ID string = "1093123836049-g84t42bajg9dbu7q13m6eotii0hpdpd8.apps.googleusercontent.com"
 
-var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID_d, ANDROID_CLIENT_ID_r, endpoints.ApiExplorerClientId}
+var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID, endpoints.ApiExplorerClientId}
 var audiences = []string{WEB_CLIENT_ID}
 var google_scopes = []string{"https://www.googleapis.com/auth/userinfo.email"}
 
 type NoRequest struct {}
 
-func (s *Service) GoogleUserService(r *http.Request, req *NoRequest, resp *Token) error {
+type Request struct {
+	Message string `json:"message"`
+}
+
+type Response struct {
+	Message string `json:"message"`
+}
+
+func (s *Service) GoogleUserService(r *http.Request, req *NoRequest, resp *Response) error {
 	c := endpoints.NewContext(r)
 	g, err := endpoints.CurrentUser(c, google_scopes, audiences, clientids);
 	if err != nil {return err}
-	resp.Email=g.String()
+	resp.Message=g.String()
 	return nil
 }
 
-/*func GoogleUserToken(t *Token) (error){
-	g, err := endpoints.CurrentUser(t.Context, google_scopes, audiences, clientids);
-	if err != nil {return err}
-	t.Email = g.Email
-	return err
-}*/
-
-func (s *Service) GoogleRevokeService(r *http.Request, req *Token, resp *Token) (err error) {
-	req.Client = urlfetch.Client(endpoints.NewContext(r))
-	if err = GoogleRevokeToken(req); err != nil {return err}
-	*resp = *req
-	return nil
-}
-
-func GoogleRevokeToken(t *Token) (err error){
-	resp, err := t.Client.Get("https://accounts.google.com/o/oauth2/revoke?token="+t.Access)
-	defer resp.Body.Close()
-	b, err := ioutil.ReadAll(resp.Body)
-	t.Status=string(b)
+func (s *Service) GoogleRevokeService(r *http.Request, req *NoRequest, resp *Response) (err error) {
+	t := r.Header.Get("authorization")
+	buf, err := urlfetch.Client(endpoints.NewContext(r)).Get("https://accounts.google.com/o/oauth2/revoke?token="+t)
+	defer buf.Body.Close()
+	b, err := ioutil.ReadAll(buf.Body)
+	resp.Message=string(b)
 	return err
 }
 
-func (s *Service) GooglePurchasesService(r *http.Request, req *NoRequest, resp *Token) error {
-	c := endpoints.NewContext(r)
-	t := &Token{}
-	t.Context = c
-	t.Client = urlfetch.Client(c)
-	log.Print("-----------------"+t.Access)
-	t.Renew()
-	log.Print("-----------------"+t.Access)
-	GooglePurchases(t)
-	*resp = *t
-	return nil
-}
-
-func GooglePurchases(t *Token) (err error) {
-	uri :="https://www.googleapis.com/androidpublisher/v1.1/applications/com.appspot/inapp/gas/purchases/"+SALE_TOKEN
-	var req, _ = http.NewRequest("GET", uri, nil)
-	req.Header.Add("Authorization", "Bearer "+t.Access)
-	client := urlfetch.Transport{Context:t.Context}
-	resp, err := client.RoundTrip(req)
-	defer resp.Body.Close()
-	b, err := ioutil.ReadAll(resp.Body)
-	t.Status=string(b)
-	log.Print("-----------------"+string(b))
-	return err
-}
-
-var config = &oauth.Config{
-	ClientId:     STORAGE_ID,
-	ClientSecret: STORAGE_SECRET,
-	Scope:        STORAGE_SCOPE,
-	AuthURL:      "https://accounts.google.com/o/oauth2/auth",
-	TokenURL:     "https://accounts.google.com/o/oauth2/token",
-}
-
-var refresh = &oauth.Token{
-	AccessToken: "",
-	RefreshToken: STORAGE_TOKEN,
-	Expiry: time.Now(),
-	Extra: nil,
-}
-
-func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *Token) (err error) {
+func (s *Service) GooglePurchasesService(r *http.Request, req *NoRequest, resp *Response) error {
 	e := endpoints.NewContext(r)
+
+	t := &oauth.Transport{
+		Token:     IAB_TOKEN,
+		Config:    IAB_CONFIG,
+		Transport: urlfetch.Client(e).Transport,
+	}
+
+	c := &cloud.Publisher{
+		Package:"com.appspot",
+		Product:"gas",
+		Recete:R,
+	}
+
+	c.New(t.Client())
+	c.Get()
+	resp.Message = "Done."
+	return nil
+}
+
+func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *Response) (err error) {
+	e := endpoints.NewContext(r)
+
+	t := &oauth.Transport{
+		Token:     STORAGE_TOKEN,
+		Config:    STORAGE_CONFIG,
+		Transport: urlfetch.Client(e).Transport,
+	}
+
 	g, err := endpoints.CurrentUser(e, google_scopes, audiences, clientids);
 	if err != nil {return err}
 	log.Print("------LOGIN---------"+g.String())
-
-	t := &oauth.Transport{
-		Token:     refresh,
-		Config:    config,
-		Transport: urlfetch.Client(e).Transport,
-	}
 
 	c := &cloud.Storage{
 	    BucketName: "gcl-storage",
@@ -111,6 +85,6 @@ func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *To
 
 	c.New(t.Client())
 	c.Set("gert.cuykens.2@gmail.com")
-	resp.Status = "ACL is set."
+	resp.Message = "ACL is set."
 	return nil
 }

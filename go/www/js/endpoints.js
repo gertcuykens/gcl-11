@@ -1,39 +1,5 @@
-//Facebook=new Token()
-//Facebook.type_token="facebook"
-
 Google=new Token()
 Google.type_token="google"
-
-Server=new Token()
-Server.type_token="server"
-
-/*
-window.fbAsyncInit = function() {
-    FB.Event.subscribe('auth.authResponseChange', function(response) {
-        if (response.status === 'connected') {
-            var b=document.getElementById('fsigninButton')
-            b.removeEventListener('click', fsignin);
-            b.addEventListener('click',fsignout)
-            document.getElementsByClassName("buttonText")[0].innerHTML='Log Out'
-            Facebook.access_token=FB.getAccessToken()
-        }
-        else if (response.status === 'not_authorized') {}
-        else {
-            var b=document.getElementById('fsigninButton')
-            b.removeEventListener('click', fsignout);
-            b.addEventListener('click',fsignin)
-            document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
-            Facebook.access_token=null
-        }
-        border()
-    });
-
-    var b=document.getElementById('fsigninButton')
-    b.removeEventListener('click', fsignout);
-    b.addEventListener('click',fsignin)
-    document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
-};
-*/
 
 init = function () {
     var apisToLoad = 2;
@@ -43,11 +9,6 @@ init = function () {
 };
 
 (function(d,s) {
-    //var js1 = d.createElement('script');
-    //js1.id = 'facebook-jssdk';
-    //js1.async = true;
-    //js1.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1379351942320920";
-    //d.getElementById('fb-root').appendChild(js1);
 
     var js2 = d.createElement('script');
     js2.id = 'google-jssdk';
@@ -56,10 +17,6 @@ init = function () {
     s.parentNode.insertBefore(js2, s);
 
 })(document,document.getElementsByTagName('script')[0]);
-
-//function fsignin() {FB.login()}
-
-//function fsignout() {FB.logout()}
 
 function signin() {
     var options = {
@@ -113,47 +70,25 @@ function border() {
     var b=document.getElementById('login')
     if (document.getElementById('login-menu').classList.contains('open')){b.style.borderBottom='1px solid transparent'; return}
     if (Google.access_token) {b.style.borderBottom='1px solid #dd4b39'; return}
-    //if (Facebook.access_token) {b.style.borderBottom='1px solid #5f78ab'; return}
     b.style.borderBottom='1px solid transparent'
 }
 
 function testAPI1() {
-    //console.log('Browser, Fetching your Facebook information... ');
-    //FB.api('/me', function(response) {console.log('Facebook, '+response.name+'.')})
-
     console.log('Browser, Fetching your Google information... ');
     gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, '+response.email+'.')})
 }
 
 function testAPI2() {
-    //console.log('Server, Fetching your Facebook information... ');
-    //gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.name_token)})
-
     console.log('Server, Fetching your Google information... ');
-    gapi.client.rest.google.user().execute(function(response){console.log('Server, '+response.email_token)})
+    gapi.client.rest.google.user().execute(function(response){console.log('Server, '+response.message)})
 }
 
 function testAPI3() {
     console.log('Iab, Fetching your order information... ');
-    gapi.client.rest.google.purchases().execute(function(response){console.log('Iab, '+JSON.stringify(response.result.status))})
+    gapi.client.rest.google.purchases().execute(function(response){console.log('Iab, '+response.message)})
 }
 
 function testAPI4() {
     console.log('Storage, setting ACL...');
-    gapi.client.rest.google.storage().execute(function(response){console.log('Storage, '+JSON.stringify(response.result.status))})
+    gapi.client.rest.google.storage().execute(function(response){console.log('Storage, '+response.message)})
 }
-
-/*
-function testAPI3() {
-    console.log('Server, Register Facebook user... ');
-    gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
-
-    console.log('Server, Register Google user... ');
-    gapi.client.rest.register(Google).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
-}
-
-function testAPI4() {
-    console.log('Server, CheckSum token... ');
-    gapi.client.rest.checksum(Server).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
-}
-*/
