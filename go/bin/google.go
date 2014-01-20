@@ -19,21 +19,6 @@ var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID_d, ANDROID_CLIENT_ID_r
 var audiences = []string{WEB_CLIENT_ID}
 var google_scopes = []string{"https://www.googleapis.com/auth/userinfo.email"}
 
-var config = &oauth.Config{
-	ClientId:     WEB_CLIENT_ID,
-	ClientSecret: "",
-	Scope:        "https://www.googleapis.com/auth/userinfo.email",
-	AuthURL:      "https://accounts.google.com/o/oauth2/auth",
-	TokenURL:     "https://accounts.google.com/o/oauth2/token",
-}
-
-var refresh = &oauth.Token{
-	AccessToken: "",
-	RefreshToken: "",
-	Expiry: time.Now(),
-	Extra: nil,
-}
-
 type NoRequest struct {}
 
 func (s *Service) GoogleUserService(r *http.Request, req *NoRequest, resp *Token) error {
@@ -92,13 +77,29 @@ func GooglePurchases(t *Token) (err error) {
 	return err
 }
 
+var config = &oauth.Config{
+	ClientId:     STORAGE_ID,
+	ClientSecret: STORAGE_SECRET,
+	Scope:        "https://www.googleapis.com/auth/devstorage.full_control",
+	AuthURL:      "https://accounts.google.com/o/oauth2/auth",
+	TokenURL:     "https://accounts.google.com/o/oauth2/token",
+}
+
+var refresh = &oauth.Token{
+	AccessToken: "",
+	RefreshToken: STORAGE_TOKEN,
+	Expiry: time.Now(),
+	Extra: nil,
+}
+
 func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *Token) (err error) {
 	e := endpoints.NewContext(r)
 	g, err := endpoints.CurrentUser(e, google_scopes, audiences, clientids);
 	if err != nil {return err}
+	log.Print("------LOGIN---------"+g.String())
 
 	t := &oauth.Transport{
-		//Token:     token,
+		Token:     refresh,
 		Config:    config,
 		Transport: urlfetch.Client(e).Transport,
 	}
@@ -109,7 +110,7 @@ func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *To
 	}
 
 	c.New(t.Client())
-	c.Set(g.String())
+	c.Set("gert.cuykens.2@gmail.com")
 	resp.Status = "ACL is set."
 	return nil
 }

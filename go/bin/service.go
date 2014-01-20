@@ -20,7 +20,6 @@ func init() {
 }
 
 /*
-
 	info3 := api.MethodByName("TwitterOauth").Info()
 	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "twitter.oauth", "GET", "twitter/oauth", "Oauth url."
 	info4 := api.MethodByName("TwitterCallback").Info()

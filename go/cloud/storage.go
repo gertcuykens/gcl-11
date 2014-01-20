@@ -14,11 +14,13 @@ type Storage struct {
 }
 
 func (s *Storage) New(c *http.Client) (err error) {
+	log.Print("-------NEW----------")
 	s.Service, err = storage.New(c)
 	return err
 }
 
 func (s *Storage) Set(entity string) (err error) {
+	log.Print("-------SET----------")
 	s.ObjectAcl = &storage.ObjectAccessControl{
 		Bucket: s.BucketName,
 		Entity: entity,
@@ -26,8 +28,9 @@ func (s *Storage) Set(entity string) (err error) {
 		Role: "READER",
 	}
 	result, err := s.Service.ObjectAccessControls.Insert(s.BucketName, s.ObjectName, s.ObjectAcl).Do()
+	log.Printf("---------------Error ACL for %s/%s:\n%v", s.BucketName, s.ObjectName, err)
 	if err != nil {return err}
-	log.Printf("---------------Result of inserting ACL for %s/%s:\n%v", s.BucketName, s.ObjectName, result)
+	log.Printf("---------------Result ACL for %s/%s:\n%v", s.BucketName, s.ObjectName, result)
 	return nil
 }
 
