@@ -1,8 +1,7 @@
 #!/bin/bash
-id=""
-secret=""
-#scope="https://www.googleapis.com/auth/androidpublisher"
-scope="https://www.googleapis.com/auth/devstorage.full_control"
+id="...apps.googleusercontent.com"
+secret="..."
+scope="https://www.googleapis.com/auth/androidpublisher+https://www.googleapis.com/auth/devstorage.full_control+https://www.googleapis.com/auth/userinfo.email"
 
 echo "https://accounts.google.com/o/oauth2/auth?scope=$scope&response_type=code&access_type=offline&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&client_id=$id&approval_prompt=force"
 
