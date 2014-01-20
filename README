@@ -1,4 +1,4 @@
-//CREATE NEW FILE secret.go IN bin
+//CREATE NEW FILE secret.go IN bin AND REPLACE ...
 package bin
 
 import (
