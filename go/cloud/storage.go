@@ -23,7 +23,7 @@ func (s *Storage) Set(entity string) (err error) {
 	log.Print("-------SET----------")
 	s.ObjectAcl = &storage.ObjectAccessControl{
 		Bucket: s.BucketName,
-		Entity: entity,
+		Entity: "user-"+entity,
 		Object: s.ObjectName,
 		Role: "READER",
 	}

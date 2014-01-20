@@ -35,6 +35,8 @@ type Token struct {
 	Oauth_verifier string `json:"oauth_verifier"`
 }
 
+var SERVER_SECRET="123456"
+
 func (t *Token) Error() string {
 	return t.Status
 }

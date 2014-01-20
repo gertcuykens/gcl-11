@@ -80,7 +80,7 @@ func GooglePurchases(t *Token) (err error) {
 var config = &oauth.Config{
 	ClientId:     STORAGE_ID,
 	ClientSecret: STORAGE_SECRET,
-	Scope:        "https://www.googleapis.com/auth/devstorage.full_control",
+	Scope:        STORAGE_SCOPE,
 	AuthURL:      "https://accounts.google.com/o/oauth2/auth",
 	TokenURL:     "https://accounts.google.com/o/oauth2/token",
 }
@@ -106,7 +106,7 @@ func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *To
 
 	c := &cloud.Storage{
 	    BucketName: "gcl-storage",
-		ObjectName: "Test.txt",
+		ObjectName: "test.txt",
 	}
 
 	c.New(t.Client())
