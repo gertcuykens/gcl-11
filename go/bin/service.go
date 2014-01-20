@@ -13,11 +13,15 @@ func init() {
 	info2 := api.MethodByName("GoogleRevokeService").Info()
 	info2.Name, info2.HttpMethod, info2.Path, info2.Desc = "google.revoke", "POST", "google/revoke", "Oauth2 google revoke."
 	info3 := api.MethodByName("GooglePurchasesService").Info()
-	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "google.purchases", "POST", "google/purchases", "Oauth2 google purchases."
-	info4 := api.MethodByName("GoogleCloudService").Info()
-	info4.Name, info4.HttpMethod, info4.Path, info4.Desc = "google.cloud", "PUT", "google/cloud", "Oauth2 google cloud."
+	info3.Name, info3.HttpMethod, info3.Path, info3.Desc, info3.Scopes= "google.purchases", "POST", "google/purchases", "Oauth2 google purchases.", google_scopes
+	info4 := api.MethodByName("GoogleStorageService").Info()
+	info4.Name, info4.HttpMethod, info4.Path, info4.Desc, info4.Scopes = "google.storage", "GET", "google/storage", "Oauth2 google storage.", google_scopes
+	endpoints.HandleHttp()
+}
 
-	/*info3 := api.MethodByName("TwitterOauth").Info()
+/*
+
+	info3 := api.MethodByName("TwitterOauth").Info()
 	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "twitter.oauth", "GET", "twitter/oauth", "Oauth url."
 	info4 := api.MethodByName("TwitterCallback").Info()
 	info4.Name, info4.HttpMethod, info4.Path, info4.Desc = "twitter.callback", "GET", "twitter/callback", "Oauth callback."
@@ -34,11 +38,7 @@ func init() {
 	info10 := api.MethodByName("Register").Info()
 	info10.Name, info10.HttpMethod, info10.Path, info10.Desc = "register", "POST", "register", "Register user."
 	info11 := api.MethodByName("CheckSum").Info()
-	info11.Name, info11.HttpMethod, info11.Path, info11.Desc = "checksum", "POST", "checkSum", "Check token."*/
-	endpoints.HandleHttp()
-}
-
-/*
+	info11.Name, info11.HttpMethod, info11.Path, info11.Desc = "checksum", "POST", "checkSum", "Check token."
 
 	http.HandleFunc("/bin/test", Test)
 import (

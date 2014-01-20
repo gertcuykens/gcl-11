@@ -134,17 +134,19 @@ function testAPI2() {
 }
 
 function testAPI3() {
-    //console.log('Server, Fetching your Facebook information... ');
-    //gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.name_token)})
+    console.log('Iab, Fetching your order information... ');
+    gapi.client.rest.google.purchases().execute(function(response){console.log('Iab, '+JSON.stringify(response.result.status))})
+}
 
-    console.log('Server, Fetching your Google information... ');
-    gapi.client.rest.google.purchases().execute(function(response){console.log('Server, '+JSON.stringify(response.result.status))})
+function testAPI4() {
+    console.log('Storage, setting ACL...');
+    gapi.client.rest.google.storage().execute(function(response){console.log('Storage, '+JSON.stringify(response.result.status))})
 }
 
 /*
 function testAPI3() {
-    //console.log('Server, Register Facebook user... ');
-    //gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
+    console.log('Server, Register Facebook user... ');
+    gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
 
     console.log('Server, Register Google user... ');
     gapi.client.rest.register(Google).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})

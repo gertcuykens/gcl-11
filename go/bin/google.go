@@ -66,15 +66,16 @@ func GoogleRevokeToken(t *Token) (err error){
 	return err
 }
 
-func (s *Service) GooglePurchasesService(r *http.Request, req *Token, resp *Token) error {
+func (s *Service) GooglePurchasesService(r *http.Request, req *NoRequest, resp *Token) error {
 	c := endpoints.NewContext(r)
-	req.Context = c
-	req.Client = urlfetch.Client(c)
-	log.Print("-----------------"+req.Access)
-	req.Renew()
-	log.Print("-----------------"+req.Access)
-	GooglePurchases(req)
-	*resp = *req
+	t := &Token{}
+	t.Context = c
+	t.Client = urlfetch.Client(c)
+	log.Print("-----------------"+t.Access)
+	t.Renew()
+	log.Print("-----------------"+t.Access)
+	GooglePurchases(t)
+	*resp = *t
 	return nil
 }
 
@@ -91,15 +92,24 @@ func GooglePurchases(t *Token) (err error) {
 	return err
 }
 
-func (s *Service) GoogleCloudService(r *http.Request, req *NoRequest, resp *Token) (err error) {
+func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *Token) (err error) {
+	e := endpoints.NewContext(r)
+	g, err := endpoints.CurrentUser(e, google_scopes, audiences, clientids);
+	if err != nil {return err}
+
 	t := &oauth.Transport{
 		//Token:     token,
 		Config:    config,
-		Transport: urlfetch.Client(endpoints.NewContext(r)).Transport,
+		Transport: urlfetch.Client(e).Transport,
 	}
-	var c = cloud.Cloud{}
+
+	c := &cloud.Storage{
+	    BucketName: "gcl-storage",
+		ObjectName: "Test.txt",
+	}
+
 	c.New(t.Client())
-	c.Insert(r.Body)
-	resp.Status = "Saved"
+	c.Set(g.String())
+	resp.Status = "ACL is set."
 	return nil
 }
