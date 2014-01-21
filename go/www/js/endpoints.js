@@ -1,3 +1,9 @@
+ID='1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com'
+
+SCOPE1='https://www.googleapis.com/auth/userinfo.email'
+//SCOPE2='https://www.googleapis.com/auth/plus.login'
+//ACTIONS='http://schemas.google.com/AddActivity'
+
 Google=new Token()
 Google.type_token="google"
 
@@ -21,10 +27,10 @@ init = function () {
 function signin() {
     var options = {
         callback : autosignin,
-        clientid : '1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com',
-        requestvisibleactions : 'http://schemas.google.com/AddActivity',
+        clientid : ID,
+        //requestvisibleactions : ACTIONS,
         cookiepolicy : 'single_host_origin',
-        scope: 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email'
+        scope: SCOPE1
     }
     gapi.auth.signIn(options)
 }
@@ -47,8 +53,8 @@ function autosignin() {
     }
 
     var options = {
-        client_id: "1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com",
-        scope: "https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email",
+        client_id: ID,
+        scope: SCOPE1,
         immediate: true
     }
 

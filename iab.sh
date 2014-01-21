@@ -1,8 +1,5 @@
 #!/bin/bash
-client_id=$GCL_13_ID
-client_secret=$GCL_13_SECRET
-
-iab=$GCL_13_IAB
+iab="..."
 
 curl -X GET "https://www.googleapis.com/androidpublisher/v1.1/applications/com.appspot/inapp/gas/purchases/$iab"\
     -H "Authorization:  Bearer $1"

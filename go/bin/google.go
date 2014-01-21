@@ -6,6 +6,7 @@ import (
 	"github.com/crhym3/go-endpoints/endpoints"
 	"net/http"
 	"cloud"
+	"log"
 )
 
 type NoRequest struct {}
@@ -20,11 +21,11 @@ type Response struct {
 
 var clientids = []string{WEB_CLIENT_ID, ANDROID_CLIENT_ID, endpoints.ApiExplorerClientId}
 var audiences = []string{WEB_CLIENT_ID}
-var google_scopes = []string{SCOPE1}
+var gscope = []string{SCOPE1}
 
 func (s *Service) GoogleUserService(r *http.Request, req *NoRequest, resp *Response) error {
 	e := endpoints.NewContext(r)
-    g, err := endpoints.CurrentUser(e, google_scopes, audiences, clientids);
+    g, err := endpoints.CurrentUser(e, gscope, audiences, clientids);
 	if err != nil {return err}
 	resp.Message = g.Email
 	return nil
@@ -32,7 +33,8 @@ func (s *Service) GoogleUserService(r *http.Request, req *NoRequest, resp *Respo
 
 func (s *Service) GoogleRevokeService(r *http.Request, req *NoRequest, resp *Response) (err error) {
 	t := r.Header.Get("authorization")
-	buf, err := urlfetch.Client(endpoints.NewContext(r)).Get("https://accounts.google.com/o/oauth2/revoke?token="+t)
+	log.Print("---------"+t[7:])
+	buf, err := urlfetch.Client(endpoints.NewContext(r)).Get("https://accounts.google.com/o/oauth2/revoke?token="+t[7:])
 	defer buf.Body.Close()
 	b, err := ioutil.ReadAll(buf.Body)
 	resp.Message=string(b)
