@@ -2,9 +2,11 @@ package com.appspot;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
@@ -22,6 +24,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //private GoogleAccountCredential user;
     private GoogleAccountCredential user2;
     private TextView userStatus;
+    private ProductActivity product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +55,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         Context context = view.getContext();
+        Pair<Context,GoogleAccountCredential> combo = Pair.create(context, user2);
+        Intent intent = new Intent(context, ProductActivity.class);
         switch(view.getId()) {
             case R.id.userButton: startActivityForResult(user2.newChooseAccountIntent(), 1); break;
-            case R.id.storageButton: new StorageTask().execute(Pair.create(context, user2)); break;
-            case R.id.serviceButton: new ServiceTask().execute(Pair.create(context, user2)); break;
-            case R.id.productButton: new ProductTask().execute(Pair.create(context, user2)); break;
+            case R.id.storageButton: new StorageTask().execute(combo); break;
+            case R.id.serviceButton: new ServiceTask().execute(combo); break;
+            case R.id.productButton: startActivity(intent); break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("onActivityResult", requestCode + "," + resultCode + "," + data);
+        //if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {}
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 1: //REQUEST_ACCOUNT_PICKER
