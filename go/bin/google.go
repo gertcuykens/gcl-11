@@ -59,6 +59,7 @@ func (s *Service) GooglePurchasesService(r *http.Request, req *NoRequest, resp *
 
 func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *Response) (err error) {
 	e := endpoints.NewContext(r)
+	g, err := endpoints.CurrentUser(e, gscope, audiences, clientids);
     TRANS.Transport=urlfetch.Client(e).Transport
 
 	c := &cloud.Storage{
@@ -79,6 +80,6 @@ func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *Re
 	buf , err := TRANS.Client().Get(c.Object.MediaLink)
 	defer buf.Body.Close()
 	b, err := ioutil.ReadAll(buf.Body)
-	resp.Message=string(b)
+	resp.Message=string(b)+" => "+g.Email
 	return nil
 }
