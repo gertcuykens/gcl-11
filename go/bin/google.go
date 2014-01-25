@@ -67,7 +67,18 @@ func (s *Service) GoogleStorageService(r *http.Request, req *NoRequest, resp *Re
 	}
 
 	c.New(TRANS.Client())
-	c.Set("gert.cuykens.2@gmail.com")
-	resp.Message = "ACL is set."
+	//c.Set("gert.cuykens.2@gmail.com")
+	c.Get()
+
+	//req, _ := http.NewRequest("GET", urls, body)
+	//req.URL.Path =
+	//googleapi.SetOpaque(req.URL)
+	//req.Header.Set("User-Agent", "google-api-go-client/0.5")
+	//res, err := TRANS.Client().Do(req)
+
+	buf , err := TRANS.Client().Get(c.Object.MediaLink)
+	defer buf.Body.Close()
+	b, err := ioutil.ReadAll(buf.Body)
+	resp.Message=string(b)
 	return nil
 }

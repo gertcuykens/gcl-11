@@ -24,10 +24,10 @@ class StorageTask extends AsyncTask<Pair<Context,GoogleAccountCredential>, Void,
         GoogleAccountCredential u = arg[0].second;
         com.google.api.services.storage.Storage storageService = new com.google.api.services.storage.Storage.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), u).setApplicationName("gcl-storage").build();
         try {
-            Storage.Objects.Get getObject = storageService.objects().get("gcl-storage", "test.txt");
             String appPath = c.getFilesDir().getAbsolutePath();
             java.io.File parentDir = new java.io.File(appPath);
             OutputStream out = new FileOutputStream(new java.io.File(parentDir,"GERT_TEST.TXT"));
+            Storage.Objects.Get getObject = storageService.objects().get("gcl-storage", "test.txt");
             getObject.getMediaHttpDownloader().setDirectDownloadEnabled(true);
             getObject.executeMediaAndDownloadTo(out);
             err= "Download complete for "+u.getSelectedAccountName()+" at "+parentDir.getPath();

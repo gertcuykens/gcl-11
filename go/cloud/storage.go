@@ -9,7 +9,7 @@ import (
 type Storage struct {
 	BucketName string
 	ObjectName string
-	ObjectAcl *storage.ObjectAccessControl
+	Object *storage.Object
 	Service *storage.Service
 }
 
@@ -21,26 +21,26 @@ func (s *Storage) New(c *http.Client) (err error) {
 
 func (s *Storage) Set(entity string) (err error) {
 	log.Print("-------SET----------")
-	s.ObjectAcl = &storage.ObjectAccessControl{
+	acl := &storage.ObjectAccessControl{
 		Bucket: s.BucketName,
 		Entity: "user-"+entity,
 		Object: s.ObjectName,
 		Role: "READER",
 	}
-	result, err := s.Service.ObjectAccessControls.Insert(s.BucketName, s.ObjectName, s.ObjectAcl).Do()
+	result, err := s.Service.ObjectAccessControls.Insert(s.BucketName, s.ObjectName, acl).Do()
 	log.Printf("---------------Error ACL for %s/%s:\n%v", s.BucketName, s.ObjectName, err)
 	if err != nil {return err}
 	log.Printf("---------------Result ACL for %s/%s:\n%v", s.BucketName, s.ObjectName, result)
 	return nil
 }
 
-/*
 func (s *Storage) Get() (err error) {
-	s.Object, err = s.Service.Objects.Get(s.Bucket, s.Object.Name).Do()
+	s.Object, err = s.Service.Objects.Get(s.BucketName, s.ObjectName).Do()
 	log.Printf("Got storage.Object, err: %#v", s.Object)
 	return nil
 }
 
+/*
 func (s *Storage) Insert(f io.Reader) (err error) {
 	s.Object, err = s.Service.Objects.Insert(s.Bucket, s.Object).Media(f).Do()
 	if err != nil {}
