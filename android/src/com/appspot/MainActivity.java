@@ -31,11 +31,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.endpoints);
 
-        //String AUDIENCE = "server:client_id:1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com";
-        // user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
+        String AUDIENCE = "server:client_id:1093123836049-ilqfjb2s2tqal2fobuduj8b790hnnfju.apps.googleusercontent.com";
+        user2 = GoogleAccountCredential.usingAudience(this, AUDIENCE);
 
-        String SCOPE="https://www.googleapis.com/auth/devstorage.read_only";
-        user2=GoogleAccountCredential.usingOAuth2(this, Arrays.asList(SCOPE.split(" ")));
+        //String SCOPE="https://www.googleapis.com/auth/devstorage.read_only";
+        //user2=GoogleAccountCredential.usingOAuth2(this, Arrays.asList(SCOPE.split(" ")));
 
         userStatus = (TextView) findViewById(R.id.userStatus);
 
