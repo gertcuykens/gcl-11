@@ -27,7 +27,7 @@ func init() {
 	info8 := api.MethodByName("LinkedInCallback").Info()
 	info8.Name, info8.HttpMethod, info8.Path, info8.Desc = "linkedin.callback", "GET", "linkedin/callback", "Oauth callback."
 	info9 := api.MethodByName("FacebookCallback").Info()
-	info9.Name, info9.HttpMethod, info9.Path, info9.Desc = "facebook.callback", "GET", "facebook/callback", "Oauth callback."
+	info9.Name, info9.HttpMethod, info9.Path, info9.Desc = "facebook.callback", "POST", "facebook/callback", "Oauth callback."
 	info10 := api.MethodByName("Register").Info()
 	info10.Name, info10.HttpMethod, info10.Path, info10.Desc = "register", "POST", "register", "Register user."
 	info11 := api.MethodByName("CheckSum").Info()

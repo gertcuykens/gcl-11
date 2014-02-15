@@ -10,7 +10,9 @@ import (
 )
 
 func (s *Service) FacebookCallback(r *http.Request, t *Token, v *Token) error {
-	t.Client = urlfetch.Client(endpoints.NewContext(r))
+	c := endpoints.NewContext(r)
+	//c.Infof("------------------: %v", "-------------------")
+	t.Client = urlfetch.Client(c)
 	if err := FacebookUser(t); err != nil {t.Status="Facebook User error!"; return err}
 	*v = *t
 	return nil
