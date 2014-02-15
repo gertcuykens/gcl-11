@@ -55,7 +55,7 @@ init = function () {
 
 })(document,document.getElementsByTagName('script')[0]);
 
-function fsignin() {FB.login()}
+function fsignin() {FB.login(function(response){}, {scope: 'email,user_likes'})}
 
 function fsignout() {FB.logout()}
 
@@ -117,18 +117,18 @@ function border() {
 
 function testAPI1() {
     console.log('Browser, Fetching your Facebook information... ');
-    FB.api('/me', function(response) {console.log('Facebook, '+response.name+'.')})
+    FB.api('/me?fields=email', function(response) {console.log('Facebook, '+response.email+'.')})
 
     console.log('Browser, Fetching your Google information... ');
     gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, '+response.email+'.')})
 }
 
 function testAPI2() {
-    console.log('Server, Fetching your Facebook information... ');
-    gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server, '+response.name_token)})
+    console.log('Facebook, Fetching your Facebook information... ');
+    gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Facebook, '+response.email_token)})
 
-    console.log('Server, Fetching your Google information... ');
-    gapi.client.rest.google.callback().execute(function(response){console.log('Server, '+response.email_token)})
+    console.log('Google, Fetching your Google information... ');
+    gapi.client.rest.google.callback().execute(function(response){console.log('Google, '+response.email_token)})
 }
 
 function testAPI3() {

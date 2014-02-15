@@ -2,6 +2,8 @@ package bin
 
 import "github.com/crhym3/go-endpoints/endpoints"
 
+const SERVER_SECRET = "123456"
+
 type Service struct {}
 
 func init() {
