@@ -4,15 +4,11 @@
         <title>Endpoints</title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/login.css">
+        <link rel="stylesheet" href="css/index.css">
         <link rel="stylesheet" href="css/facebook.css">
         <link rel="stylesheet" href="css/google.css">
-        <link rel="stylesheet" href="css/twitter.css">
-        <link rel="stylesheet" href="css/linkedin.css">
     </head>
     <body>
-
-  <div id="fb-root"></div>
   <div class="container">
       <nav class="navbar navbar-default" role="navigation">
 
@@ -50,24 +46,6 @@
                                   </div>
                               </div>
                           </li>
-                          <!--li class="login">
-                              <div  id="tSignInWrapper">
-                                  <span class="label"></span>
-                                  <div id="tsigninButton" >
-                                      <span class="icon"></span>
-                                      <span class="buttonText">Log In</span>
-                                  </div>
-                              </div>
-                          </li>
-                          <li class="login">
-                              <div  id="lSignInWrapper">
-                                  <span class="label"></span>
-                                  <div id="lsigninButton" >
-                                      <span class="icon"></span>
-                                      <span class="buttonText">Log In</span>
-                                  </div>
-                              </div>
-                          </li-->
                       </ul>
                   </li>
               </ul>
@@ -82,11 +60,60 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="./js/token.js"></script>
-  <script type="text/javascript" src="./js/endpoints.js"></script>
-</body>
+  <script type="text/javascript" src="./js/facebook.js"></script>
+  <script type="text/javascript" src="./js/google.js"></script>
+  <script>
+      $('#logindropdown').on('hidden.bs.dropdown', function () {border()})
+      $('#logindropdown').on('shown.bs.dropdown', function () {border()})
+
+      border = function(){
+          var b=document.getElementById('login')
+          if (document.getElementById('login-menu').classList.contains('open')){b.style.borderBottom='1px solid transparent'; return}
+          if (Google.access_token) {b.style.borderBottom='1px solid #dd4b39'; return}
+          if (Facebook.access_token) {b.style.borderBottom='1px solid #5f78ab'; return}
+          b.style.borderBottom='1px solid transparent'
+      }
+
+      function testAPI() {
+          console.log('Browser, Fetching your Facebook information... ');
+          FB.api('/me?fields=email', function(response) {console.log('Facebook, '+response.email+'.')})
+
+          console.log('Browser, Fetching your Google information... ');
+          gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, '+response.email+'.')})
+
+          console.log('Facebook, Fetching your Facebook information... ');
+          Facebook.access_token=FB.getAccessToken()
+          gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Facebook, '+response.email_token)})
+
+          console.log('Google, Fetching your Google information... ');
+          Google.access_token=gapi.auth.getToken().access_token
+          gapi.client.rest.google.callback().execute(function(response){console.log('Google, '+response.email_token)})
+      }
+  </script>
+
+  <div id="fb-root"></div>
+
+    </body>
 </html>
 
 <!--
+
+       //Server=new Token()
+       //Server.type_token="server"
+
+       function testAPI3() {
+       console.log('Server, Register Facebook user... ');
+       gapi.client.rest.register(Facebook).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
+
+       console.log('Server, Register Google user... ');
+       gapi.client.rest.register(Google).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
+       }
+
+       function testAPI4() {
+       console.log('Server, CheckSum Facebook token... ');
+       gapi.client.rest.checksum(Server).execute(function(response){console.log('Server, '+JSON.stringify(response.result));Server=response.result})
+       }
+
 function signout() {
     var http=new XMLHttpRequest();
     http.open('GET','https://accounts.google.com/o/oauth2/revoke?token='+gapi.auth.getToken().access_token,true)
