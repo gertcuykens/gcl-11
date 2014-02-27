@@ -7,7 +7,7 @@ window.fbAsyncInit = function() {
             var b=document.getElementById('fsigninButton')
             b.removeEventListener('click', fsignin);
             b.addEventListener('click',fsignout)
-            document.getElementsByClassName("buttonText")[0].innerHTML='Log Out'
+            //document.getElementsByClassName("buttonText")[0].innerHTML='Log Out'
             Facebook.access_token=FB.getAccessToken()
         }
         else if (response.status === 'not_authorized') {}
@@ -15,7 +15,7 @@ window.fbAsyncInit = function() {
             var b=document.getElementById('fsigninButton')
             b.removeEventListener('click', fsignout);
             b.addEventListener('click',fsignin)
-            document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+            //document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
             Facebook.access_token=null
         }
         border()
@@ -24,7 +24,7 @@ window.fbAsyncInit = function() {
     var b=document.getElementById('fsigninButton')
     b.removeEventListener('click', fsignout);
     b.addEventListener('click',fsignin)
-    document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+    //document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
 };
 
 (function(d,s) {

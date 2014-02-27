@@ -22,3 +22,13 @@ span.gicon {
     height: 23px;
     border-right: #bb3f30 1px solid;
 }
+
+span.label {font-weight: bold;}
+
+span.buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 3px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: 'Helvetica Neue', Helvetica, Arial, 'lucida grande',tahoma,verdana,arial,sans-serif;}

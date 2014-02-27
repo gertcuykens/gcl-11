@@ -5,7 +5,7 @@ init = function () {
     console.log('Loading Google')
     var apisToLoad = 2;
     var callback = function() { if (--apisToLoad == 0) {autosignin()}}
-    gapi.client.load('rest', 'v0', callback, 'http://'+window.location.host+'/_ah/api');
+    gapi.client.load('rest', 'v0', callback, 'https://'+window.location.host+'/_ah/api'); //TODO
     gapi.client.load('oauth2', 'v2', callback);
 };
 
@@ -32,14 +32,14 @@ autosignin = function() {
     var b=document.getElementById('gsigninButton')
     b.removeEventListener('click', signout);
     b.addEventListener('click',signin)
-    document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
+    //document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
 
     var callback = function (t) {
         if (!t) return false
         var b=document.getElementById("gsigninButton")
         b.removeEventListener('click', signin);
         b.addEventListener('click', signout)
-        document.getElementsByClassName("buttonText")[1].innerHTML='Log Out'
+        //document.getElementsByClassName("buttonText")[1].innerHTML='Log Out'
         console.log('Sign-in state: '+ t['status']['signed_in'])
         Google.access_token=gapi.auth.getToken().access_token
         border()
@@ -58,7 +58,7 @@ signout = function () {
     Google.access_token=gapi.auth.getToken().access_token
     gapi.client.rest.google.revoke(Google).execute(function(response){console.log('Server, Bye, '+response.message);Google.access_token=null;border()})
     var b=document.getElementById('gsigninButton')
-    b.removeEventListener('click', signout);
+    b.removeEventListener('click', signout)
     b.addEventListener('click',signin)
-    document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
+    //document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
 }
