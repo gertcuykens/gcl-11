@@ -222,6 +222,34 @@
                 android:layout_alignParentRight="true"
                 android:text="Submit"/>
 
+    <RelativeLayout
+        android:id="@+id/serviceLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:padding="5dp"
+        android:background="@drawable/border">
+
+        <TextView
+            android:id="@+id/serviceText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Service"/>
+
+        <Button
+            android:id="@+id/serviceButton"
+            android:layout_width="108dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="Submit"/>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -281,6 +309,25 @@
                 android:layout_alignParentRight="true"
                 android:text="Submit"/>
 
+        <TextView
+            android:id="@+id/productText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Product"/>
+
+        <Button
+            android:id="@+id/productButton"
+            android:layout_width="108dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="Submit"/>
+
     </RelativeLayout>
 
 </LinearLayout>
+

@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html xmlns:fb="http://ogp.me/ns/fb#">
+    <head>
+        <title>Endpoints</title>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/login.css">
+        <link rel="stylesheet" href="css/google.css">
+        <!--link rel="stylesheet" href="css/facebook.css"-->
+        <!--link rel="stylesheet" href="css/twitter.css"-->
+        <!--link rel="stylesheet" href="css/linkedin.css"-->
+    </head>
+    <body>
+
+      <div id="fb-root"></div>
+
+      <div class="container">
+          <nav class="navbar navbar-default" role="navigation">
+
+              <div class="navbar-header">
+                  <a class="navbar-brand" href="">Endpoints</a>
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+              </div>
+
+              <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+                  <ul class="navbar-nav navbar-right nav" id="logindropdown">
+                      <li class="dropdown" id="login-menu">
+                          <a href="" class="dropdown-toggle" data-toggle="dropdown" data-target="#" id="login">Sign in <b class="caret"></b></a>
+                          <ul class="dropdown-menu login">
+                              <li class="login">
+                                  <div  id="gSignInWrapper">
+                                      <span class="label"></span>
+                                      <div id="gsigninButton" >
+                                          <span class="gicon"></span>
+                                          <span class="buttonText">Log In</span>
+                                      </div>
+                                  </div>
+                              </li>
+                              <!--li class="login"><fb:login-button autologoutlink="true" size="large" show-faces="false" max-rows="1"></fb:login-button></li-->
+                              <!--li class="login">
+                                  <div  id="fSignInWrapper">
+                                      <span class="label"></span>
+                                      <div id="fsigninButton" >
+                                          <span class="ficon"></span>
+                                          <span class="buttonText">Log In</span>
+                                      </div>
+                                  </div>
+                              </li-->
+                              <!--li class="login">
+                                  <div  id="tSignInWrapper">
+                                      <span class="label"></span>
+                                      <div id="tsigninButton" >
+                                          <span class="icon"></span>
+                                          <span class="buttonText">Log In</span>
+                                      </div>
+                                  </div>
+                              </li>
+                              <li class="login">
+                                  <div  id="lSignInWrapper">
+                                      <span class="label"></span>
+                                      <div id="lsigninButton" >
+                                          <span class="icon"></span>
+                                          <span class="buttonText">Log In</span>
+                                      </div>
+                                  </div>
+                              </li-->
+                          </ul>
+                      </li>
+                  </ul>
+              </div>
+          </nav>
+
+          <ul style="padding-top:10px;">
+              <li><a href="_ah/api/explorer">API Web Interface</a></li>
+              <li><a href="https://github.com/gertcuykens/gcl-13">Source Code</a></li>
+              <!--li><a href="https://play.google.com/apps/testing/com.appspot">Android release apk</a></li>
+              <li><a href="https://lb1.pcs.ovh.net/v1/AUTH_a4c2ef109c996858a5c3f8e411de8538/gcl-13/TrivialDrive.apk">Android debug apk</a></li-->
+          </ul>
+
+      </div>
+
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+      <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="./js/token.js"></script>
+      <script type="text/javascript" src="./js/endpoints.js"></script>
+
+    </body>
+</html>
+
+<!--
+function signout() {
+    var http=new XMLHttpRequest();
+    http.open('GET','https://accounts.google.com/o/oauth2/revoke?token='+gapi.auth.getToken().access_token,true)
+    http.send();
+    http.onreadystatechange=function(){ if (http.readyState!=4 && http.status!=200) return false
+                                        var b=document.getElementById('signinButton')
+                                        b.removeEventListener('click', signout);
+                                        b.addEventListener('click',signin)
+                                        document.getElementsByClassName("buttonText")[0].innerHTML="Log In"}
+}
+
+FB.init({appId:'...', status:true, cookie:true, xfbml:true});
+var c=b.cloneNode(true);
+var p=b.parentNode
+p.replaceChild(c,b);
+-->
