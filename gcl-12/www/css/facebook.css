@@ -1,0 +1,35 @@
+#fsigninButton {
+    display: inline-block;
+    background: #5f78ab;
+    color: white;
+    width: 88px;
+    height: 25px;
+    border: 1px solid #161648;
+    /*border-radius: 1px;*/
+    /*white-space: nowrap;*/
+}
+
+#fsigninButton:hover {
+    background: #5f78cc;
+    cursor: pointer;
+}
+
+span.ficon {
+    background: transparent url('../img/facebook.png') no-repeat;
+    background-position:0px -107px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 23px;
+    height: 23px;
+    border-right: 1px solid #161648;
+}
+
+span.label {font-weight: bold;}
+
+span.buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 3px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: 'Helvetica Neue', Helvetica, Arial, 'lucida grande',tahoma,verdana,arial,sans-serif;}

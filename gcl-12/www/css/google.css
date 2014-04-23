@@ -1,0 +1,34 @@
+#gsigninButton {
+    display: inline-block;
+    background: #dd4b39;
+    color: white;
+    width: 88px;
+    height: 25px;
+    border: 1px solid #6E0000;
+    /*border-radius: 1px;*/
+    /*white-space: nowrap;*/
+}
+
+#gsigninButton:hover {
+    background: #e74b37;
+    cursor: pointer;
+}
+
+span.gicon {
+    background: transparent url('../img/btn_red_32.png') 2px 50% no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    width: 23px;
+    height: 23px;
+    border-right: #bb3f30 1px solid;
+}
+
+span.label {font-weight: bold;}
+
+span.buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 3px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: 'Helvetica Neue', Helvetica, Arial, 'lucida grande',tahoma,verdana,arial,sans-serif;}

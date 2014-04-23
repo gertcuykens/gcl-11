@@ -1,0 +1,21 @@
+form {
+    padding: 0px 10px 10px 10px;
+    border:5px solid grey;
+    margin-top: 20px;}
+
+.row {
+    margin:0px;
+    padding:0px;
+    overflow: scroll;}
+
+h2 { margin:5px 0px;}
+
+.navbar { margin:10px 0px 0px 0px;}
+
+/*.login {padding:0px; margin:0px; min-width:88px; width: 88px;}*/
+
+#login {border-bottom: 1px solid transparent;}
+
+#bs-navbar-collapse-1 ul.dropdown-menu {margin-top: 5px !important; min-width: 50px !important;}
+#bs-navbar-collapse-1.in ul.dropdown-menu {margin-top:0px !important;}
+#bs-navbar-collapse-1.in li {margin:0px 10px;}
