@@ -42,7 +42,7 @@ var TWITTER_SERVER = oauth.ServiceProvider{
 var consumer = oauth.NewConsumer(TWITTER_ID, TWITTER_SECRET, TWITTER_SERVER)
 //consumer.Debug(true)
 
-func (s *Service) TwitterOauth(r *http.Request, req *NoRequest, resp *ResponseOauth) error {
+func (s *Service) TwitterOauth(r *http.Request, _, resp *ResponseOauth) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	requestToken, url, err := consumer.GetRequestTokenAndUrl("http://localhost:8080/_ah/api/rest/v0/twitter/callback")
@@ -52,7 +52,7 @@ func (s *Service) TwitterOauth(r *http.Request, req *NoRequest, resp *ResponseOa
 	return err
 }
 
-func (s *Service) TwitterOauthOob(r *http.Request, req *NoRequest, resp *ResponseOauth) error {
+func (s *Service) TwitterOauthOob(r *http.Request, _, resp *ResponseOauth) error {
 	c := endpoints.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	requestToken, url, err := consumer.GetRequestTokenAndUrl("oob")

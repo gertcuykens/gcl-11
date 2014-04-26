@@ -1,4 +1,4 @@
-package com.appspot;
+package my.endpoints;
 /*
 import android.accounts.AccountManager;
 import android.app.Activity;

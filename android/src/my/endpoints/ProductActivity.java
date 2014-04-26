@@ -1,4 +1,4 @@
-package com.appspot;
+package my.endpoints;
 /*
 import android.app.Activity;
 import android.app.AlertDialog;

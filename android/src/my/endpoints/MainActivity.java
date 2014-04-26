@@ -13,15 +13,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.appspot.gcl_11.rest1.Rest1;
-import com.appspot.gcl_11.rest1.model.Multiply;
+import com.appspot.gcl_11.rest.Rest;
+import com.appspot.gcl_11.rest.model.Multiply;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private GoogleAccountCredential user;
-    private Rest1 service;
+    private Rest service;
     private Button userButton;
     private TextView userStatus;
     private EditText getGreetingValue;
@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String AUDIENCE = "server:client_id:522156758812-09f5qv0e4gqjdjqfocerqcud5m5jutau.apps.googleusercontent.com";
         user = GoogleAccountCredential.usingAudience(this, AUDIENCE);
 
-        Rest1.Builder endpoints = new Rest1.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
+        Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
         service = endpoints.build();
 
         userStatus = (TextView) findViewById(R.id.userStatus);
@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch(view.getId()) {
             case R.id.userButton:
                 if (userButton.getText().equals("Sign Out")) {
-                    Rest1.Builder endpoints = new Rest1.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
+                    Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), null);
                     service = endpoints.build();
                     userStatus.setText("Not signed in");
                     userButton.setText("Sign In");
@@ -98,7 +98,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         user.setSelectedAccountName(accountName);
-                        Rest1.Builder endpoints = new Rest1.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user);
+                        Rest.Builder endpoints = new Rest.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), user);
                         service = endpoints.build();
                         userStatus.setText(user.getSelectedAccountName());
                         userButton.setText("Sign Out");

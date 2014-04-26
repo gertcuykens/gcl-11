@@ -11,7 +11,7 @@ type Service struct {}
 const PACKAGE string = ""
 
 const WEB_CLIENT_ID string = "522156758812-09f5qv0e4gqjdjqfocerqcud5m5jutau.apps.googleusercontent.com"
-const ANDROID_CLIENT_ID string = ""
+const ANDROID_CLIENT_ID string = "522156758812-29jkcaiofrismobslc4ioop1dvfhhgoi.apps.googleusercontent.com"
 
 const SERVER_CLIENT_ID string = ""
 const SERVER_SECRET string = ""
