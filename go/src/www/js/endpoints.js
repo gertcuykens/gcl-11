@@ -1,25 +1,25 @@
 function testAPI() {
-  console.log('Browser, Fetching your Facebook information... ');
-  FB.api('/me?fields=email', function(response) {console.log('Facebook, '+response.email+'.')})
+  console.log('Browser Facebook, Fetching your information... ');
+  FB.api('/me?fields=email', function(response) {console.log('Browser Facebook, '+response.email+'.')})
 
-  console.log('Browser, Fetching your Google information... ');
-  gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Google, '+response.email+'.')})
+  console.log('Browser Google, Fetching your information... ');
+  gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Browser Google, '+response.email+'.')})
 
-  console.log('Server, Fetching your Facebook information... ');
+  console.log('Server Facebook, Fetching your information... ');
   Facebook.access_token=FB.getAccessToken()
-  gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Facebook, '+response.email_token)})
+  gapi.client.rest.facebook.callback(Facebook).execute(function(response){console.log('Server Facebook, '+response.email_token)})
 
-  console.log('Server, Fetching your Google information... ');
+  console.log('Server Google, Fetching your information... ');
   Google.access_token=gapi.auth.getToken().access_token
-  gapi.client.rest.google.callback().execute(function(response){console.log('Google, '+response.email_token)})
+  gapi.client.rest.google.callback().execute(function(response){console.log('Server Google, '+response.result.message)})
 }
 
-function testAPI3() {
+function testAPI2() {
     console.log('Iab, Fetching your order information... ');
     gapi.client.rest.google.purchases().execute(function(response){console.log('Iab, '+response.message)})
 }
 
-function testAPI4() {
+function testAPI3() {
     console.log('Storage, setting ACL...');
     gapi.client.rest.google.storage().execute(function(response){console.log('Storage, '+response.message)})
 }
