@@ -1,3 +1,5 @@
+FACEBOOK_CLIENT_ID="249348058430770"
+
 Facebook=new Token()
 Facebook.type_token="facebook"
 
@@ -32,7 +34,7 @@ window.fbAsyncInit = function() {
     var js = d.createElement('script');
     js.id = 'facebook-jssdk';
     js.async = true;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=299270320238297";
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId="+FACEBOOK_CLIENT_ID;
     //d.getElementById('fb-root').appendChild(js);
     s.parentNode.insertBefore(js, s);
 })(document,document.getElementsByTagName('script')[0]);

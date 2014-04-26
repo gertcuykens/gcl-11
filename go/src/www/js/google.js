@@ -1,3 +1,6 @@
+GOOGLE_CLIENT_ID="522156758812-09f5qv0e4gqjdjqfocerqcud5m5jutau.apps.googleusercontent.com"
+GOOGLE_SCOPE="https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.login"
+
 Google=new Token()
 Google.type_token="google"
 
@@ -21,10 +24,10 @@ init = function () {
 signin = function() {
     var options = {
         callback : autosignin,
-        clientid : '781166019436-vs3a5b1nva8kefmsk1mscccur6rkpos4.apps.googleusercontent.com',
+        clientid : GOOGLE_CLIENT_ID,
         requestvisibleactions : 'http://schemas.google.com/AddActivity',
         cookiepolicy : 'single_host_origin',
-        scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.login'
+        scope: GOOGLE_SCOPE
     }
     gapi.auth.signIn(options)
 }
@@ -47,8 +50,8 @@ autosignin = function() {
     }
 
     var options = {
-        client_id: "781166019436-vs3a5b1nva8kefmsk1mscccur6rkpos4.apps.googleusercontent.com",
-        scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.login",
+        client_id: GOOGLE_CLIENT_ID,
+        scope: GOOGLE_SCOPE,
         immediate: true
     }
 
