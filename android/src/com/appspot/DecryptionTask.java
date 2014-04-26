@@ -1,5 +1,5 @@
 package com.appspot;
-
+/*
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -49,7 +49,7 @@ class DecryptionTask extends AsyncTask<Pair<Context,String>, Void, Pair<Context,
     }
 
 }
-
+*/
 /*
         File file = new File(Environment.getExternalStorageDirectory() + File.separator + "your_folder_on_sd", "file_name");
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));

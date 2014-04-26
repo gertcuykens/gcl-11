@@ -1,5 +1,0 @@
-package bin
-
-const TWITTER_SECRET = ""
-const LINKEDIN_SECRET = ""
-

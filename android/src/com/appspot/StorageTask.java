@@ -1,5 +1,5 @@
 package com.appspot;
-
+/*
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -51,3 +51,4 @@ class StorageTask extends AsyncTask<Pair<Context,GoogleAccountCredential>, Void,
     }
 
 }
+*/

@@ -1,5 +1,5 @@
 package com.appspot;
-
+/*
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -90,3 +90,4 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
 }
+*/

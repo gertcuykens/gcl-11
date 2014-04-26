@@ -1,5 +1,5 @@
 package com.appspot;
-
+/*
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -120,6 +120,7 @@ public class ProductActivity extends Activity implements View.OnClickListener {
         bld.create().show();
     }
 }
+*/
 
 /*
 Purchase premiumPurchase = inventory.getPurchase(SKU_PREMIUM);
