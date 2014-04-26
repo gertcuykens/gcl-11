@@ -5,7 +5,8 @@ api_version: go1
 threadsafe: true
 
 handlers:
- - url: /_ah/.*
+
+ - url: /_ah/spi/.*
    script: _go_app
 
  - url: /css
@@ -40,6 +41,3 @@ inbound_services:
 #- url: /(.*\.html)
 #  static_files: www/\1
 #  upload: www/(.*\.html)
-
-
-
