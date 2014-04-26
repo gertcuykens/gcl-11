@@ -5,7 +5,8 @@ init = function () {
     console.log('Loading Google')
     var apisToLoad = 2;
     var callback = function() { if (--apisToLoad == 0) {autosignin()}}
-    gapi.client.load('rest', 'v0', callback, 'https://'+window.location.host+'/_ah/api'); //TODO
+    var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+    gapi.client.load('rest', 'v0', callback, http+window.location.host+'/_ah/api')
     gapi.client.load('oauth2', 'v2', callback);
 };
 
