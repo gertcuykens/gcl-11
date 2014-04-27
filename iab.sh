@@ -1,5 +1,5 @@
 #!/bin/bash
-iab="..."
+iab=""
 
 curl -X GET "https://www.googleapis.com/androidpublisher/v1.1/applications/com.appspot/inapp/gas/purchases/$iab"\
     -H "Authorization:  Bearer $1"
