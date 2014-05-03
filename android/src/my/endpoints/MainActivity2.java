@@ -20,7 +20,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 
 import java.util.Arrays;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity2 extends Activity implements View.OnClickListener {
     //private GoogleAccountCredential user;
     private GoogleAccountCredential user2;
     private TextView userStatus;

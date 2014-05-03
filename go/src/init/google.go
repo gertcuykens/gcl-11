@@ -9,7 +9,6 @@ import (
 	"cloud"
 	publisher "code.google.com/p/google-api-go-client/androidpublisher/v1.1"
 	"strconv"
-	"appengine/datastore"
 )
 
 type Message struct {Message string `json:"message"`}
@@ -80,60 +79,6 @@ func (s *Service) GoogleStorage(r *http.Request, req *Iab, resp *Message) (err e
 	defer buf.Body.Close()
 	b, err := ioutil.ReadAll(buf.Body)
 	resp.Message=string(b)+" => "+g.Email+" => "+strconv.FormatInt(p.Result.PurchaseTime,10)
-	return nil
-}
-
-func (gs *Service) GooglePut(r *http.Request, req *cloud.Entity, resp *cloud.Entity) error {
-	e := endpoints.NewContext(r)
-
-	g, err := endpoints.CurrentUser(e, SCOPES, AUDIENCES, CLIENTIDS);
-	if err != nil {return err}
-	if g == nil {return err}
-
-	//e.Infof("-------------------")
-	//e.Infof("DataStore, %v\n", g.Email)
-	//e.Infof("-------------------")
-
-	//k := datastore.NewKey(e, "wordbucket", g.Email, 0, nil)
-	//v:= &cloud.Entity {}
-
-	/*
-	c := &cloud.DataStore{
-		Root:k,
-		Entity:req,
-		Context:e,
-	}
-	*/
-
-	//if err:=c.Put(); err !=nil {return err}
-
-	*resp=*req
-	return nil
-}
-
-func (gs *Service) GoogleGet(r *http.Request, req, resp *cloud.Entity) error {
-	e := endpoints.NewContext(r)
-
-	g, err := endpoints.CurrentUser(e, SCOPES, AUDIENCES, CLIENTIDS);
-	if err != nil {return err}
-	if g == nil {return err}
-
-	//e.Infof("-------------------")
-	//e.Infof("DataStore, %v\n", g.Email)
-	//e.Infof("-------------------")
-
-	k := datastore.NewKey(e, "wordbucket", g.Email, 0, nil)
-	v:= &cloud.Entity {}
-
-	c := &cloud.DataStore{
-		Root:k,
-		Entity:v,
-		Context:e,
-	}
-
-	//if err:=c.Get(); err !=nil {return err}
-
-	*resp = *c.Entity
 	return nil
 }
 

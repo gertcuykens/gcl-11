@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:fb="http://ogp.me/ns/fb#">
     <head>
-        <title>Endpoints</title>
+        <title>Gcl-11</title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/index.css">
@@ -10,10 +10,10 @@
 
       <div class="container">
 
-          <nav class="navbar navbar-default" role="navigation">
+          <nav class="navbar navbar-default" role="navigation" style="margin:10px 0px;">
 
               <div class="navbar-header">
-                  <a class="navbar-brand" href="">Endpoints</a>
+                  <a id="list" class="navbar-brand" href="#">Gcl-11</a>
                   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
                       <span class="sr-only">Toggle navigation</span>
                       <span class="icon-bar"></span>
@@ -23,61 +23,38 @@
               </div>
 
               <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-                  <ul class="navbar-nav navbar-right nav" id="logindropdown">
-                      <li class="dropdown" id="login-menu">
+                  <ul class="nav navbar-nav navbar-right">
+                      <li id="login"><a id="fsigninButton" href="#">Facebook</a></li>
+                      <!--li class="dropdown" id="login-menu">
                           <a href="" class="dropdown-toggle" data-toggle="dropdown" id="login">Sign in <b class="caret"></b></a>
                           <ul class="dropdown-menu" role="menu" aria-labelledby="login" style="padding:10px;">
                               <li id="fsigninButton">Facebook</li>
                               <li id="gsigninButton" style="margin-top:5px;">Google</li>
                           </ul>
-                      </li>
+                      </li-->
                   </ul>
               </div>
 
           </nav>
 
-          <ul style="padding-top:10px;">
+          <div class="row">
+              <div class="col-md-12"><input id="message" class="form-control input-lg" placeholder="Your text message"/></div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-8"><input id="feed" class="form-control input-lg" value="gcl11/feed"/></div>
+              <div class="col-md-2"><input id="submit" type="button" class="btn btn-default btn-lg btn-block" value="Submit"/></div>
+              <div class="col-md-2"><input id="publish" type="button" class="btn btn-default btn-lg btn-block" value="Publish"/></div>
+          </div>
+
+          <ul id="console" style="padding-top:10px;">
+              <p>Loading...</p>
               <li><a href="_ah/api/explorer">Web Interface</a></li>
               <li><a href="https://play.google.com/store/apps/details?id=my.endpoints">Android Client</a></li>
-              <!--li><a href="https://play.google.com/apps/testing/com.appspot">Android release apk</a></li>
+              <!--li><a href="https://play.google.com/apps/testing/com.appspot">Android release apk</a></li> style="width: 90px; display: inline-block;"
               <li><a href="https://lb1.pcs.ovh.net/v1/AUTH_a4c2ef109c996858a5c3f8e411de8538/gcl-13/TrivialDrive.apk">Android debug apk</a></li-->
               <li><a href="https://github.com/gertcuykens/gcl-11">Source Code</a></li>
           </ul>
-
-          <div id="outputLog"></div>
-
-          <form action="javascript:void(0);">
-              <h2>Get Greeting</h2>
-              <div><span style="width: 90px; display: inline-block;">Greeting ID: </span><input id="id" value="0"/></div>
-              <div><input id="getGreeting" type="submit" class="btn btn-small" value="Submit"/></div>
-          </form>
-
-          <form action="javascript:void(0);">
-              <h2>List Greetings</h2>
-              <div><input id="listGreeting" type="submit" class="btn btn-small" value="Submit"/></div>
-          </form>
-
-          <form action="javascript:void(0);">
-              <h2>Multiply Greetings</h2>
-              <div><span style="width: 90px; display: inline-block;">Greeting: </span><input id="greeting" value="hello "/></div>
-              <div><span style="width: 90px; display: inline-block;">Count: </span><input id="count" value="2"/> </div>
-              <div><input id="multiplyGreetings" type="submit" class="btn btn-small" value="Submit"/></div>
-          </form>
-
-          <form action="javascript:void(0);">
-              <h2>Authenticated Greeting</h2>
-              <div><input id="authedGreeting" type="submit" class="btn btn-small" value="Submit"/></div>
-          </form>
-
-          <form action="javascript:void(0);">
-              <h2>Soap</h2>
-              <div><input id="soap" type="submit" class="btn btn-small" value="Submit"/></div>
-          </form>
-
-          <form action="javascript:void(0);">
-              <h2>Datastore</h2>
-              <div><input id="datastore" type="submit" class="btn btn-small" value="Submit"/></div>
-          </form>
 
       </div>
 
@@ -86,10 +63,10 @@
       <script type="text/javascript" src="./js/token.js"></script>
       <script type="text/javascript" src="./js/facebook.js"></script>
       <script type="text/javascript" src="./js/google.js"></script>
+      <script type="text/javascript" src="./js/service.js"></script>
       <script>
           $('#logindropdown').on('hidden.bs.dropdown', function () {border()})
           $('#logindropdown').on('shown.bs.dropdown', function () {border()})
-
           border = function(){
               var b=document.getElementById('login')
               //if (document.getElementById('login-menu').classList.contains('open')){b.style.borderBottom='1px solid transparent'; return}
@@ -97,8 +74,10 @@
               if (Facebook.access_token) {b.style.borderBottom='1px solid #5f78ab'; return}
               b.style.borderBottom='1px solid transparent'
           }
+          document.getElementById('list').onclick = service.list
+          document.getElementById('submit').onclick = service.submit
+          document.getElementById('publish').onclick = service.publish
       </script>
-      <script type="text/javascript" src="./js/endpoints.js"></script>
 
       <div id="fb-root"></div>
 

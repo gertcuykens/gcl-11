@@ -1,7 +1,12 @@
-package init
-
+package util
+/*
 import (
     "encoding/xml"
+    "bytes"
+    "encoding/xml"
+    "io/ioutil"
+    "net/http"
+    "appengine/urlfetch"
 )
 
 const SERVER = "http://ws.cdyne.com/emailverify/Emailvernotestemail.asmx"
@@ -36,14 +41,22 @@ type SoapEnvelope struct {
     Body    SoapBody
 }
 
-/*
-import (
-    "bytes"
-    "encoding/xml"
-    "io/ioutil"
-    "net/http"
-    "appengine/urlfetch"
-)
+func (gs *Service) Soap(r *http.Request, req *NoRequest, resp *Response) error {
+	c := endpoints.NewContext(r)
+	httpClient := urlfetch.Client(c)
+	respx, err := httpClient.Post(SERVER, "text/xml; charset=utf-8", bytes.NewBufferString(QUERY))
+	if err != nil {return err}
+	b, err := ioutil.ReadAll(respx.Body)
+	if err != nil {return err}
+	in := string(b)
+	var envelope SoapEnvelope
+	parser := xml.NewDecoder(bytes.NewBufferString(in))
+	err = parser.DecodeElement(&envelope, nil)
+	if err != nil {return err}
+	resp.Message = envelope.Body.VerifyEmailResponse.VerifyEmailResult.ResponseText
+	respx.Body.Close()
+	return nil
+}
 
 func GetSoapEnvelope() (envelope *SoapEnvelope) {
     httpClient := new(http.Client)

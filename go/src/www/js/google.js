@@ -5,12 +5,12 @@ Google=new Token()
 Google.type_token="google"
 
 init = function () {
-    console.log('Loading Google')
-    var apisToLoad = 2;
-    var callback = function() { if (--apisToLoad == 0) {autosignin()}}
+    console.log('Loading Google API')
+    //var apisToLoad = 2;
+    //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
     var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
-    gapi.client.load('rest', 'v0', callback, http+window.location.host+'/_ah/api')
-    gapi.client.load('oauth2', 'v2', callback);
+    gapi.client.load('service', 'v0', service.list, http+window.location.host+'/_ah/api')
+    //gapi.client.load('oauth2', 'v2', function(){});
 };
 
 (function(d,s) {

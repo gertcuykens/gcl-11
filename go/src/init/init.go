@@ -47,11 +47,10 @@ var TRANS = &oauth.Transport{
 
 func init() {
 	service := &Service{}
-	api, err := endpoints.RegisterService(service, "rest", "v0", "API", true)
+	api, err := endpoints.RegisterService(service, "service", "v0", "API", true)
 	if err != nil {panic(err.Error())}
 	rpc1(api)
 	rpc2(api)
-	rpc3(api)
 	endpoints.HandleHttp()
 }
 
@@ -75,13 +74,17 @@ func rpc1(api *endpoints.RpcService) {
 	//info8.Name, info8.HttpMethod, info8.Path, info8.Desc = "linkedin.callback", "GET", "linkedin/callback", "Oauth callback."
 	info9 := api.MethodByName("FacebookCallback").Info()
 	info9.Name, info9.HttpMethod, info9.Path, info9.Desc = "facebook.callback", "POST", "facebook/callback", "Oauth callback."
-	//info10 := api.MethodByName("Register").Info()
-	//info10.Name, info10.HttpMethod, info10.Path, info10.Desc = "register", "POST", "register", "Register user."
-	//info11 := api.MethodByName("CheckSum").Info()
-	//info11.Name, info11.HttpMethod, info11.Path, info11.Desc = "checksum", "POST", "checkSum", "Check token."
 }
 
 func rpc2(api *endpoints.RpcService) {
+	info1 := api.MethodByName("List").Info()
+	info1.Name, info1.HttpMethod, info1.Path, info1.Desc = "datastore.list", "POST", "datastore/list", "List."
+	info2 := api.MethodByName("Submit").Info()
+	info2.Name, info2.HttpMethod, info2.Path, info2.Desc = "datastore.submit", "POST", "datastore/submit", "Submit."
+}
+
+/*
+func rpc3(api *endpoints.RpcService) {
 	scope := []string{"https://www.googleapis.com/auth/userinfo.email"}
 	info1 := api.MethodByName("List").Info()
 	info1.Name, info1.HttpMethod, info1.Path, info1.Desc = "greetings.listGreeting", "GET", "response", "List of greetings."
@@ -97,7 +100,7 @@ func rpc2(api *endpoints.RpcService) {
 	info6.Name, info6.HttpMethod, info6.Path, info6.Desc= "greetings.multiply", "POST", "response", "Multiply greeting."
 }
 
-func rpc3(api *endpoints.RpcService) {
+func rpc4(api *endpoints.RpcService) {
 	scope := []string{"https://www.googleapis.com/auth/userinfo.email"}
 	//info1 := api.MethodByName("GoogleUserService").Info()
 	//info1.Name, info1.HttpMethod, info1.Path, info1.Desc, info1.Scopes = "google.user", "POST", "google/user", "Oauth2 google user.", scope
@@ -108,6 +111,7 @@ func rpc3(api *endpoints.RpcService) {
 	info4 := api.MethodByName("GoogleStorage").Info()
 	info4.Name, info4.HttpMethod, info4.Path, info4.Desc, info4.Scopes = "google.storage", "GET", "google/storage", "Oauth2 google storage.", scope
 }
+*/
 
 /*
 import (

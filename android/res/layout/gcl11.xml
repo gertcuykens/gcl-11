@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:baselineAligned="false"
+              android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="100dp"
+                  android:layout_marginLeft="0dp"
+                  android:layout_marginRight="0dp"
+                  android:layout_marginTop="5dp"
+                  android:layout_marginBottom="5dp"
+                  android:baselineAligned="false"
+                  android:orientation="vertical"
+                  android:background="@drawable/border"
+                  android:padding="5dp">
+
+        <RelativeLayout
+            android:id="@+id/messageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/messageValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_centerVertical="true"
+                android:autoText="false"
+                android:text="gcl-11 test message"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/graphLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/graphValue"
+                android:layout_toLeftOf="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_centerVertical="true"
+                android:autoText="false"
+                android:text="gcl11/feed"/>
+
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_toLeftOf="@+id/publishButton"
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Submit"/>
+
+            <Button
+                android:id="@+id/publishButton"
+                android:layout_width="108dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:text="Publish"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+    android:id="@+id/textViewResults"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:background="@drawable/border"/>
+
+</LinearLayout>

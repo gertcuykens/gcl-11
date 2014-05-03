@@ -1,4 +1,4 @@
-package init
+package util
 
 import (
     "fmt"
@@ -15,7 +15,7 @@ func contact(w http.ResponseWriter, r *http.Request) {
     subject := r.FormValue("subject")
     message := r.FormValue("message")
     msg := &mail.Message{
-            Sender:  name + " <contact@gcl-12.appspotmail.com>",
+            Sender:  name + " <contact@gcl-11.appspotmail.com>",
             To:      []string{"gert.cuykens@gmail.com"},
             ReplyTo: email,
             Subject: subject,

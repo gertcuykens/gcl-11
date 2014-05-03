@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">Hello Endpoints</string>
+    <string name="app_name">Gcl-11</string>
+    <string name="hello">Hello World!</string>
+    <string name="app_id">249348058430770</string>
+    <string name="request">Send</string>
+    <string name="instructions">Login to create a link to fetch account data</string>
+    <string name="logout">Log out</string>
+    <string name="login_failed_dialog_title">Login failed</string>
+    <string name="ok_button">OK</string>
+
     <string name="change_locale">Change Locale</string>
     <string name="list_moments_title">Touch a moment to delete</string>
     <string name="send_interactive_button_name">Send Interactive Post</string>
