@@ -3,7 +3,6 @@ package my.endpoints;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.widget.TextView;
 import com.appspot.gcl_11.service.Service;
 import com.appspot.gcl_11.service.model.Entity;
@@ -15,12 +14,13 @@ import com.facebook.Settings;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.http.HttpHeaders;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 class ListTask extends AsyncTask<Context, Void, Void> {
     Context context;
@@ -59,10 +59,18 @@ class ListTask extends AsyncTask<Context, Void, Void> {
                 Entity entity = new Entity();
                 Entity result = new Entity();
                 try {
+                    class Init implements HttpRequestInitializer {
+                        public void initialize(HttpRequest request) {
+                            HttpHeaders headers = new HttpHeaders();
+                            headers.setAuthorization(token2);
+                            request.setHeaders(headers);
+                        }
+                    }
+
                     HttpTransport transport = AndroidHttp.newCompatibleTransport();
-                    Service.Builder endpoints = new Service.Builder(transport, new GsonFactory(), null);
+                    Service.Builder endpoints = new Service.Builder(transport, new GsonFactory(), new Init());
                     service = endpoints.build();
-                    result = service.datastore().list(entity).setOauthToken(token2).execute();
+                    result = service.datastore().list(entity).execute();
                 } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
                     //int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c[0]);
                     //int statusCode = availabilityException.getConnectionStatusCode();

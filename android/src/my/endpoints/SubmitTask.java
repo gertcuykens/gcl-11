@@ -3,7 +3,6 @@ package my.endpoints;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import com.appspot.gcl_11.service.Service;
 import com.appspot.gcl_11.service.model.Entity;
 import com.appspot.gcl_11.service.model.Message;
@@ -14,6 +13,9 @@ import com.facebook.Settings;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.http.HttpHeaders;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 
@@ -36,7 +38,7 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
                 Global g = Global.getInstance();
                 String m = g.getMessage();
                 if (exception != null) {session = createSession(g.APP_ID);}
-                sendRequest1(m,session.getAccessToken());
+                sendRequest1(m, session.getAccessToken());
             }
         };
 
@@ -45,7 +47,7 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
         Session session = createSession(g.APP_ID);
 
         if (session.isOpened()) {
-            sendRequest1(m,session.getAccessToken());
+            sendRequest1(m, session.getAccessToken());
         } else {
             session.openForRead(new Session.OpenRequest((Activity) context).setCallback(callback));
         }
@@ -69,10 +71,18 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
                 entity.setList(list);
 
                 try {
+                    class Init implements HttpRequestInitializer {
+                        public void initialize(HttpRequest request) {
+                            HttpHeaders headers = new HttpHeaders();
+                            headers.setAuthorization(token2);
+                            request.setHeaders(headers);
+                        }
+                    }
+
                     HttpTransport transport = AndroidHttp.newCompatibleTransport();
-                    Service.Builder endpoints = new Service.Builder(transport, new GsonFactory(), null);
+                    Service.Builder endpoints = new Service.Builder(transport, new GsonFactory(), new Init());
                     service = endpoints.build();
-                    service.datastore().submit(entity).setOauthToken(token2).execute();
+                    service.datastore().submit(entity).execute();
                 } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
                     //int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c[0]);
                     //int statusCode = availabilityException.getConnectionStatusCode();

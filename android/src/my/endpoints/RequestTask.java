@@ -1,27 +1,14 @@
 package my.endpoints;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
-import com.appspot.gcl_11.service.Service;
-import com.appspot.gcl_11.service.model.Entity;
-import com.appspot.gcl_11.service.model.Message;
 import com.facebook.*;
 import com.facebook.model.GraphObject;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.json.gson.GsonFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 class RequestTask extends AsyncTask<Context, Void, Void> {
     Context context;
