@@ -5,7 +5,6 @@ import (
 	"appengine/urlfetch"
 	"github.com/crhym3/go-endpoints/endpoints"
 	"net/http"
-	"log"
 	"cloud"
 	publisher "code.google.com/p/google-api-go-client/androidpublisher/v1.1"
 	"strconv"
@@ -27,9 +26,10 @@ func (s *Service) GoogleCallback(r *http.Request, _, resp *Message) error {
 }
 
 func (s *Service) GoogleRevoke(r *http.Request, _, resp *Message) (err error) {
+	e := endpoints.NewContext(r)
 	t := r.Header.Get("authorization")
-	log.Print("---------"+t[7:])
-	buf, err := urlfetch.Client(endpoints.NewContext(r)).Get("https://accounts.google.com/o/oauth2/revoke?token="+t[7:])
+	e.Infof("============="+t[7:])
+	buf, err := urlfetch.Client(e).Get("https://accounts.google.com/o/oauth2/revoke?token="+t[7:])
 	defer buf.Body.Close()
 	b, err := ioutil.ReadAll(buf.Body)
 	resp.Message=string(b)

@@ -51,7 +51,6 @@ public class MainActivity extends Activity {
     private void onClickSubmit(View view) {
         g = Global.getInstance();
         g.setMessage(messageValue.getText().toString());
-
         Context context = view.getContext();
         new SubmitTask().execute(context);
     }
@@ -65,7 +64,6 @@ public class MainActivity extends Activity {
         g = Global.getInstance();
         g.setMessage(messageValue.getText().toString());
         g.setGraph(graphValue.getText().toString());
-
         Context context = view.getContext();
         new RequestTask().execute(context);
     }

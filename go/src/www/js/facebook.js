@@ -8,7 +8,7 @@ window.fbAsyncInit = function() {
     FB.Event.subscribe('auth.authResponseChange', function(response) {
         if (response.status === 'connected') {
             var b=document.getElementById('fsigninButton')
-            b.removeEventListener('click', fsignin);
+            b.removeEventListener('click', fsignin)
             b.addEventListener('click',fsignout)
             //document.getElementsByClassName("buttonText")[0].innerHTML='Log Out'
             Facebook.access_token=FB.getAccessToken()
@@ -28,6 +28,24 @@ window.fbAsyncInit = function() {
     b.removeEventListener('click', fsignout);
     b.addEventListener('click',fsignin)
     //document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+
+    init = function () {
+        console.log('Loading Google API')
+        //var apisToLoad = 2;
+        //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
+        var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+        gapi.client.load('service', 'v0', service.list, http+window.location.host+'/_ah/api')
+        //gapi.client.load('oauth2', 'v2', function(){});
+    };
+
+    (function(d,s) {
+        var js = d.createElement('script');
+        js.id = 'google-jssdk';
+        js.async = true;
+        js.src = '//apis.google.com/js/client:plusone.js?onload=init';
+        s.parentNode.insertBefore(js, s);
+    })(document,document.getElementsByTagName('script')[0]);
+
 };
 
 (function(d,s) {

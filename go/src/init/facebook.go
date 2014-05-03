@@ -55,3 +55,44 @@ func  FacebookUser(req *Token) (err error) {
 	req.Email = f.Email
 	return err
 }
+
+type Accounts struct {
+	Data []Data `json:"data"`
+}
+
+type Data struct {
+	Name string `json:"name"`
+	Perms []string `json:"perms"`
+}
+
+func  FacebookAccounts(req *Token) (err error) {
+	resp, err := req.Client.Get("https://graph.facebook.com/me?fields=accounts?access_token="+req.Access)
+	defer resp.Body.Close()
+	b, err := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(b, &Accounts{})
+	return err
+}
+
+/*
+{
+"data": [
+{
+"category": "Community",
+"name": "Gcl-11",
+"access_token": "",
+"perms": [
+"ADMINISTER",
+"EDIT_PROFILE",
+"CREATE_CONTENT",
+"MODERATE_CONTENT",
+"CREATE_ADS",
+"BASIC_ADMIN"
+],
+"id": "269460066558605"
+}
+],
+"paging": {
+"next": "https://graph.facebook.com/v2.0/100001676421210/accounts?limit=5000&offset=5000&__after_id=enc_AeyDT65z8_Y-uBUnYu7-82gjWe3EGIDgVs5S-6y2bUUV4mRmjNZaUQ9M07o8iJfFJ_J4OAhtMIJVDiAfQfYkCce1"
+}
+}
+*/

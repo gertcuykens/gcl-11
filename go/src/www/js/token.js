@@ -14,3 +14,10 @@ Token = function() {
     this.extra=[]
     this.status=null
 }
+
+Tokeng = function() {
+    this.access_token=null
+    this.error=null
+    this.expires_in=null
+    this.state=null
+}

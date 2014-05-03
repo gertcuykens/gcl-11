@@ -23,12 +23,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-class RequestTask extends AsyncTask<Context, Void, String> {
-    static final String APP_ID = "249348058430770";
+class RequestTask extends AsyncTask<Context, Void, Void> {
     Context context;
 
     @Override
-    protected String doInBackground(Context... arg) {
+    protected Void doInBackground(Context... arg) {
         context = arg[0];
 
         Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
@@ -43,7 +42,7 @@ class RequestTask extends AsyncTask<Context, Void, String> {
                 p.putString("link","");
                 p.putString("picture","");
                 //p.putString("access_token","");
-                if (exception != null) {session = createSession();}
+                if (exception != null) {session = createSession(g.APP_ID);}
                 sendRequest1(context, session, f, p);
             }
         };
@@ -58,29 +57,14 @@ class RequestTask extends AsyncTask<Context, Void, String> {
         p.putString("picture","");
         //p.putString("access_token","");
 
-        Session session = createSession();
+        Session session = createSession(g.APP_ID);
         if (session.isOpened()) {
             sendRequest1(context, session, f, p);
         } else {
             session.openForRead(new Session.OpenRequest((Activity) context).setCallback(callback));
         }
 
-        String err=null;
-        return err;
-    }
-
-    @Override
-    protected void onPostExecute(String err) {
-        if (err!=null) MainActivity.toaster(context, err);
-    }
-
-    private Session createSession() {
-        Session activeSession = Session.getActiveSession();
-        if (activeSession == null || activeSession.getState().isClosed()) {
-            activeSession = new Session.Builder(context).setApplicationId(APP_ID).build();
-            Session.setActiveSession(activeSession);
-        }
-        return activeSession;
+        return null;
     }
 
     private void sendRequest1(Context c1, Session s1, String g1, Bundle p1) {
@@ -141,7 +125,21 @@ class RequestTask extends AsyncTask<Context, Void, String> {
 
     }
 
+    private Session createSession(String APP_ID) {
+        Session activeSession = Session.getActiveSession();
+        if (activeSession == null || activeSession.getState().isClosed()) {
+            activeSession = new Session.Builder(context).setApplicationId(APP_ID).build();
+            Session.setActiveSession(activeSession);
+        }
+        return activeSession;
+    }
+
 }
+
+//@Override
+//protected void onPostExecute(String err) {
+//    if (err!=null) MainActivity.toaster(context, err);
+//}
 
 /*
     private void sendRequests(Bundle postParams, String graph) {

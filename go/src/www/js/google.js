@@ -4,23 +4,6 @@ GOOGLE_SCOPE="https://www.googleapis.com/auth/userinfo.email https://www.googlea
 Google=new Token()
 Google.type_token="google"
 
-init = function () {
-    console.log('Loading Google API')
-    //var apisToLoad = 2;
-    //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
-    var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
-    gapi.client.load('service', 'v0', service.list, http+window.location.host+'/_ah/api')
-    //gapi.client.load('oauth2', 'v2', function(){});
-};
-
-(function(d,s) {
-    var js = d.createElement('script');
-    js.id = 'google-jssdk';
-    js.async = true;
-    js.src = '//apis.google.com/js/client:plusone.js?onload=init';
-    s.parentNode.insertBefore(js, s);
-})(document,document.getElementsByTagName('script')[0]);
-
 signin = function() {
     var options = {
         callback : autosignin,
