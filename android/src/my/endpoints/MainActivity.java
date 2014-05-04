@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
         Context context = view.getContext();
         new RequestTask().execute(context);
     }
-
+/*
     static void alert(Context c, String s) {
         new AlertDialog.Builder(c)
                 .setTitle(R.string.login_failed_dialog_title)
@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
                 .setPositiveButton(R.string.ok_button, null)
                 .show();
     }
-
+*/
     static void toaster(Context c, String s) {
         Toast toast = Toast.makeText(c, s, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);

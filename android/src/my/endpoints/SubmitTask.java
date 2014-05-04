@@ -25,26 +25,24 @@ import java.util.List;
 
 class SubmitTask extends AsyncTask<Context, Void, Void> {
     Context context;
-    Service service;
 
     @Override
     protected Void doInBackground(Context... arg) {
         context = arg[0];
-        String err=null;
 
         Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         Session.StatusCallback callback = new Session.StatusCallback() {
             public void call(Session session, SessionState state, Exception exception) {
                 Global g = Global.getInstance();
                 String m = g.getMessage();
-                if (exception != null) {session = createSession(g.APP_ID);}
+                if (exception != null) {session = createSession(Global.APP_ID);}
                 sendRequest1(m, session.getAccessToken());
             }
         };
 
         Global g = Global.getInstance();
         String m = g.getMessage();
-        Session session = createSession(g.APP_ID);
+        Session session = createSession(Global.APP_ID);
 
         if (session.isOpened()) {
             sendRequest1(m, session.getAccessToken());
@@ -62,7 +60,6 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
         Thread t = new Thread() {
 
             public void run() {
-                String err=null;
                 Message message = new Message();
                 message.setMessage(m2);
                 List<Message> list = new ArrayList<Message>();
@@ -80,20 +77,20 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
                     }
 
                     HttpTransport transport = AndroidHttp.newCompatibleTransport();
-                    Service.Builder endpoints = new Service.Builder(transport, new GsonFactory(), new Init());
-                    service = endpoints.build();
+                    Service.Builder endpoints = new Service.Builder(transport, new GsonFactory(), new Init()).setApplicationName(Global.APP_NAME);
+                    Service service = endpoints.build();
                     service.datastore().submit(entity).execute();
                 } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
                     //int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c[0]);
                     //int statusCode = availabilityException.getConnectionStatusCode();
                     //GooglePlayServicesUtil.getErrorDialog(statusCode, this, 0).show();
-                    err = "GooglePlay Services not found! " + availabilityException.getConnectionStatusCode();
+                    //err = "GooglePlay Services not found! " + availabilityException.getConnectionStatusCode();
                 } catch (UserRecoverableAuthIOException userRecoverableException) {
                     ((Activity) context).startActivity(userRecoverableException.getIntent());
-                    err = "User Recoverable Auth IO Exception!";
+                    //err = "User Recoverable Auth IO Exception!";
                 } catch (IOException e) {
                     e.printStackTrace();
-                    err = "IO Exception!";
+                    //err = "IO Exception!";
                 }
                 new ListTask().execute(context);
             }

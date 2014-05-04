@@ -3,6 +3,7 @@ package my.endpoints;
 public class Global {
     private static Global instance;
     static final String APP_ID = "249348058430770";
+    static final String APP_NAME = "gcl-11";
     private static String message;
     private static String graph;
     private Global(){}

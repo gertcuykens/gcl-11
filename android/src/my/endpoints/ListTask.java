@@ -25,7 +25,6 @@ import java.io.IOException;
 
 class ListTask extends AsyncTask<Context, Void, Void> {
     Context context;
-    Service service;
 
     @Override
     protected Void doInBackground(Context... arg) {
@@ -61,7 +60,6 @@ class ListTask extends AsyncTask<Context, Void, Void> {
         final String token2= token1;
         Thread t = new Thread() {
             public void run() {
-                String err=null;
                 Entity entity = new Entity();
                 Entity result = new Entity();
                 try {
@@ -74,20 +72,20 @@ class ListTask extends AsyncTask<Context, Void, Void> {
                     }
 
                     HttpTransport transport = AndroidHttp.newCompatibleTransport();
-                    Service.Builder endpoints = new Service.Builder(transport, new GsonFactory(), new Init());
-                    service = endpoints.build();
+                    Service.Builder endpoints = new Service.Builder(transport, new GsonFactory(), new Init()).setApplicationName(Global.APP_NAME);
+                    Service service = endpoints.build();
                     result = service.datastore().list(entity).execute();
                 } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
                     //int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c[0]);
                     //int statusCode = availabilityException.getConnectionStatusCode();
                     //GooglePlayServicesUtil.getErrorDialog(statusCode, this, 0).show();
-                    err = "GooglePlay Services not found! " + availabilityException.getConnectionStatusCode();
+                    //err = "GooglePlay Services not found! " + availabilityException.getConnectionStatusCode();
                 } catch (UserRecoverableAuthIOException userRecoverableException) {
                     ((Activity) context).startActivity(userRecoverableException.getIntent());
-                    err = "User Recoverable Auth IO Exception!";
+                    //err = "User Recoverable Auth IO Exception!";
                 } catch (IOException e) {
                     e.printStackTrace();
-                    err = "IO Exception!";
+                    //err = "IO Exception!";
                 }
                 //if (err!=null) MainActivity.toaster(context, err);
                 printEntity(context, result);
