@@ -12,18 +12,14 @@ service.publish = function() {
 service.submit = function() {
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
-  console.log(t);
   gapi.auth.setToken(t)
-  console.log(gapi.auth.getToken());
   gapi.client.service.datastore.submit({"list":[{"message":document.getElementById('message').value}]}).execute(function(resp){service.list()})
 };
 
 service.list = function() {
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
-  console.log(t);
   gapi.auth.setToken(t)
-  console.log(gapi.auth.getToken());
   gapi.client.service.datastore.list().execute(
       function(resp) {
         if (!resp.code) {
@@ -31,7 +27,8 @@ service.list = function() {
           document.getElementById('console').innerHTML=""
           for (var i = 0; i < resp.list.length; i++) {print(resp.list[i]);}
         }
-      });
+      }
+  );
 };
 
 print = function(s) {

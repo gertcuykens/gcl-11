@@ -30,7 +30,7 @@ func (s *DataStore) Put() (err error) {
 }
 
 func (s *DataStore) Get() (err error) {
-	q := datastore.NewQuery("message").Ancestor(s.Root)
+	q := datastore.NewQuery("message").Order("Message")  //Ancestor(s.Root)
 	for t := q.Run(s.Context);; {
 		var m Message
 		_, err := t.Next(&m)
