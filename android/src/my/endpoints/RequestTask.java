@@ -29,8 +29,14 @@ class RequestTask extends AsyncTask<Context, Void, Void> {
                 p.putString("link","");
                 p.putString("picture","");
                 //p.putString("access_token","");
-                if (exception != null) {session = createSession(g.APP_ID);}
-                sendRequest1(context, session, f, p);
+                if (exception != null) {
+                    session.close();
+                    session = createSession(Global.APP_ID);
+                    sendRequest1(context, session, f, p);
+                } else {
+                    session = createSession(Global.APP_ID);
+                    sendRequest1(context, session, f, p);
+                }
             }
         };
 
@@ -44,7 +50,7 @@ class RequestTask extends AsyncTask<Context, Void, Void> {
         p.putString("picture","");
         //p.putString("access_token","");
 
-        Session session = createSession(g.APP_ID);
+        Session session = createSession(Global.APP_ID);
         if (session.isOpened()) {
             sendRequest1(context, session, f, p);
         } else {
@@ -80,17 +86,23 @@ class RequestTask extends AsyncTask<Context, Void, Void> {
                                 String s = "";
 
                                 if (error != null) {
-                                    s = s + String.format("Error gcl-11: %s\n", error.getErrorMessage());
-                                    Log.e("FACEBOOK ERROR", "" + error.getErrorMessage());
+                                    s = s + String.format("Error gcl-11: %s", error.getErrorMessage());
+                                    Log.i("graph", "----------------------------");
+                                    Log.e ("graph", "" + error.getErrorMessage());
+                                    Log.i("graph", "----------------------------");
                                 } else {
                                     JSONObject graphResponse = graphObject.getInnerJSONObject();
                                     try {
                                         String postId = graphResponse.getString("id");
-                                        s = s + String.format("%s: gcl-11\n", postId);
-                                        Log.i ("graph", postId);
+                                        s = s + String.format("%s: gcl-11", postId);
+                                        Log.i("graph", "----------------------------");
+                                        Log.i("graph", postId);
+                                        Log.i("graph", "----------------------------");
                                     } catch (JSONException e) {
-                                        s = s + String.format("Error gcl-11: %s\n", e.getMessage());
-                                        Log.e("FACEBOOK ERROR", e.getMessage());
+                                        s = s + String.format("Error gcl-11: %s", e.getMessage());
+                                        Log.i("graph", "----------------------------");
+                                        Log.e("graph", e.getMessage());
+                                        Log.i("graph", "----------------------------");
                                     }
                                 }
 

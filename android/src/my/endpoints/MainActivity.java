@@ -1,11 +1,11 @@
 package my.endpoints;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
+import android.util.Log;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-    Global g;
+    public static Activity activity;
     EditText graphValue;
     EditText messageValue;
     Button submitButton;
@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gcl11);
+        activity = this;
         
         this.messageValue = (EditText) findViewById(R.id.messageValue);
         this.graphValue = (EditText) findViewById(R.id.graphValue);
@@ -45,11 +46,31 @@ public class MainActivity extends Activity {
             }
         });
 
-        new ListTask().execute(this);
+        Intent intent = new Intent(this, LoginUsingLoginFragmentActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.login, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, LoginUsingLoginFragmentActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void onClickSubmit(View view) {
-        g = Global.getInstance();
+        Global g = Global.getInstance();
         g.setMessage(messageValue.getText().toString());
         Context context = view.getContext();
         new SubmitTask().execute(context);
@@ -61,13 +82,34 @@ public class MainActivity extends Activity {
     }
 
     private void onClickRequest(View view) {
-        g = Global.getInstance();
+        Global g = Global.getInstance();
         g.setMessage(messageValue.getText().toString());
         g.setGraph(graphValue.getText().toString());
         Context context = view.getContext();
         new RequestTask().execute(context);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("graph", "----------------------------");
+        Log.i("graph", String.valueOf("MainActivity onActivityResult:"+resultCode));
+        Log.i("graph", "----------------------------");
+    }
+
+    static void toaster(Context c, String s) {
+        Toast toast = Toast.makeText(c, s, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
+        toast.show();
+    }
+
+}
+
 /*
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        new ListTask().execute(this);
+    }
+
     static void alert(Context c, String s) {
         new AlertDialog.Builder(c)
                 .setTitle(R.string.login_failed_dialog_title)
@@ -76,13 +118,6 @@ public class MainActivity extends Activity {
                 .show();
     }
 */
-    static void toaster(Context c, String s) {
-        Toast toast = Toast.makeText(c, s, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-        toast.show();
-    }
-
-}
 
 //import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 //import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -185,8 +220,3 @@ public class MainActivity extends Activity {
     }
 */
 
-/*
-Log.i ("graph", "----------------------------");
-Log.i ("graph", String.valueOf(pendingRequest));
-Log.i ("graph", "----------------------------");
-*/

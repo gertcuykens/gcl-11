@@ -8,10 +8,7 @@ import android.widget.TextView;
 import com.appspot.gcl_11.service.Service;
 import com.appspot.gcl_11.service.model.Entity;
 import com.appspot.gcl_11.service.model.Message;
-import com.facebook.LoggingBehavior;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.Settings;
+import com.facebook.*;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -33,23 +30,28 @@ class ListTask extends AsyncTask<Context, Void, Void> {
         Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         Session.StatusCallback callback = new Session.StatusCallback() {
             public void call(Session session, SessionState state, Exception exception) {
-                Global g = Global.getInstance();
-                if (exception != null) {session = createSession(g.APP_ID);}
-                sendRequest1(session.getAccessToken());
+                if (exception != null) {
+                    Log.i("graph", "----------------------------");
+                    Log.i("graph", String.valueOf(exception));
+                    Log.i("graph", "----------------------------");
+                    session.close();
+                    session = createSession();
+                    sendRequest1(session.getAccessToken());
+                } else {
+                    session = createSession();
+                    sendRequest1(session.getAccessToken());
+                }
             }
         };
 
-        Global g = Global.getInstance();
-        Session session = createSession(g.APP_ID);
+        Session session = createSession();
         if (session.isOpened()) {
-
             Log.i("graph", "----------------------------");
             Log.i("graph", session.getAccessToken());
             Log.i("graph", "----------------------------");
-
             sendRequest1(session.getAccessToken());
         } else {
-            session.openForRead(new Session.OpenRequest((Activity) context).setCallback(callback));
+            session.openForRead( new Session.OpenRequest((Activity) context).setCallback(callback) );
         }
 
         return null;
@@ -129,10 +131,10 @@ class ListTask extends AsyncTask<Context, Void, Void> {
 
     }
 
-    private Session createSession(String APP_ID) {
+    private Session createSession() {
         Session activeSession = Session.getActiveSession();
         if (activeSession == null || activeSession.getState().isClosed()) {
-            activeSession = new Session.Builder(context).setApplicationId(APP_ID).build();
+            activeSession = new Session.Builder(context).setApplicationId(Global.APP_ID).build();
             Session.setActiveSession(activeSession);
         }
         return activeSession;

@@ -10,6 +10,11 @@
     <string name="login_failed_dialog_title">Login failed</string>
     <string name="ok_button">OK</string>
 
+    <string name="login_using_activity">Login using Activity</string>
+    <string name="login_using_custom_fragment">Login using Custom Fragment</string>
+    <string name="login_using_usersettingsfragment">Login using UserSettingsFragment</string>
+    <string name="login">Facebook</string>
+
     <string name="change_locale">Change Locale</string>
     <string name="list_moments_title">Touch a moment to delete</string>
     <string name="send_interactive_button_name">Send Interactive Post</string>

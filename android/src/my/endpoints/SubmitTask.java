@@ -3,6 +3,7 @@ package my.endpoints;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import com.appspot.gcl_11.service.Service;
 import com.appspot.gcl_11.service.model.Entity;
 import com.appspot.gcl_11.service.model.Message;
@@ -35,14 +36,23 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
             public void call(Session session, SessionState state, Exception exception) {
                 Global g = Global.getInstance();
                 String m = g.getMessage();
-                if (exception != null) {session = createSession(Global.APP_ID);}
-                sendRequest1(m, session.getAccessToken());
+                if (exception != null) {
+                    Log.i("graph", "----------------------------");
+                    Log.i("graph", String.valueOf(exception));
+                    Log.i("graph", "----------------------------");
+                    session.close();
+                    session = createSession();
+                    sendRequest1(m, session.getAccessToken());
+                } else {
+                    session = createSession();
+                    sendRequest1(m, session.getAccessToken());
+                }
             }
         };
 
         Global g = Global.getInstance();
         String m = g.getMessage();
-        Session session = createSession(Global.APP_ID);
+        Session session = createSession();
 
         if (session.isOpened()) {
             sendRequest1(m, session.getAccessToken());
@@ -71,7 +81,7 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
                     class Init implements HttpRequestInitializer {
                         public void initialize(HttpRequest request) {
                             HttpHeaders headers = new HttpHeaders();
-                            headers.setAuthorization("Bearer "+token2);
+                            headers.setAuthorization("Bearer " + token2);
                             request.setHeaders(headers);
                         }
                     }
@@ -100,10 +110,10 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
         t.start();
     }
 
-    private Session createSession(String APP_ID) {
+    private Session createSession() {
         Session activeSession = Session.getActiveSession();
         if (activeSession == null || activeSession.getState().isClosed()) {
-            activeSession = new Session.Builder(context).setApplicationId(APP_ID).build();
+            activeSession = new Session.Builder(context).setApplicationId(Global.APP_ID).build();
             Session.setActiveSession(activeSession);
         }
         return activeSession;

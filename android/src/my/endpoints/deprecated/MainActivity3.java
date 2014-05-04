@@ -1,4 +1,4 @@
-package my.endpoints;
+package my.endpoints.deprecated;
 /*
 import android.accounts.AccountManager;
 import android.app.Activity;

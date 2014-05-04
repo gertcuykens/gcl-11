@@ -1,4 +1,4 @@
-package my.endpoints;
+package my.endpoints.deprecated;
 /*
 import android.app.Activity;
 import android.app.AlertDialog;
