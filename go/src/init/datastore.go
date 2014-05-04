@@ -21,8 +21,8 @@ type Data struct {
 
 func (s *Service) List(r *http.Request, _, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
-	t := r.Header.Get("Authorization")
-	c.Infof("============%s",t[7:])
+	//t := r.Header.Get("Authorization")
+	//c.Infof("============%s",t[7:])
 
 	client := urlfetch.Client(c)
 	req, err := http.NewRequest("GET", "https://graph.facebook.com/me/accounts", nil) //&access_token=
@@ -55,15 +55,15 @@ func (s *Service) List(r *http.Request, _, resp *cloud.Entity) error {
 		Context: c,
 	}
 	d.Get()
-	//c.Infof("<============%s",d.Entity.List[0].Message)
+
 	*resp = *d.Entity
 	return err
 }
 
 func (s *Service) Submit(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
-	t := r.Header.Get("Authorization")
-	c.Infof("============%s",t)
+	//t := r.Header.Get("Authorization")
+	//c.Infof("============%s",t)
 
 	client := urlfetch.Client(c)
 	req, err := http.NewRequest("GET", "https://graph.facebook.com/me/accounts", nil) //&access_token=
@@ -96,7 +96,8 @@ func (s *Service) Submit(r *http.Request, m *cloud.Entity, resp *cloud.Entity) e
 		Context: c,
 	}
 	d.Put()
-	resp = d.Entity
+
+	*resp = *d.Entity
 	return nil
 }
 
