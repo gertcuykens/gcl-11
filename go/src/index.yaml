@@ -1,0 +1,7 @@
+#indexes:
+#- kind: message
+#  ancestor: no
+#  properties:
+#  - name: message
+#    direction: desc
+
