@@ -6,7 +6,13 @@ import (
 	"time"
 )
 
-type Service struct {}
+type Service struct {
+	Status string `json:"error"`
+}
+
+func (s *Service) Error() string {
+	return s.Status
+}
 
 const PACKAGE string = ""
 

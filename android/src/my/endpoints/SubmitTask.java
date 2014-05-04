@@ -74,7 +74,7 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
                     class Init implements HttpRequestInitializer {
                         public void initialize(HttpRequest request) {
                             HttpHeaders headers = new HttpHeaders();
-                            headers.setAuthorization(token2);
+                            headers.setAuthorization("Bearer "+token2);
                             request.setHeaders(headers);
                         }
                     }

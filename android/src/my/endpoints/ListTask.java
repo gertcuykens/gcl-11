@@ -3,6 +3,7 @@ package my.endpoints;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 import com.appspot.gcl_11.service.Service;
 import com.appspot.gcl_11.service.model.Entity;
@@ -42,6 +43,11 @@ class ListTask extends AsyncTask<Context, Void, Void> {
         Global g = Global.getInstance();
         Session session = createSession(g.APP_ID);
         if (session.isOpened()) {
+
+            Log.i("graph", "----------------------------");
+            Log.i("graph", session.getAccessToken());
+            Log.i("graph", "----------------------------");
+
             sendRequest1(session.getAccessToken());
         } else {
             session.openForRead(new Session.OpenRequest((Activity) context).setCallback(callback));
@@ -62,7 +68,7 @@ class ListTask extends AsyncTask<Context, Void, Void> {
                     class Init implements HttpRequestInitializer {
                         public void initialize(HttpRequest request) {
                             HttpHeaders headers = new HttpHeaders();
-                            headers.setAuthorization(token2);
+                            headers.setAuthorization("Bearer "+token2);
                             request.setHeaders(headers);
                         }
                     }
