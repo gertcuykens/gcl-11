@@ -27,43 +27,25 @@ class ListTask extends AsyncTask<Context, Void, Void> {
     protected Void doInBackground(Context... arg) {
         context = arg[0];
 
-        Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-        Session.StatusCallback callback = new Session.StatusCallback() {
-            public void call(Session session, SessionState state, Exception exception) {
-                if (exception != null) {
-                    Log.i("graph", "----------------------------");
-                    Log.i("graph", String.valueOf(exception));
-                    Log.i("graph", "----------------------------");
-                    session.close();
-                    session = createSession();
-                    sendRequest1(session.getAccessToken());
-                } else {
-                    session = createSession();
-                    sendRequest1(session.getAccessToken());
-                }
-            }
-        };
-
-        Session session = createSession();
+        Session session = Global.createSession(context);
         if (session.isOpened()) {
             Log.i("graph", "----------------------------");
             Log.i("graph", session.getAccessToken());
             Log.i("graph", "----------------------------");
             sendRequest1(session.getAccessToken());
-        } else {
-            session.openForRead( new Session.OpenRequest((Activity) context).setCallback(callback) );
         }
 
         return null;
     }
 
     private void sendRequest1(String token1) {
-
         final String token2= token1;
+
         Thread t = new Thread() {
             public void run() {
                 Entity entity = new Entity();
                 Entity result = new Entity();
+
                 try {
                     class Init implements HttpRequestInitializer {
                         public void initialize(HttpRequest request) {
@@ -81,15 +63,21 @@ class ListTask extends AsyncTask<Context, Void, Void> {
                     //int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c[0]);
                     //int statusCode = availabilityException.getConnectionStatusCode();
                     //GooglePlayServicesUtil.getErrorDialog(statusCode, this, 0).show();
-                    //err = "GooglePlay Services not found! " + availabilityException.getConnectionStatusCode();
+                    Log.i("graph", "----------------------------");
+                    Log.i("graph", "GooglePlay Services not found! " + availabilityException.getConnectionStatusCode());
+                    Log.i("graph", "----------------------------");
                 } catch (UserRecoverableAuthIOException userRecoverableException) {
                     ((Activity) context).startActivity(userRecoverableException.getIntent());
-                    //err = "User Recoverable Auth IO Exception!";
+                    Log.i("graph", "----------------------------");
+                    Log.i("graph", "User Recoverable Auth IO Exception!");
+                    Log.i("graph", "----------------------------");
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    //err = "IO Exception!";
+                    //e.printStackTrace();
+                    Log.i("graph", "----------------------------");
+                    Log.i("graph", "IO Exception!");
+                    Log.i("graph", "----------------------------");
                 }
-                //if (err!=null) MainActivity.toaster(context, err);
+
                 printEntity(context, result);
             }
         };
@@ -129,15 +117,6 @@ class ListTask extends AsyncTask<Context, Void, Void> {
         Thread t = new Thread(new PrintEntity(c1, e1));
         t.start();
 
-    }
-
-    private Session createSession() {
-        Session activeSession = Session.getActiveSession();
-        if (activeSession == null || activeSession.getState().isClosed()) {
-            activeSession = new Session.Builder(context).setApplicationId(Global.APP_ID).build();
-            Session.setActiveSession(activeSession);
-        }
-        return activeSession;
     }
 
     //@Override

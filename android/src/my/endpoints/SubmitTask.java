@@ -7,10 +7,7 @@ import android.util.Log;
 import com.appspot.gcl_11.service.Service;
 import com.appspot.gcl_11.service.model.Entity;
 import com.appspot.gcl_11.service.model.Message;
-import com.facebook.LoggingBehavior;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.Settings;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -31,33 +28,11 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
     protected Void doInBackground(Context... arg) {
         context = arg[0];
 
-        Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-        Session.StatusCallback callback = new Session.StatusCallback() {
-            public void call(Session session, SessionState state, Exception exception) {
-                Global g = Global.getInstance();
-                String m = g.getMessage();
-                if (exception != null) {
-                    Log.i("graph", "----------------------------");
-                    Log.i("graph", String.valueOf(exception));
-                    Log.i("graph", "----------------------------");
-                    session.close();
-                    session = createSession();
-                    sendRequest1(m, session.getAccessToken());
-                } else {
-                    session = createSession();
-                    sendRequest1(m, session.getAccessToken());
-                }
-            }
-        };
-
-        Global g = Global.getInstance();
-        String m = g.getMessage();
-        Session session = createSession();
-
+        Session session = Global.createSession(context);
         if (session.isOpened()) {
+            Global g = Global.getInstance();
+            String m = g.getMessage();
             sendRequest1(m, session.getAccessToken());
-        } else {
-            session.openForRead(new Session.OpenRequest((Activity) context).setCallback(callback));
         }
 
         return null;
@@ -94,29 +69,27 @@ class SubmitTask extends AsyncTask<Context, Void, Void> {
                     //int statusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c[0]);
                     //int statusCode = availabilityException.getConnectionStatusCode();
                     //GooglePlayServicesUtil.getErrorDialog(statusCode, this, 0).show();
-                    //err = "GooglePlay Services not found! " + availabilityException.getConnectionStatusCode();
+                    Log.i("graph", "----------------------------");
+                    Log.i("graph", "GooglePlay Services not found! " + availabilityException.getConnectionStatusCode());
+                    Log.i("graph", "----------------------------");
                 } catch (UserRecoverableAuthIOException userRecoverableException) {
                     ((Activity) context).startActivity(userRecoverableException.getIntent());
-                    //err = "User Recoverable Auth IO Exception!";
+                    Log.i("graph", "----------------------------");
+                    Log.i("graph", "User Recoverable Auth IO Exception!");
+                    Log.i("graph", "----------------------------");
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    //err = "IO Exception!";
+                    //e.printStackTrace();
+                    Log.i("graph", "----------------------------");
+                    Log.i("graph", "IO Exception!");
+                    Log.i("graph", "----------------------------");
                 }
+
                 new ListTask().execute(context);
             }
 
         };
 
         t.start();
-    }
-
-    private Session createSession() {
-        Session activeSession = Session.getActiveSession();
-        if (activeSession == null || activeSession.getState().isClosed()) {
-            activeSession = new Session.Builder(context).setApplicationId(Global.APP_ID).build();
-            Session.setActiveSession(activeSession);
-        }
-        return activeSession;
     }
 
     //@Override

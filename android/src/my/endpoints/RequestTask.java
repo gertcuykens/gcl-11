@@ -17,44 +17,18 @@ class RequestTask extends AsyncTask<Context, Void, Void> {
     protected Void doInBackground(Context... arg) {
         context = arg[0];
 
-        Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-        Session.StatusCallback callback = new Session.StatusCallback() {
-            public void call(Session session, SessionState state, Exception exception) {
-                Global g = Global.getInstance();
-                String m = g.getMessage();
-                String f = g.getGraph();
-                Bundle p = new Bundle();
-                p.putString("message",m);
-                p.putString("name","");
-                p.putString("link","");
-                p.putString("picture","");
-                //p.putString("access_token","");
-                if (exception != null) {
-                    session.close();
-                    session = createSession(Global.APP_ID);
-                    sendRequest1(context, session, f, p);
-                } else {
-                    session = createSession(Global.APP_ID);
-                    sendRequest1(context, session, f, p);
-                }
-            }
-        };
-
-        Global g = Global.getInstance();
-        String m = g.getMessage();
-        String f = g.getGraph();
-        Bundle p = new Bundle();
-        p.putString("message",m);
-        p.putString("name","");
-        p.putString("link","");
-        p.putString("picture","");
-        //p.putString("access_token","");
-
-        Session session = createSession(Global.APP_ID);
+        Session session = Global.createSession(context);
         if (session.isOpened()) {
+            Global g = Global.getInstance();
+            String m = g.getMessage();
+            String f = g.getGraph();
+            Bundle p = new Bundle();
+            p.putString("message",m);
+            p.putString("name","");
+            p.putString("link","");
+            p.putString("picture","");
+            //p.putString("access_token","");
             sendRequest1(context, session, f, p);
-        } else {
-            session.openForRead(new Session.OpenRequest((Activity) context).setCallback(callback));
         }
 
         return null;
@@ -88,7 +62,7 @@ class RequestTask extends AsyncTask<Context, Void, Void> {
                                 if (error != null) {
                                     s = s + String.format("Error gcl-11: %s", error.getErrorMessage());
                                     Log.i("graph", "----------------------------");
-                                    Log.e ("graph", "" + error.getErrorMessage());
+                                    Log.e("graph", error.getErrorMessage());
                                     Log.i("graph", "----------------------------");
                                 } else {
                                     JSONObject graphResponse = graphObject.getInnerJSONObject();
@@ -124,48 +98,9 @@ class RequestTask extends AsyncTask<Context, Void, Void> {
 
     }
 
-    private Session createSession(String APP_ID) {
-        Session activeSession = Session.getActiveSession();
-        if (activeSession == null || activeSession.getState().isClosed()) {
-            activeSession = new Session.Builder(context).setApplicationId(APP_ID).build();
-            Session.setActiveSession(activeSession);
-        }
-        return activeSession;
-    }
+    //@Override
+    //protected void onPostExecute(String err) {
+    //    if (err!=null) MainActivity.toaster(context, err);
+    //}
 
 }
-
-//@Override
-//protected void onPostExecute(String err) {
-//    if (err!=null) MainActivity.toaster(context, err);
-//}
-
-/*
-    private void sendRequests(Bundle postParams, String graph) {
-
-        Request request =new Request(session, "me", null, null, new Request.Callback() {
-            public void onCompleted(Response response) {
-                GraphObject graphObject = response.getGraphObject();
-                FacebookRequestError error = response.getError();
-                String s = "";
-
-                if (graphObject != null) {
-                    if (graphObject.getProperty("id") != null) {
-                        s = s + String.format("%s: %s\n", graphObject.getProperty("id"), graphObject.getProperty("name"));
-                    } else {
-                        s = s + String.format("%s: <no such id>\n", "me");
-                    }
-                } else if (error != null) {
-                    s = s + String.format("Error: %s", error.getErrorMessage());
-                }
-
-                MainActivity.toaster(context, s);
-            }
-        });
-
-        //pendingRequest = false;
-
-        //request.executeAsync();
-
-    }
-*/

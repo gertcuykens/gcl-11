@@ -22,8 +22,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import com.facebook.LoggingBehavior;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.Settings;
 import com.facebook.widget.UserSettingsFragment;
 
 public class LoginUsingLoginFragmentActivity extends FragmentActivity {
@@ -34,6 +36,9 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         context = MainActivity.activity;
         setContentView(R.layout.login_fragment_activity);
+
+        Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         userSettingsFragment = (UserSettingsFragment) fragmentManager.findFragmentById(R.id.login_fragment);
         userSettingsFragment.setSessionStatusCallback(new Session.StatusCallback() {
@@ -42,21 +47,18 @@ public class LoginUsingLoginFragmentActivity extends FragmentActivity {
                 Log.i("graph", "----------------------------");
                 Log.i("graph", String.format("New session state: %s", state.toString()));
                 Log.i("graph", "----------------------------");
-                if (state.isOpened()||state.isClosed()) {new ListTask().execute(context);}
+                if (state.isOpened()){new ListTask().execute(context);}
             }
         });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        userSettingsFragment.onActivityResult(requestCode, resultCode, data);
         Log.i("graph", "----------------------------");
         Log.i("graph", String.valueOf("LoginUsingLoginFragmentActivity onActivityResult: "+resultCode));
         Log.i("graph", "----------------------------");
-        userSettingsFragment.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }
-
-//private UiLifecycleHelper uiHelper;
-
