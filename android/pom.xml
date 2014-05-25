@@ -9,7 +9,7 @@
     <artifactId>gcl-11</artifactId>
     <version>0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Hello Endpoints</name>
+    <name>Gcl-11</name>
 
     <dependencies>
         <dependency>
