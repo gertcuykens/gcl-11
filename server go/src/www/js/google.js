@@ -50,3 +50,20 @@ signout = function () {
     //document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
 }
 
+init = function () {
+    console.log('Loading Google API')
+    //var apisToLoad = 2;
+    //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
+    var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+    gapi.client.load('service', 'v0', service.list, http+window.location.host+'/_ah/api')
+    //gapi.client.load('oauth2', 'v2', function(){});
+};
+
+go = function() {
+    var s = document.getElementsByTagName('script')[0]
+    var j = document.createElement('script');
+    j.id = 'google-jssdk';
+    j.async = true;
+    j.src = '//apis.google.com/js/client:plusone.js?onload=init';
+    s.parentNode.insertBefore(j, s);
+};
