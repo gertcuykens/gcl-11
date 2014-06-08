@@ -68,7 +68,7 @@ func (u *User) set(c endpoints.Context, r *http.Request) error {
 	return nil
 }
 
-func (s *Service) List(r *http.Request, _, resp *cloud.Entity) error {
+func (s *Service) List(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
 
 	s.Status="no authentication"
@@ -108,6 +108,16 @@ func (s *Service) Submit(r *http.Request, m *cloud.Entity, resp *cloud.Entity) e
 	d.Put(u.Name)
 
 	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) Delete(r *http.Request, _ *cloud.Entity, _ *cloud.Entity) error {
+	c := endpoints.NewContext(r)
+	c.Infof("=====delete")
+
+	d := cloud.DataStore {Context: c}
+	d.Delete()
+
 	return nil
 }
 

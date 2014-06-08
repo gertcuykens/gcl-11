@@ -2,5 +2,7 @@
 #- kind: message
 #  ancestor: no
 #  properties:
+#  - name: user
 #  - name: message
+#  - name: date
 #    direction: desc

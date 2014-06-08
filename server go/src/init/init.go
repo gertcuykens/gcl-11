@@ -87,6 +87,8 @@ func rpc2(api *endpoints.RpcService) {
 	info1.Name, info1.HttpMethod, info1.Path, info1.Desc = "datastore.list", "POST", "datastore/list", "List."
 	info2 := api.MethodByName("Submit").Info()
 	info2.Name, info2.HttpMethod, info2.Path, info2.Desc = "datastore.submit", "POST", "datastore/submit", "Submit."
+	info3 := api.MethodByName("Delete").Info()
+	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "datastore.delete", "POST", "datastore/delete", "Delete."
 }
 
 /*
