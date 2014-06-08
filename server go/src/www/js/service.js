@@ -13,7 +13,7 @@ service.submit = function() {
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
-  gapi.client.service.datastore.submit({"list":[{"message":document.getElementById('message').value}]}).execute(function(resp){service.list()})
+  gapi.client.service.datastore.submit({"list":[{"user":"","message":document.getElementById('message').value}]}).execute(function(resp){service.list()})
 };
 
 service.list = function() {

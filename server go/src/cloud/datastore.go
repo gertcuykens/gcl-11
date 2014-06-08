@@ -7,6 +7,7 @@ import (
 
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
 type Message struct {
+	User string `json:"user"`
 	Message string `json:"message"`
 }
 
@@ -20,10 +21,11 @@ type DataStore struct {
 	Context endpoints.Context
 }
 
-func (s *DataStore) Put() (err error) {
+func (s *DataStore) Put(u string) (err error) {
 	key := datastore.NewKey(s.Context, "message", "", 0, s.Root)
 	for _,m := range s.Entity.List {
 		//s.Context.Infof("==========>%s",m)
+		m.User=u
 		key, err = datastore.Put(s.Context, key, m)
 	}
 	return
