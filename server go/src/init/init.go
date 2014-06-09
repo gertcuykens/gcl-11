@@ -6,13 +6,9 @@ import (
 	"time"
 )
 
-type Service struct {
-	Status string `json:"error"`
-}
+type Service struct {Status string `json:"error"`}
 
-func (s *Service) Error() string {
-	return s.Status
-}
+func (s *Service) Error() string {return s.Status}
 
 const PACKAGE string = ""
 
@@ -55,41 +51,30 @@ func init() {
 	service := &Service{}
 	api, err := endpoints.RegisterService(service, "service", "v0", "API", true)
 	if err != nil {panic(err.Error())}
-	rpc1(api)
-	rpc2(api)
+	scope := []string{}
+	rpc(api, scope, "GetAll", "datastore.getall", "POST", "datastore/getall", "Get all.")
+	rpc(api, scope, "Get", "datastore.get", "POST", "datastore/get", "Get.")
+	rpc(api, scope, "Put", "datastore.put", "POST", "datastore/put", "Put.")
+	rpc(api, scope, "Delete", "datastore.delete", "POST", "datastore/delete", "Delete.")
+	rpc(api, scope, "Truncate", "datastore.truncate", "POST", "datastore/truncate", "Truncate.")
 	endpoints.HandleHttp()
 }
 
-func rpc1(api *endpoints.RpcService) {
-	scope := []string{"https://www.googleapis.com/auth/userinfo.email"}
-	info1 := api.MethodByName("GoogleCallback").Info()
-	info1.Name, info1.HttpMethod, info1.Path, info1.Desc, info1.Scopes = "google.callback", "POST", "google/callback", "Oauth callback.", scope
-	info2 := api.MethodByName("GoogleRevoke").Info()
-	info2.Name, info2.HttpMethod, info2.Path, info2.Desc = "google.revoke", "POST", "google/revoke", "Oauth revoke."
-	info3 := api.MethodByName("TwitterOauth").Info()
-	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "twitter.oauth", "GET", "twitter/oauth", "Oauth url."
-	info4 := api.MethodByName("TwitterCallback").Info()
-	info4.Name, info4.HttpMethod, info4.Path, info4.Desc = "twitter.callback", "GET", "twitter/callback", "Oauth callback."
-	info5 := api.MethodByName("TwitterOauthOob").Info()
-	info5.Name, info5.HttpMethod, info5.Path, info5.Desc = "twitter.oauth.oob", "GET", "twitter/oauth/oob", "Oauth url oob."
-	info6 := api.MethodByName("TwitterCallbackOob").Info()
-	info6.Name, info6.HttpMethod, info6.Path, info6.Desc = "twitter.callback.oob", "POST", "twitter/callback/oob", "Oauth callback oob."
-	//info7 := api.MethodByName("LinkedInOauth").Info()
-	//info7.Name, info7.HttpMethod, info7.Path, info7.Desc = "linkedin.oauth", "GET", "linkedin/oauth", "Oauth url."
-	//info8 := api.MethodByName("LinkedInCallback").Info()
-	//info8.Name, info8.HttpMethod, info8.Path, info8.Desc = "linkedin.callback", "GET", "linkedin/callback", "Oauth callback."
-	info9 := api.MethodByName("FacebookCallback").Info()
-	info9.Name, info9.HttpMethod, info9.Path, info9.Desc = "facebook.callback", "POST", "facebook/callback", "Oauth callback."
+func rpc(api *endpoints.RpcService, scope []string, a ...string) {
+	info := api.MethodByName(a[0]).Info()
+	info.Name, info.HttpMethod, info.Path, info.Desc, info.Scopes= a[1], a[2], a[3], a[4], scope
 }
 
-func rpc2(api *endpoints.RpcService) {
-	info1 := api.MethodByName("List").Info()
-	info1.Name, info1.HttpMethod, info1.Path, info1.Desc = "datastore.list", "POST", "datastore/list", "List."
-	info2 := api.MethodByName("Submit").Info()
-	info2.Name, info2.HttpMethod, info2.Path, info2.Desc = "datastore.submit", "POST", "datastore/submit", "Submit."
-	info3 := api.MethodByName("Delete").Info()
-	info3.Name, info3.HttpMethod, info3.Path, info3.Desc = "datastore.delete", "POST", "datastore/delete", "Delete."
-}
+//scope := []string{"https://www.googleapis.com/auth/userinfo.email"}
+//rpc(api, scope, "GoogleCallback", "google.callback", "POST", "google/callback", "Oauth callback.")
+//rpc(api, scope, "GoogleRevoke", "google.revoke", "POST", "google/revoke", "Oauth revoke.")
+//rpc(api, scope, "TwitterOauth", "twitter.oauth", "GET", "twitter/oauth", "Oauth url.")
+//rpc(api, scope, "TwitterCallback", "twitter.callback", "GET", "twitter/callback", "Oauth callback.")
+//rpc(api, scope, "TwitterOauthOob", "twitter.oauth.oob", "GET", "twitter/oauth/oob", "Oauth url oob.")
+//rpc(api, scope, "TwitterCallbackOob", "twitter.callback.oob", "POST", "twitter/callback/oob", "Oauth callback oob.")
+//rpc(api, scope, "LinkedInOauth", "linkedin.oauth", "GET", "linkedin/oauth", "Oauth url.")
+//rpc(api, scope, "LinkedInCallback". "linkedin.callback", "GET", "linkedin/callback", "Oauth callback.")
+//rpc(api, scope, "FacebookCallback", "facebook.callback", "POST", "facebook/callback", "Oauth callback.")
 
 /*
 func rpc3(api *endpoints.RpcService) {

@@ -8,6 +8,7 @@ import (
 
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
 type Message struct {
+	Id int64 `json:"id" datastore:"-"`
 	User string `json:"user"`
 	Message string `json:"message"`
     Date time.Time `json:"date"`
@@ -26,36 +27,49 @@ type DataStore struct {
 func (s *DataStore) Put(u string) (err error) {
 	key := datastore.NewKey(s.Context, "message", "", 0, s.Root)
 	for _,m := range s.Entity.List {
-		//s.Context.Infof("==========>%s",m)
 		m.User=u
 		m.Date=time.Now()
 		key, err = datastore.Put(s.Context, key, m)
 	}
-	return
+	return nil
 }
 
 func (s *DataStore) Get() (err error) {
+	for _,m := range s.Entity.List {
+		key := datastore.NewKey(s.Context, "message", "", m.Id, s.Root)
+		err = datastore.Get(s.Context, key, m)
+	}
+	return nil
+}
+
+func (s *DataStore) GetAll() (err error) {
 	q := datastore.NewQuery("message").Order("-Date")  //Ancestor(s.Root)
 	for t := q.Run(s.Context);; {
 		var m Message
-		_, err := t.Next(&m)
+		k, err := t.Next(&m)
 		if err == datastore.Done {err=nil; break}
 		if err != nil {break}
-		//s.Context.Infof("<==========%s",m)
+		m.Id = k.IntID()
 		s.Entity.List = append(s.Entity.List, &m)
 	}
-	return
+	return nil
 }
 
 func (s *DataStore) Delete() (err error) {
-	s.Context.Infof("==========delete")
+	for _, m := range s.Entity.List {
+		key := datastore.NewKey(s.Context, "message", "", m.Id, s.Root)
+		datastore.Delete(s.Context,key)
+	}
+	return nil
+}
+
+func (s *DataStore) Truncate() (err error) {
 	q := datastore.NewQuery("message")
 	var m []Message
-	keys,err := q.GetAll(s.Context, &m)
+	keys, err := q.GetAll(s.Context, &m)
 	if err != nil {return err}
-	for i, k := range keys {
-		s.Context.Infof("<==========%d",i)
-		datastore.Delete(s.Context,k)
-	}
-	return
+	for _, k := range keys {datastore.Delete(s.Context, k)}
+	return nil
 }
+
+//s.Context.Infof("==========>%v",m)

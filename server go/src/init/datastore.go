@@ -38,7 +38,6 @@ func (a *Accounts) editor(c endpoints.Context, r *http.Request) bool {
 	b, err := ioutil.ReadAll(buf.Body)
 	err = json.Unmarshal(b,a)
 	if err != nil {return false}
-	c.Infof("============%v",a)
 	for i,x := range a.Data {
 		if x.Name=="Gcl-11" {
 			for _,y := range a.Data[i].Perms {
@@ -63,12 +62,31 @@ func (u *User) set(c endpoints.Context, r *http.Request) error {
 	b, err := ioutil.ReadAll(buf.Body)
 	err = json.Unmarshal(b,u)
 	if err != nil {}
-	c.Infof("============%v",u)
 
 	return nil
 }
 
-func (s *Service) List(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) error {
+func (s *Service) GetAll(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) error {
+	c := endpoints.NewContext(r)
+
+	s.Status="no authentication"
+	var a = &Accounts{}
+	if !a.editor(c,r) {return s}
+	s.Status="ok"
+
+	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+	d := cloud.DataStore {
+		Root:  k,
+		Entity: &cloud.Entity{},
+		Context: c,
+	}
+	d.GetAll()
+
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) Get(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
 
 	s.Status="no authentication"
@@ -88,7 +106,7 @@ func (s *Service) List(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) err
 	return nil
 }
 
-func (s *Service) Submit(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
+func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
 
 	s.Status="no authentication"
@@ -111,12 +129,30 @@ func (s *Service) Submit(r *http.Request, m *cloud.Entity, resp *cloud.Entity) e
 	return nil
 }
 
-func (s *Service) Delete(r *http.Request, _ *cloud.Entity, _ *cloud.Entity) error {
+func (s *Service) Delete(r *http.Request, m *cloud.Entity, _ *cloud.Entity) error {
 	c := endpoints.NewContext(r)
-	c.Infof("=====delete")
 
-	d := cloud.DataStore {Context: c}
+	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+	d := cloud.DataStore {
+		Root:  k,
+		Entity: m,
+		Context: c,
+	}
 	d.Delete()
+
+	return nil
+}
+
+func (s *Service) Truncate(r *http.Request, m *cloud.Entity, _ *cloud.Entity) error {
+	c := endpoints.NewContext(r)
+
+	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+	d := cloud.DataStore {
+		Root:  k,
+		Entity: m,
+		Context: c,
+	}
+	d.Truncate()
 
 	return nil
 }

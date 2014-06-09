@@ -13,14 +13,14 @@ service.submit = function() {
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
-  gapi.client.service.datastore.submit({"list":[{"user":"","message":document.getElementById('message').value}]}).execute(function(resp){service.list()})
+  gapi.client.service.datastore.put({"list":[{"id":0, "user":"", "message":document.getElementById('message').value}]}).execute(function(resp){service.list()})
 };
 
 service.list = function() {
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
-  gapi.client.service.datastore.list().execute(
+  gapi.client.service.datastore.getall().execute(
       function(resp) {
         if (!resp.code) {
           resp.list = resp.list || [];
@@ -42,9 +42,9 @@ testAPI = function () {
   console.log('Browser Facebook, Fetching your information... ');
   FB.api('/me?fields=email', function(response) {console.log('Browser Facebook, '+response.email+'.')})
 
-  console.log('Server Facebook, Fetching your information... ');
-  Facebook.access_token=FB.getAccessToken()
-  gapi.client.service.facebook.callback(Facebook).execute(function(response){console.log('Server Facebook, '+response.email_token)})
+  //console.log('Server Facebook, Fetching your information... ');
+  //Facebook.access_token=FB.getAccessToken()
+  //gapi.client.service.facebook.callback(Facebook).execute(function(response){console.log('Server Facebook, '+response.email_token)})
 }
 
 /*
