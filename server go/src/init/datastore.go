@@ -89,10 +89,10 @@ func (s *Service) GetAll(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) e
 func (s *Service) Get(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
 
-	s.Status="no authentication"
-	var a = &Accounts{}
-	if !a.editor(c,r) {return s}
-	s.Status="ok"
+	//s.Status="no authentication"
+	//var a = &Accounts{}
+	//if !a.editor(c,r) {return s}
+	//s.Status="ok"
 
 	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	d := cloud.DataStore {

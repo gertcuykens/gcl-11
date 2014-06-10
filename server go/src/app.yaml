@@ -22,6 +22,10 @@ handlers:
    static_files: www/img/favicon.ico
    upload: www/img/favicon.ico
 
+ - url: /result
+   static_files: www/result.html
+   upload: www/result.html
+
  - url: /
    static_files: www/index.html
    upload: www/index.html

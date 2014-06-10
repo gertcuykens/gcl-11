@@ -9,9 +9,13 @@ import (
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
 type Message struct {
 	Id int64 `json:"id" datastore:"-"`
-	User string `json:"user"`
-	Message string `json:"message"`
     Date time.Time `json:"date"`
+	User string `json:"user"`
+	Event string `json:"event"`
+	Heat int64 `json:"heat"`
+	Rider string `json:"rider"`
+	Trick string `json:"trick"`
+	Score int64 `json:"score"`
 }
 
 type Entity struct {

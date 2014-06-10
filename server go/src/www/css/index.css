@@ -11,19 +11,12 @@ p {
  height:100%;
 }
 
-.form-control {
- margin-bottom:10px;
-}
-
-.btn {
- margin-bottom:10px;
-}
-
+/*
 #login {border-bottom: 1px solid transparent;}
-
 #bs-navbar-collapse-1 ul .dropdown-menu {margin-top: 5px !important; min-width: 50px !important;}
 #bs-navbar-collapse-1 .in ul .dropdown-menu {margin-top:0px !important;}
 #bs-navbar-collapse-1 .in li {margin:0px 10px;}
+*/
 
 #console {
    /*position: absolute;

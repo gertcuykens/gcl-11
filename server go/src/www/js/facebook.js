@@ -10,25 +10,25 @@ window.fbAsyncInit = function() {
             var b=document.getElementById('fsigninButton')
             b.removeEventListener('click', fsignin)
             b.addEventListener('click',fsignout)
-            //document.getElementsByClassName("buttonText")[0].innerHTML='Log Out'
+            b.value="Sign out"
             Facebook.access_token=FB.getAccessToken()
-            go()
+            start()
         }
         else if (response.status === 'not_authorized') {}
         else {
             var b=document.getElementById('fsigninButton')
             b.removeEventListener('click', fsignout);
             b.addEventListener('click',fsignin)
-            //document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+            b.value="Sign in"
             Facebook.access_token=null
         }
-        border()
+
     });
 
     var b=document.getElementById('fsigninButton')
     b.removeEventListener('click', fsignout);
     b.addEventListener('click',fsignin)
-    //document.getElementsByClassName("buttonText")[0].innerHTML='Log In'
+    b.value="Sign in"
 
 };
 
@@ -44,7 +44,7 @@ window.fbAsyncInit = function() {
 
 fsignin = function() {FB.login(function(response){}, {scope: 'email,publish_actions,manage_pages'})}
 
-fsignout = function() {FB.logout(); Facebook.access_token=null}
+fsignout = function() {FB.logout(); Facebook.access_token=null; stop()}
 
 /*
 $(document).ready(function() {
