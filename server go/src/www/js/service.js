@@ -29,7 +29,7 @@ service.submit = function() {
     "event":"",
     "rider":$('#rider').val(),
     "trick":$('#trick').val(),
-    "score":$('#score').val(),
+    "score":parseInt($("#score").val(), 10)
   }]}).execute(function(resp){})
 };
 
@@ -52,17 +52,26 @@ service.list = function() {
 };
 
 print = function(s) {
-  var tr = document.createElement('tr');
-  for (var x in s) {
-      var td = document.createElement('td');
-      if (x=="date") {td.innerHTML = new Date(s.date).toLocaleString()}
-      else {td.innerHTML = s[x]}
-      //var d =
-      //d.toLocaleString()+' '+s.id+' '+s.user+' '+s.message;
-      tr.appendChild(td);
-  }
-  tr.onclick=form
-  document.getElementById('console').appendChild(tr);
+  var row = document.createElement('tr');
+  row.onclick=form
+
+  var rider = document.createElement('td');
+  rider.innerHTML=s['rider']
+  row.appendChild(rider);
+
+  var trick = document.createElement('td');
+  trick.innerHTML=s['trick']
+  row.appendChild(trick);
+
+  var score = document.createElement('td');
+  score.innerHTML=s['score']
+  row.appendChild(score);
+
+  var judge = document.createElement('td');
+  judge.innerHTML=s['judge']
+  row.appendChild(judge);
+
+  document.getElementById('console').appendChild(row);
 };
 
 init = function () {
@@ -125,5 +134,14 @@ function testAPI3() {
     gapi.client.rest.google.storage().execute(function(response){console.log('Storage, '+response.message)})
 }
 */
+
+ /*
+  for (var x in s) {
+      var td = document.createElement('td');
+      if (x=="date") {td.innerHTML = new Date(s.date).toLocaleString()}
+      else {td.innerHTML = s[x]}
+      tr.appendChild(td);
+  }*/
+
 
       //element.classList.add('row');

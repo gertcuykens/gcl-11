@@ -10,7 +10,7 @@ import (
 type Message struct {
 	Id int64 `json:"id" datastore:"-"`
     Date time.Time `json:"date"`
-	User string `json:"user"`
+	Judge string `json:"judge"`
 	Event string `json:"event"`
 	Heat int64 `json:"heat"`
 	Rider string `json:"rider"`
@@ -31,7 +31,7 @@ type DataStore struct {
 func (s *DataStore) Put(u string) (err error) {
 	key := datastore.NewKey(s.Context, "message", "", 0, s.Root)
 	for _,m := range s.Entity.List {
-		m.User=u
+		m.Judge=u
 		m.Date=time.Now()
 		key, err = datastore.Put(s.Context, key, m)
 	}
