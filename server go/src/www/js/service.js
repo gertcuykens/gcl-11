@@ -8,7 +8,7 @@ service.truncate = function() {
 
 service.publish = function() {
   FB.api(
-   'gcl11/feed',//document.getElementById('feed').value,
+   'gcl11/feed', //document.getElementById('feed').value,
    'post',
    {message: document.getElementById('message').value},
    function(response){console.log(response)}

@@ -40,6 +40,10 @@
               </div>
 
               <div class="row">
+                  <div class="col-xs-12" style="margin-top:10px;"><input id="feed" class="form-control input-lg" placeholder="gcl11/feed" value="gcl11/feed"/></div>
+              </div>
+
+              <div class="row">
                   <div class="col-xs-12" style="margin-top:10px;"><textarea id="message" class="form-control" rows="10"></textarea></div>
               </div>
 
@@ -55,6 +59,7 @@
       <script>
           document.getElementById('list1').onclick = service.list
           document.getElementById('list2').onclick = service.list
+          document.getElementById('table').onclick = form
           document.getElementById('publishButton').onclick = service.publish
       </script>
 

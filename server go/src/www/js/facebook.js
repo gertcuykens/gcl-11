@@ -6,31 +6,19 @@ Facebook.type_token="facebook"
 window.fbAsyncInit = function() {
 
     FB.Event.subscribe('auth.authResponseChange', function(response) {
-        if (response.status === 'connected') {
-            var b=document.getElementById('fsigninButton')
-            b.removeEventListener('click', fsignin)
-            b.addEventListener('click',fsignout)
-            b.value="Sign out"
-            Facebook.access_token=FB.getAccessToken()
-            start()
-        }
-        else if (response.status === 'not_authorized') {}
-        else {
-            var b=document.getElementById('fsigninButton')
-            b.removeEventListener('click', fsignout);
-            b.addEventListener('click',fsignin)
-            b.value="Sign in"
-            Facebook.access_token=null
-        }
+        if (response.status === 'connected') {signout()}
+        else if (response.status === 'not_authorized') {alert('Not authorized.')}
+        else {signin()}
+        console.log(response)
+    })
 
-    });
+    FB.getLoginStatus(function(response){
+        start()
+        if (!FB.getAccessToken()) signin()
+        console.log(response)
+    })
 
-    var b=document.getElementById('fsigninButton')
-    b.removeEventListener('click', fsignout);
-    b.addEventListener('click',fsignin)
-    b.value="Sign in"
-
-};
+}
 
 (function(d,s) {
     console.log('Loading Facebook')
@@ -42,7 +30,25 @@ window.fbAsyncInit = function() {
     s.parentNode.insertBefore(js, s);
 })(document,document.getElementsByTagName('script')[0]);
 
-fsignin = function() {FB.login(function(response){}, {scope: 'email,publish_actions,manage_pages'})}
+signin = function() {
+    var b=document.getElementById('fsigninButton')
+    b.removeEventListener('click', fsignout);
+    b.addEventListener('click',fsignin)
+    b.value="Sign in"
+    b.style.display="block";
+    Facebook.access_token=null
+}
+
+fsignin = function() {FB.login(function(response){service.list()}, {scope: 'email,publish_actions,manage_pages'})}
+
+signout = function() {
+    var b=document.getElementById('fsigninButton')
+    b.removeEventListener('click', fsignin)
+    b.addEventListener('click',fsignout)
+    b.value="Sign out"
+    b.style.display="none";
+    Facebook.access_token=FB.getAccessToken()
+}
 
 fsignout = function() {FB.logout(); Facebook.access_token=null; stop()}
 

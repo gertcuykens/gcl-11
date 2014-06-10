@@ -69,10 +69,10 @@ func (u *User) set(c endpoints.Context, r *http.Request) error {
 func (s *Service) GetAll(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
 
-	s.Status="no authentication"
-	var a = &Accounts{}
-	if !a.editor(c,r) {return s}
-	s.Status="ok"
+	//s.Status="No authentication."
+	//var a = &Accounts{}
+	//if !a.editor(c,r) {return s}
+	//s.Status="ok"
 
 	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	d := cloud.DataStore {
