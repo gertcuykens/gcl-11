@@ -30,7 +30,7 @@ service.submit = function() {
     "rider":$('#rider').val(),
     "trick":$('#trick').val(),
     "score":parseInt($("#score").val(), 10)
-  }]}).execute(function(resp){})
+  }]}).execute(function(resp){service.list()})
 };
 
 service.list = function() {
@@ -72,7 +72,7 @@ print = function(s) {
   document.getElementById('console').appendChild(row);
 };
 
-init = function () {
+start = function () {
     console.log('Loading Google API')
     //var apisToLoad = 2;
     //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
@@ -81,16 +81,7 @@ init = function () {
     //gapi.client.load('oauth2', 'v2', function(){});
 };
 
-start = function() {
-    var s = document.getElementsByTagName('script')[0]
-    var j = document.createElement('script');
-    j.id = 'google-jssdk';
-    j.async = true;
-    j.src = '//apis.google.com/js/client:plusone.js?onload=init';
-    s.parentNode.insertBefore(j, s);
-};
-
-stop = function() {document.getElementById('console').innerHTML=""};
+stop = service.list; //document.getElementById('console').innerHTML=""
 
 form = function(x) {
     switch(x){

@@ -10,19 +10,20 @@ $(document).ready(function() {
     });
 
     FB.Event.subscribe('auth.authResponseChange', function(response) {
-        if (response.status === 'connected') {signout()}
+        if (response.status === 'connected') {form(2); signout()}
         else if (response.status === 'not_authorized') {alert('Not authorized.')}
         else {signin()}
         console.log(response)
     });
 
     FB.getLoginStatus(function(response){
-        start()
-        if (!FB.getAccessToken()) signin()
+        $.getScript('//apis.google.com/js/client:plusone.js?onload=start');
+        if (!FB.getAccessToken()){form(1); signin()}
         console.log(response)
     });
 
   });
+
 });
 
 signin = function() {
@@ -40,7 +41,7 @@ signout = function() {
     b.removeEventListener('click', fsignin)
     b.addEventListener('click',fsignout)
     b.value="Sign out"
-    b.style.display="none";
+    b.style.display="block";
 }
 
 fsignout = function() {FB.logout(); stop();}
