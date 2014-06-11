@@ -8,30 +8,20 @@
     </head>
     <body>
 
+        <div id="fb-root"></div>
+
         <div class="container">
 
-            <div id="table">
+            <div id="form1">
 
                 <div class="row">
                     <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list1" style="margin:5px 0px 0px;">Gcl-11</h1></div>
                     <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="fsigninButton" type="button" class="btn btn-default btn-lg btn-block" value="Sign in" style="display:none;"/></div>
                 </div>
 
-                <table class="table table-hover" style="margin-top:20px;">
-                    <thead>
-                    <tr>
-                        <th>Rider</th>
-                        <th>Trick</th>
-                        <th>Score</th>
-                        <th>Judge</th>
-                    </tr>
-                    </thead>
-                    <tbody id="console"></tbody>
-                </table>
-
             </div>
 
-            <div id="form" style="display:none;">
+            <div id="form2" style="display:none;">
 
                 <div class="row">
                     <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list2" style="margin:5px 0px 0px;">Score</h1></div>
@@ -52,20 +42,31 @@
 
             </div>
 
+            <table id="table" class="table table-hover" style="margin-top:20px;">
+                <thead>
+                <tr>
+                    <th>Rider</th>
+                    <th>Trick</th>
+                    <th>Score</th>
+                    <th>Judge</th>
+                </tr>
+                </thead>
+                <tbody id="console"></tbody>
+            </table>
+
         </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="./js/token.js"></script>
-        <script type="text/javascript" src="./js/facebook.js"></script>
         <script type="text/javascript" src="./js/service.js"></script>
+        <script type="text/javascript" src="./js/facebook.js"></script>
         <script>
           document.getElementById('list1').onclick = service.list
-          document.getElementById('list2').onclick = service.list
+          document.getElementById('list2').onclick = function(){form(1)}
           document.getElementById('submitButton').onclick = service.submit
+          document.getElementById('table').onclick = function(){form(2)}
         </script>
-
-        <div id="fb-root"></div>
 
     </body>
 </html>

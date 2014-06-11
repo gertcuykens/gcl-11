@@ -34,8 +34,6 @@ service.submit = function() {
 };
 
 service.list = function() {
-  $( "#table" ).show()
-  $( "#form" ).hide()
   document.getElementById('console').innerHTML="Loading..."
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
@@ -53,7 +51,7 @@ service.list = function() {
 
 print = function(s) {
   var row = document.createElement('tr');
-  row.onclick=form
+  //row.onclick=form
 
   var rider = document.createElement('td');
   rider.innerHTML=s['rider']
@@ -94,7 +92,12 @@ start = function() {
 
 stop = function() {document.getElementById('console').innerHTML=""};
 
-form = function() {$( "#table" ).hide(),$( "#form" ).show()}
+form = function(x) {
+    switch(x){
+        case 1: $( "#form1" ).show(),$( "#form2" ).hide(); break;
+        case 2: $( "#form1" ).hide(),$( "#form2" ).show(); break;
+    }
+}
 
 testAPI = function () {
   console.log('Browser Facebook, Fetching your information... ');
