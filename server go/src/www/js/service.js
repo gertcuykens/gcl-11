@@ -93,23 +93,7 @@ print1 = function(s) {
 };
 
 print2 = function(s) {
-/*
-  var total = document.createElement('td');
-  total.className=s['rider']+'-'+s['heat']
-  total.innerHTML=""
 
-  var rank = document.createElement('td');
-  rank.className=s['rider']+'-'+s['heat']+'-'+s['event']
-  rank.innerHTML=""
-
-    var row = document.createElement('tr');
-    row.id=s['id']
-    row.appendChild(rider);
-    row.appendChild(total);
-    row.appendChild(rank);
-
-  document.getElementById('console2').appendChild(row);
-*/
   var object = {}
   for (var i = 0; i < s.length; i++) {
     var rider=s[i]['rider']
@@ -119,9 +103,9 @@ print2 = function(s) {
     var attempt=s[i]['attempt']
     var score=s[i]['score']
     var judge=s[i]['judge']
-    if (!object[rider]) {object[rider]={}}
+    if (!object[rider]) {object[rider]={};}
     if (!object[rider][event]) {object[rider][event]={}}
-    if (!object[rider][event][heat]) {object[rider][event][heat]={}}
+    if (!object[rider][event][heat]) {object[rider][event][heat]={};}
     if (!object[rider][event][heat][attempt]) {object[rider][event][heat][attempt]={}}
     if (!object[rider][event][heat][attempt][judge]) {object[rider][event][heat][attempt][judge]=[score,trick]}
   }
@@ -183,14 +167,9 @@ print2 = function(s) {
         count++
         if (count>5){break}
         score[event][heat][rider]=total
-        var result = document.getElementsByClassName(rider+'-'+heat)
-        for (r in result){
-          //var x=rider//parseInt(place)+1
-          result[r].innerHTML=total
-        }
        }
      }
-     console.log(score)
+     //console.log(score)
 
      var rank={}
      for (event in score) {
@@ -205,7 +184,7 @@ print2 = function(s) {
          }
        }
      }
-     console.log(rank)
+     //console.log(rank)
 
      for (event in rank) {
        if(rank.hasOwnProperty(event)){
@@ -217,13 +196,19 @@ print2 = function(s) {
                if(rank[event][heat].hasOwnProperty(place)){
                  //console.log(rank[event][heat][place])
                  var rider= rank[event][heat][place]
+                 print3(rider,event,heat);
                  var rider2= rider
                  if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
                  else {rider2= rank[event][heat][0]}
-                 var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
+                 var result = document.getElementsByClassName(rider+'-'+event+'-'+heat+'-rank')
                  for (r in result){
                   //var x=rider//parseInt(place)+1
                   result[r].innerHTML=score[event][heat][rider]-score[event][heat][rider2]
+                 }
+                 var result2 = document.getElementsByClassName(rider+'-'+event+'-'+heat+'-total')
+                 for (r in result){
+                   //var x=rider//parseInt(place)+1
+                   result2[r].innerHTML=score[event][heat][rider]
                  }
                }
               }
@@ -232,39 +217,61 @@ print2 = function(s) {
        }
      }
 
-/*
-  var trick = document.createElement('td');
-  trick.innerHTML=s['trick']
-
-  var score = document.createElement('td');
-  score.innerHTML=s['score']
-
-  var caption = document.createElement('caption');
-  caption.innerHTML=s['rider']
-
-  var thead = document.createElement('thead');
-  thead.innerHTML="<tr><th>Trick</th><th>Score</th></tr>"
-
-  var tbody = document.createElement('tbody');
-
-  var row = document.createElement('tr');
-  row.appendChild(trick);
-
-  var table = document.getElementById('container');
-  table.id=s['rider']
-  table.appendChild(caption)
-  table.appendChild(thead)
-  table.appendChild(tbody)
-
-  var container = document.getElementById('container');
-  container.appendChild(table)
-
-  row.appendChild(score);
-
-  document.getElementById(s['rider']).appendChild(row);
-*/
-
 };
+
+print3 = function(rider,event,heat){
+
+  var riderf = document.createElement('td');
+  riderf.innerHTML=rider
+
+  var total = document.createElement('td');
+  total.className=rider+'-'+event+'-'+heat+'-total'
+  total.innerHTML=""
+
+  var rank = document.createElement('td');
+  rank.className=rider+'-'+event+'-'+heat+'-rank'
+  rank.innerHTML=""
+
+    var row = document.createElement('tr');
+    row.appendChild(riderf);
+    row.appendChild(total);
+    row.appendChild(rank);
+
+  document.getElementById('console2').appendChild(row);
+
+  /*
+    var trick = document.createElement('td');
+    trick.innerHTML=s['trick']
+
+    var score = document.createElement('td');
+    score.innerHTML=s['score']
+
+    var caption = document.createElement('caption');
+    caption.innerHTML=s['rider']
+
+    var thead = document.createElement('thead');
+    thead.innerHTML="<tr><th>Trick</th><th>Score</th></tr>"
+
+    var tbody = document.createElement('tbody');
+
+    var row = document.createElement('tr');
+    row.appendChild(trick);
+
+    var table = document.getElementById('container');
+    table.id=s['rider']
+    table.appendChild(caption)
+    table.appendChild(thead)
+    table.appendChild(tbody)
+
+    var container = document.getElementById('container');
+    container.appendChild(table)
+
+    row.appendChild(score);
+
+    document.getElementById(s['rider']).appendChild(row);
+  */
+
+}
 
 start = service.list
 stop = service.list //document.getElementById('console').innerHTML=""
