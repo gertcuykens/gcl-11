@@ -6,11 +6,14 @@ p {
  font-family: 'Helvetica Neue', Helvetica, Arial, 'lucida grande',tahoma,verdana,arial,sans-serif;}
 }
 
+caption {text-align:left;}
+
 .container {
  position:relative;
  height:100%;
 }
 
+h1 {margin-bottom:0px;}
 /*
 #login {border-bottom: 1px solid transparent;}
 #bs-navbar-collapse-1 ul .dropdown-menu {margin-top: 5px !important; min-width: 50px !important;}

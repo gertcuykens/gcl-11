@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/index.css">
+        <style>caption {text-align:left;}</style>
     </head>
     <body>
 
@@ -77,6 +78,7 @@
             </div>
 
             <table id="table2" class="table table-hover" style="margin-top:20px;">
+                <caption><h1>Result</h1></caption>
                 <thead>
                 <tr id="header2">
                     <th>Rider</th>
@@ -85,19 +87,6 @@
                 </tr>
                 </thead>
                 <tbody id="console2"></tbody>
-            </table>
-
-            <table id="table1" class="table table-hover" style="margin-top:20px;">
-                <thead>
-                <tr id="header1">
-                    <th>Rider</th>
-                    <th>Trick</th>
-                    <th>Score</th>
-                    <th>Judge</th>
-                    <th>Attempt</th>
-                </tr>
-                </thead>
-                <tbody id="console1"></tbody>
             </table>
 
         </div>
@@ -111,7 +100,7 @@
           document.getElementById('list1').onclick = service.list
           document.getElementById('list2').onclick = service.list
           document.getElementById('submitButton').onclick = service.submit
-          document.getElementById('table1').onclick = service.editor
+          //document.getElementById('table1').onclick = service.editor
         </script>
 
     </body>

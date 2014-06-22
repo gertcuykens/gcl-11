@@ -46,7 +46,7 @@ service.submit = function() {
 };
 
 service.list = function() {
-  document.getElementById('console1').innerHTML="Loading..."
+  document.getElementById('console2').innerHTML="Loading..."
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
@@ -54,18 +54,15 @@ service.list = function() {
       function(resp) {
         if (!resp.code) {
             resp.list = resp.list || []
-            document.getElementById('console1').innerHTML=""
-            for (var i = 0; i < resp.list.length; i++) {print1(resp.list[i]);}
+            document.getElementById('console2').innerHTML=""
             print2(resp.list);
+            for (var i = 0; i < resp.list.length; i++) {print1(resp.list[i]);}
         }
       }
   );
 };
 
 print1 = function(s) {
-
-    var rider = document.createElement('td');
-    rider.innerHTML=s['rider']
 
     var trick = document.createElement('td');
     trick.innerHTML=s['trick']
@@ -82,13 +79,13 @@ print1 = function(s) {
     var row = document.createElement('tr');
     row.id=s['id']
     //row.onclick=delete
-    row.appendChild(rider);
+    //row.appendChild(rider);
     row.appendChild(trick);
     row.appendChild(score);
     row.appendChild(judge);
     row.appendChild(attempt);
 
-    document.getElementById('console1').appendChild(row);
+    document.getElementById(s['rider']).appendChild(row);
 
 };
 
@@ -221,6 +218,8 @@ print2 = function(s) {
 
 print3 = function(rider,event,heat){
 
+  print4(rider)
+
   var riderf = document.createElement('td');
   riderf.innerHTML=rider
 
@@ -237,39 +236,28 @@ print3 = function(rider,event,heat){
     row.appendChild(total);
     row.appendChild(rank);
 
-  document.getElementById('console2').appendChild(row);
+  document.getElementById("console2").appendChild(row);
 
-  /*
-    var trick = document.createElement('td');
-    trick.innerHTML=s['trick']
+}
 
-    var score = document.createElement('td');
-    score.innerHTML=s['score']
+print4 = function(rider) {
 
     var caption = document.createElement('caption');
-    caption.innerHTML=s['rider']
+    caption.innerHTML='<h1>'+rider+'</h1>'
 
     var thead = document.createElement('thead');
-    thead.innerHTML="<tr><th>Trick</th><th>Score</th></tr>"
+    thead.innerHTML="<tr><th>Trick</th><th>Score</th><th>Judge</th><th>Attempt</th></tr>"
 
     var tbody = document.createElement('tbody');
+    tbody.id=rider
 
-    var row = document.createElement('tr');
-    row.appendChild(trick);
-
-    var table = document.getElementById('container');
-    table.id=s['rider']
+    var table = document.createElement('table');
+    table.className="table table-hover"
     table.appendChild(caption)
     table.appendChild(thead)
     table.appendChild(tbody)
 
-    var container = document.getElementById('container');
-    container.appendChild(table)
-
-    row.appendChild(score);
-
-    document.getElementById(s['rider']).appendChild(row);
-  */
+  document.getElementsByClassName('container')[0].appendChild(table);
 
 }
 
