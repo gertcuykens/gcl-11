@@ -76,19 +76,28 @@
 
             </div>
 
-            <table id="table" class="table table-hover" style="margin-top:20px;">
+            <table id="table1" class="table table-hover" style="margin-top:20px;">
                 <thead>
-                <tr id="header">
+                <tr id="header1">
                     <th>Rider</th>
                     <th>Trick</th>
                     <th>Score</th>
                     <th>Judge</th>
                     <th>Attempt</th>
+                </tr>
+                </thead>
+                <tbody id="console1"></tbody>
+            </table>
+
+            <table id="table2" class="table table-hover" style="margin-top:20px;">
+                <thead>
+                <tr id="header2">
+                    <th>Rider</th>
                     <th>Heat Total</th>
                     <th>Rank</th>
                 </tr>
                 </thead>
-                <tbody id="console"></tbody>
+                <tbody id="console2"></tbody>
             </table>
 
         </div>
@@ -102,7 +111,7 @@
           document.getElementById('list1').onclick = service.list
           document.getElementById('list2').onclick = service.list
           document.getElementById('submitButton').onclick = service.submit
-          document.getElementById('table').onclick = service.editor
+          document.getElementById('table1').onclick = service.editor
         </script>
 
     </body>

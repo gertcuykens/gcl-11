@@ -46,7 +46,7 @@ service.submit = function() {
 };
 
 service.list = function() {
-  document.getElementById('console').innerHTML="Loading..."
+  document.getElementById('console1').innerHTML="Loading..."
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
@@ -54,7 +54,7 @@ service.list = function() {
       function(resp) {
         if (!resp.code) {
             resp.list = resp.list || []
-            document.getElementById('console').innerHTML=""
+            document.getElementById('console1').innerHTML=""
             for (var i = 0; i < resp.list.length; i++) {print1(resp.list[i]);}
             print2(resp.list);
         }
@@ -79,29 +79,37 @@ print1 = function(s) {
     var attempt = document.createElement('td');
     attempt.innerHTML=s['attempt']
 
-    var total = document.createElement('td');
-    total.className=s['rider']+'-'+s['heat']
-    total.innerHTML=""
-
-    var win = document.createElement('td');
-    win.className=s['rider']+'-'+s['heat']+'-'+s['event']
-    win.innerHTML=""
-
     var row = document.createElement('tr');
+    row.id=s['id']
     //row.onclick=delete
     row.appendChild(rider);
     row.appendChild(trick);
     row.appendChild(score);
     row.appendChild(judge);
     row.appendChild(attempt);
-    row.appendChild(total);
-    row.appendChild(win);
 
-    document.getElementById('console').appendChild(row);
+    document.getElementById('console1').appendChild(row);
+
 };
 
 print2 = function(s) {
+/*
+  var total = document.createElement('td');
+  total.className=s['rider']+'-'+s['heat']
+  total.innerHTML=""
 
+  var rank = document.createElement('td');
+  rank.className=s['rider']+'-'+s['heat']+'-'+s['event']
+  rank.innerHTML=""
+
+    var row = document.createElement('tr');
+    row.id=s['id']
+    row.appendChild(rider);
+    row.appendChild(total);
+    row.appendChild(rank);
+
+  document.getElementById('console2').appendChild(row);
+*/
   var object = {}
   for (var i = 0; i < s.length; i++) {
     var rider=s[i]['rider']
@@ -119,23 +127,23 @@ print2 = function(s) {
   }
   //console.log(object)
 
-   var win={}
+   var trick={}
    for (rider in object) {
     if(object.hasOwnProperty(rider)){
-     console.log(rider)
-     if (!win[rider]) {win[rider]={}}
+     //console.log(rider)
+     if (!trick[rider]) {trick[rider]={}}
      for (event in object[rider]) {
       if(object[rider].hasOwnProperty(event)){
-       console.log(event)
-       if (!win[rider][event]) {win[rider][event]={}}
+       //console.log(event)
+       if (!trick[rider][event]) {trick[rider][event]={}}
        for (heat in object[rider][event]) {
         if(object[rider][event].hasOwnProperty(heat)){
-         console.log(heat)
-         if (!win[rider][event][heat]) {win[rider][event][heat]={}}
-         var trick={}
+         //console.log(heat)
+         if (!trick[rider][event][heat]) {trick[rider][event][heat]=[]}
+         var list={}
          for (attempt in object[rider][event][heat]) {
           if(object[rider][event][heat].hasOwnProperty(attempt)){
-           console.log(attempt)
+           //console.log(attempt)
            var name=""
            var max=0
            var score=0
@@ -144,94 +152,85 @@ print2 = function(s) {
              max+=10
              score+=object[rider][event][heat][attempt][judge][0]
              name=object[rider][event][heat][attempt][judge][1]
-             if (!trick[name]){trick[name]=[score,max]}
-             else if (trick[name][0]<score){trick[name]=[score,max]}
+             if (!list[name]){list[name]=[score,max,name]}
+             else if (list[name][0]<score){list[name]=[score,max,name]}
             }
            }
-           console.log(name+':'+score+'/'+max)
+           //console.log(name+':'+score+'/'+max)
           }
          }
-         console.log(trick)
-         var result = document.getElementsByClassName(rider+'-'+heat)
-         for (r in result){
-          var score=0
-          for (t in trick){
-           score += trick[t][0]
-           //result[r].innerHTML+=' '+t+':'+trick[t][0]+'/'+trick[t][1]
-           result[r].innerHTML=score
-           win[rider][event][heat]=score
-          }
-         }
+         var keys = Object.keys(list).sort(function(a,b){return list[b][0]-list[a][0]})
+         for (k in keys) {trick[rider][event][heat].push(list[keys[k]])}
         }
        }
       }
      }
     }
    }
-  console.log(win)
+   //console.log(trick)
 
-  var rank={}
-  var score={}
-  for (var i = 0; i < s.length; i++) {
-    var rider=s[i]['rider']
-    var event=s[i]['event']
-    var heat=s[i]['heat']
-    if (!score[event]) {score[event]={}}
-    if (!score[event][heat]) {score[event][heat]={}}
-    if (!score[event][heat][rider]) {score[event][heat][rider]=win[rider][event][heat]}
-    var list = score[event][heat]
-    if (!rank[event]) {rank[event]={}}
-    if (!rank[event][heat]) {rank[event][heat]=[]}
-    rank[event][heat]=Object.keys(list).sort(function(a,b){return list[b]-list[a]})
-  }
-  console.log(rank)
+     var score={}
+     for (var i = 0; i < s.length; i++) {
+       var rider=s[i]['rider']
+       var event=s[i]['event']
+       var heat=s[i]['heat']
+       if (!score[event]) {score[event]={}}
+       if (!score[event][heat]) {score[event][heat]=[]}
+       if (!score[event][heat][rider]) {
+        var count=0
+        var total=0
+        for (t in trick[rider][event][heat]) {total+=trick[rider][event][heat][t][0]}
+        count++
+        if (count>5){break}
+        score[event][heat][rider]=total
+        var result = document.getElementsByClassName(rider+'-'+heat)
+        for (r in result){
+          //var x=rider//parseInt(place)+1
+          result[r].innerHTML=total
+        }
+       }
+     }
+     console.log(score)
 
-  for (event in rank) {
-    if(score.hasOwnProperty(event)){
-      console.log(event)
-      for (heat in rank[event]) {
-         if(score[event].hasOwnProperty(heat)){
-           console.log(heat)
-           for (place in rank[event][heat]) {
-            if(rank[event][heat].hasOwnProperty(place)){
-              console.log(rank[event][heat][place])
-              var rider= rank[event][heat][place]
-              var rider2= rider
-              if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
-              else {rider2= rank[event][heat][0]}
-              var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
-              for (r in result){
-               //var x=rider//parseInt(place)+1
-               result[r].innerHTML=score[event][heat][rider]-score[event][heat][rider2]
-              }
+     var rank={}
+     for (event in score) {
+       if(score.hasOwnProperty(event)){
+         if (!rank[event]) {rank[event]={}}
+         for (heat in score[event]) {
+            if(score[event].hasOwnProperty(heat)){
+                  if (!rank[event][heat]) {rank[event][heat]=[]}
+                  var list = score[event][heat]
+                  rank[event][heat]=Object.keys(list).sort(function(a,b){return list[b]-list[a]})
             }
-           }
          }
-      }
-    }
-  }
+       }
+     }
+     console.log(rank)
 
-           //console.log(sum)
-           /*for (rider in score[event][heat]) {
-            if(score[event][heat].hasOwnProperty(rider)){
-             var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
-              for (r in result){
-               result[r].innerHTML=(score[event][heat][rider]*3)-sum
+     for (event in rank) {
+       if(rank.hasOwnProperty(event)){
+         //console.log(event)
+         for (heat in rank[event]) {
+            if(rank[event].hasOwnProperty(heat)){
+              //console.log(heat)
+              for (place in rank[event][heat]) {
+               if(rank[event][heat].hasOwnProperty(place)){
+                 //console.log(rank[event][heat][place])
+                 var rider= rank[event][heat][place]
+                 var rider2= rider
+                 if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
+                 else {rider2= rank[event][heat][0]}
+                 var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
+                 for (r in result){
+                  //var x=rider//parseInt(place)+1
+                  result[r].innerHTML=score[event][heat][rider]-score[event][heat][rider2]
+                 }
+               }
               }
             }
-           }*/
-
-       //var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
-       //for (r in result){
-      //  result[r].innerHTML=score[event][heat][rider]-
-        /*var score=0
-        for (w in win){
-         score += trick[t][0]
-         result[r].innerHTML+=' '+t+':'+trick[t][0]+'/'+trick[t][1]
-         result[r].innerHTML=score
-        }*/
-      // }
-
+         }
+       }
+     }
 
 /*
   var trick = document.createElement('td');
@@ -264,6 +263,7 @@ print2 = function(s) {
 
   document.getElementById(s['rider']).appendChild(row);
 */
+
 };
 
 start = service.list
