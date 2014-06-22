@@ -57,6 +57,7 @@ func init() {
 	rpc(api, scope, "Put", "datastore.put", "POST", "datastore/put", "Put.")
 	rpc(api, scope, "Delete", "datastore.delete", "POST", "datastore/delete", "Delete.")
 	rpc(api, scope, "Truncate", "datastore.truncate", "POST", "datastore/truncate", "Truncate.")
+	rpc(api, scope, "Editor", "datastore.editor", "POST", "datastore/editor", "Editor.")
 	endpoints.HandleHttp()
 }
 

@@ -10,15 +10,15 @@ $(document).ready(function() {
     });
 
     FB.Event.subscribe('auth.authResponseChange', function(response) {
-        if (response.status === 'connected') {form(2); signout()}
+        if (response.status === 'connected') {signout()}
         else if (response.status === 'not_authorized') {alert('Not authorized.')}
         else {signin()}
         console.log(response)
     });
 
     FB.getLoginStatus(function(response){
-        $.getScript('//apis.google.com/js/client:plusone.js?onload=start');
-        if (!FB.getAccessToken()){form(1); signin()}
+        $.getScript('//apis.google.com/js/client:plusone.js?onload=load');
+        if (!FB.getAccessToken()){signin()}
         console.log(response)
     });
 
@@ -34,8 +34,6 @@ signin = function() {
     b.style.display="block";
 }
 
-fsignin = function() {FB.login(function(response){service.list()}, {scope: 'email,publish_actions,manage_pages'})}
-
 signout = function() {
     var b=document.getElementById('fsigninButton')
     b.removeEventListener('click', fsignin)
@@ -44,7 +42,18 @@ signout = function() {
     b.style.display="block";
 }
 
+fsignin = function() {FB.login(function(response){start()}, {scope: 'email,publish_actions,manage_pages'})}
+
 fsignout = function() {FB.logout(); stop();}
+
+load = function () {
+    console.log('Loading Google API')
+    //var apisToLoad = 2;
+    //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
+    var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+    gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
+    //gapi.client.load('oauth2', 'v2', function(){});
+};
 
 /*
 $(document).ready(function() {

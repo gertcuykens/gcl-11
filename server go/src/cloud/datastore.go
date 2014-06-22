@@ -16,6 +16,7 @@ type Message struct {
 	Rider string `json:"rider"`
 	Trick string `json:"trick"`
 	Score int64 `json:"score"`
+	Attempt int64 `json:"attempt"`
 }
 
 type Entity struct {
@@ -29,7 +30,7 @@ type DataStore struct {
 }
 
 func (s *DataStore) Put(u string) (err error) {
-	key := datastore.NewKey(s.Context, "message", "", 0, s.Root)
+	key := datastore.NewKey(s.Context, "tarifa", "", 0, s.Root)
 	for _,m := range s.Entity.List {
 		m.Judge=u
 		m.Date=time.Now()
@@ -40,14 +41,14 @@ func (s *DataStore) Put(u string) (err error) {
 
 func (s *DataStore) Get() (err error) {
 	for _,m := range s.Entity.List {
-		key := datastore.NewKey(s.Context, "message", "", m.Id, s.Root)
+		key := datastore.NewKey(s.Context, "tarifa", "", m.Id, s.Root)
 		err = datastore.Get(s.Context, key, m)
 	}
 	return nil
 }
 
 func (s *DataStore) GetAll() (err error) {
-	q := datastore.NewQuery("message").Order("-Date")  //Ancestor(s.Root)
+	q := datastore.NewQuery("tarifa").Ancestor(s.Root).Order("-Date")
 	for t := q.Run(s.Context);; {
 		var m Message
 		k, err := t.Next(&m)
@@ -61,14 +62,14 @@ func (s *DataStore) GetAll() (err error) {
 
 func (s *DataStore) Delete() (err error) {
 	for _, m := range s.Entity.List {
-		key := datastore.NewKey(s.Context, "message", "", m.Id, s.Root)
+		key := datastore.NewKey(s.Context, "tarifa", "", m.Id, s.Root)
 		datastore.Delete(s.Context,key)
 	}
 	return nil
 }
 
 func (s *DataStore) Truncate() (err error) {
-	q := datastore.NewQuery("message")
+	q := datastore.NewQuery("tarifa")
 	var m []Message
 	keys, err := q.GetAll(s.Context, &m)
 	if err != nil {return err}

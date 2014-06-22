@@ -19,12 +19,6 @@ type Data struct {
 	Perms []string `json:"perms"`
 }
 
-type User struct {
-	Id int `json:"id"`
-	Name string `json:"name"`
-	Email []string `json:"email"`
-}
-
 func (a *Accounts) editor(c endpoints.Context, r *http.Request) bool {
 	//t := r.Header.Get("Authorization")
 	//c.Infof("============%s",t[7:])
@@ -50,6 +44,12 @@ func (a *Accounts) editor(c endpoints.Context, r *http.Request) bool {
 	return false
 }
 
+type User struct {
+	Id int `json:"id"`
+	Name string `json:"name"`
+	Email []string `json:"email"`
+}
+
 func (u *User) set(c endpoints.Context, r *http.Request) error {
     //t := r.Header.Get("Authorization")
 	//c.Infof("============%s",t[7:])
@@ -63,6 +63,15 @@ func (u *User) set(c endpoints.Context, r *http.Request) error {
 	err = json.Unmarshal(b,u)
 	if err != nil {}
 
+	return nil
+}
+
+func (s *Service) Editor(r *http.Request,  _ *cloud.Entity, _ *cloud.Entity) error {
+	c := endpoints.NewContext(r)
+	s.Status="no authentication"
+	var a = &Accounts{}
+	if !a.editor(c,r) {return s}
+	s.Status="ok"
 	return nil
 }
 

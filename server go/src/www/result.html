@@ -23,11 +23,24 @@
 
               <div class="row">
                   <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list2" style="margin:5px 0px 0px;">Heat</h1></div>
+                  <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="publishButton" type="button" class="btn btn-default btn-lg btn-block" value="Search"/></div>
+              </div>
+
+              <div class="row">
+                  <div class="col-xs-12" style="margin-top:10px;"><input id="feed" class="form-control input-lg" placeholder="Heat number" value="0"/></div>
+              </div>
+
+          </div>
+
+          <div id="form3" style="display:none;">
+
+              <div class="row">
+                  <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list2" style="margin:5px 0px 0px;">Feed</h1></div>
                   <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="publishButton" type="button" class="btn btn-default btn-lg btn-block" value="Publish"/></div>
               </div>
 
               <div class="row">
-                  <div class="col-xs-12" style="margin-top:10px;"><input id="feed" class="form-control input-lg" placeholder="gcl11/feed" value="gcl11/feed"/></div>
+                  <div class="col-xs-12" style="margin-top:10px;"><input id="feed" class="form-control input-lg" placeholder="Feed" value="gcl11/feed"/></div>
               </div>
 
               <div class="row">
@@ -36,18 +49,7 @@
 
           </div>
 
-          <table id="table" class="table table-hover" style="margin-top:20px;">
-              <thead>
-              <tr>
-                  <th>Heat</th>
-                  <th>Rider</th>
-                  <th>Score</th>
-              </tr>
-              </thead>
-              <tbody id="console">
-
-              </tbody>
-          </table>
+          <div id="console"></div>
 
       </div>
 
@@ -57,10 +59,10 @@
       <script type="text/javascript" src="./js/facebook.js"></script>
       <script type="text/javascript" src="./js/service.js"></script>
       <script>
-          document.getElementById('list1').onclick = service.list
-          document.getElementById('list2').onclick = function(){form(1)}
-          document.getElementById('publishButton').onclick = service.publish
-          document.getElementById('table').onclick = function(){form(2)}
+          //document.getElementById('list1').onclick = service.list
+          //document.getElementById('list2').onclick = function(){form(1)}
+          //document.getElementById('publishButton').onclick = service.publish
+          //document.getElementById('table').onclick = function(){form(2)}
       </script>
 
       <div id="fb-root"></div>
