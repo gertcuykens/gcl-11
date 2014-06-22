@@ -84,7 +84,7 @@ print1 = function(s) {
     total.innerHTML=""
 
     var win = document.createElement('td');
-    win.className=s['rider']+'-'+s['heat']+'-'
+    win.className=s['rider']+'-'+s['heat']+'-'+s['event']
     win.innerHTML=""
 
     var row = document.createElement('tr');
@@ -119,17 +119,19 @@ print2 = function(s) {
   }
   //console.log(object)
 
+   var win={}
    for (rider in object) {
-    //var win={}
     if(object.hasOwnProperty(rider)){
      console.log(rider)
-     //if (!win[rider]) {win[rider]={}}
+     if (!win[rider]) {win[rider]={}}
      for (event in object[rider]) {
       if(object[rider].hasOwnProperty(event)){
        console.log(event)
+       if (!win[rider][event]) {win[rider][event]={}}
        for (heat in object[rider][event]) {
         if(object[rider][event].hasOwnProperty(heat)){
          console.log(heat)
+         if (!win[rider][event][heat]) {win[rider][event][heat]={}}
          var trick={}
          for (attempt in object[rider][event][heat]) {
           if(object[rider][event][heat].hasOwnProperty(attempt)){
@@ -157,6 +159,7 @@ print2 = function(s) {
            score += trick[t][0]
            //result[r].innerHTML+=' '+t+':'+trick[t][0]+'/'+trick[t][1]
            result[r].innerHTML=score
+           win[rider][event][heat]=score
           }
          }
         }
@@ -165,6 +168,57 @@ print2 = function(s) {
      }
     }
    }
+  console.log(win)
+
+  var score={}
+  for (var i = 0; i < s.length; i++) {
+    var rider=s[i]['rider']
+    var event=s[i]['event']
+    var heat=s[i]['heat']
+    if (!score[event]) {score[event]={}}
+    if (!score[event][heat]) {score[event][heat]={}}
+    if (!score[event][heat][rider]) {score[event][heat][rider]=win[rider][event][heat]}
+  }
+  console.log(score)
+
+  for (event in score) {
+    if(score.hasOwnProperty(event)){
+      console.log(event)
+      for (heat in score[event]) {
+         if(score[event].hasOwnProperty(heat)){
+           console.log(heat)
+           var sum=0
+           for (rider in score[event][heat]) {
+            if(score[event][heat].hasOwnProperty(rider)){
+              console.log(rider)
+              sum+=score[event][heat][rider]
+            }
+           }
+           console.log(sum)
+           for (rider in score[event][heat]) {
+            if(score[event][heat].hasOwnProperty(rider)){
+             var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
+              for (r in result){
+               result[r].innerHTML=(score[event][heat][rider]*3)-sum
+              }
+            }
+           }
+         }
+      }
+    }
+  }
+
+       //var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
+       //for (r in result){
+      //  result[r].innerHTML=score[event][heat][rider]-
+        /*var score=0
+        for (w in win){
+         score += trick[t][0]
+         result[r].innerHTML+=' '+t+':'+trick[t][0]+'/'+trick[t][1]
+         result[r].innerHTML=score
+        }*/
+      // }
+
 
 /*
   var trick = document.createElement('td');
