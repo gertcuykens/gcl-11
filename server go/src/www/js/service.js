@@ -170,6 +170,7 @@ print2 = function(s) {
    }
   console.log(win)
 
+  var rank={}
   var score={}
   for (var i = 0; i < s.length; i++) {
     var rider=s[i]['rider']
@@ -178,28 +179,30 @@ print2 = function(s) {
     if (!score[event]) {score[event]={}}
     if (!score[event][heat]) {score[event][heat]={}}
     if (!score[event][heat][rider]) {score[event][heat][rider]=win[rider][event][heat]}
+    var list = score[event][heat]
+    if (!rank[event]) {rank[event]={}}
+    if (!rank[event][heat]) {rank[event][heat]=[]}
+    rank[event][heat]=Object.keys(list).sort(function(a,b){return list[b]-list[a]})
   }
-  console.log(score)
+  console.log(rank)
 
-  for (event in score) {
+  for (event in rank) {
     if(score.hasOwnProperty(event)){
       console.log(event)
-      for (heat in score[event]) {
+      for (heat in rank[event]) {
          if(score[event].hasOwnProperty(heat)){
            console.log(heat)
-           var sum=0
-           for (rider in score[event][heat]) {
-            if(score[event][heat].hasOwnProperty(rider)){
-              console.log(rider)
-              sum+=score[event][heat][rider]
-            }
-           }
-           console.log(sum)
-           for (rider in score[event][heat]) {
-            if(score[event][heat].hasOwnProperty(rider)){
-             var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
+           for (place in rank[event][heat]) {
+            if(rank[event][heat].hasOwnProperty(place)){
+              console.log(rank[event][heat][place])
+              var rider= rank[event][heat][place]
+              var rider2= rider
+              if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
+              else {rider2= rank[event][heat][0]}
+              var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
               for (r in result){
-               result[r].innerHTML=(score[event][heat][rider]*3)-sum
+               //var x=rider//parseInt(place)+1
+               result[r].innerHTML=score[event][heat][rider]-score[event][heat][rider2]
               }
             }
            }
@@ -207,6 +210,16 @@ print2 = function(s) {
       }
     }
   }
+
+           //console.log(sum)
+           /*for (rider in score[event][heat]) {
+            if(score[event][heat].hasOwnProperty(rider)){
+             var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
+              for (r in result){
+               result[r].innerHTML=(score[event][heat][rider]*3)-sum
+              }
+            }
+           }*/
 
        //var result = document.getElementsByClassName(rider+'-'+heat+'-'+event)
        //for (r in result){
