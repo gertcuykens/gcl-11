@@ -56,36 +56,27 @@ service.list = function() {
             resp.list = resp.list || []
             document.getElementById('console2').innerHTML=""
             print2(resp.list);
-            for (var i = 0; i < resp.list.length; i++) {print1(resp.list[i]);}
         }
       }
   );
 };
 
-print1 = function(s) {
+print1 = function(rider,trick,score) {
 
-    var trick = document.createElement('td');
-    trick.innerHTML=s['trick']
+    var trickf = document.createElement('td');
+    trickf.innerHTML=trick
 
-    var score = document.createElement('td');
-    score.innerHTML=s['score']
-
-    var judge = document.createElement('td');
-    judge.innerHTML=s['judge']
-
-    var attempt = document.createElement('td');
-    attempt.innerHTML=s['attempt']
+    var scoref = document.createElement('td');
+    scoref.innerHTML=score
 
     var row = document.createElement('tr');
-    row.id=s['id']
+    //row.id=s['id']
     //row.onclick=delete
     //row.appendChild(rider);
-    row.appendChild(trick);
-    row.appendChild(score);
-    row.appendChild(judge);
-    row.appendChild(attempt);
+    row.appendChild(trickf);
+    row.appendChild(scoref);
 
-    document.getElementById(s['rider']).appendChild(row);
+    document.getElementById(rider).appendChild(row);
 
 };
 
@@ -112,7 +103,7 @@ print2 = function(s) {
    for (rider in object) {
     if(object.hasOwnProperty(rider)){
      //console.log(rider)
-     if (!trick[rider]) {trick[rider]={}}
+     if (!trick[rider]) {trick[rider]={}; print4(rider)}
      for (event in object[rider]) {
       if(object[rider].hasOwnProperty(event)){
        //console.log(event)
@@ -141,14 +132,17 @@ print2 = function(s) {
           }
          }
          var keys = Object.keys(list).sort(function(a,b){return list[b][0]-list[a][0]})
-         for (k in keys) {trick[rider][event][heat].push(list[keys[k]])}
+         for (k in keys) {
+          trick[rider][event][heat].push(list[keys[k]])
+          print1(rider,list[keys[k]][2],list[keys[k]][0])
+         }
         }
        }
       }
      }
     }
    }
-   //console.log(trick)
+   console.log(trick)
 
      var score={}
      for (var i = 0; i < s.length; i++) {
@@ -218,8 +212,6 @@ print2 = function(s) {
 
 print3 = function(rider,event,heat){
 
-  print4(rider)
-
   var riderf = document.createElement('td');
   riderf.innerHTML=rider
 
@@ -246,7 +238,7 @@ print4 = function(rider) {
     caption.innerHTML='<h1>'+rider+'</h1>'
 
     var thead = document.createElement('thead');
-    thead.innerHTML="<tr><th>Trick</th><th>Score</th><th>Judge</th><th>Attempt</th></tr>"
+    thead.innerHTML="<tr><th>Trick</th><th>Score</th></tr>"
 
     var tbody = document.createElement('tbody');
     tbody.id=rider
