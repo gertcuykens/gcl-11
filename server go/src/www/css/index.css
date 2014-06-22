@@ -13,6 +13,10 @@ caption {text-align:left;}
  height:100%;
 }
 
+.result {
+ font-size: 18px;
+}
+
 h1 {margin-bottom:0px;}
 /*
 #login {border-bottom: 1px solid transparent;}
