@@ -45,17 +45,30 @@
                     <div class="col-xs-12" style="margin-top:10px;"><input id="attempt" class="form-control input-lg" placeholder="Attempt"/></div>
                 </div>
 
+                <table id="table2" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Rider</th>
+                            <th>Trick</th>
+                            <th>Judge</th>
+                            <th>Score</th>
+                            <th>Attempt</th>
+                        </tr>
+                    </thead>
+                    <tbody id="console2"></tbody>
+                </table>
+
             </div>
 
             <div id="form3" style="display:none;">
 
                 <div class="row">
-                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list2" style="margin:5px 0px 0px;">Heat</h1></div>
-                    <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="publishButton" type="button" class="btn btn-default btn-lg btn-block" value="Search"/></div>
+                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list3" style="margin:5px 0px 0px;">Heat</h1></div>
+                    <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="searchButton" type="button" class="btn btn-default btn-lg btn-block" value="Search"/></div>
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12" style="margin-top:10px;"><input id="feed" class="form-control input-lg" placeholder="Heat number" value="0"/></div>
+                    <div class="col-xs-12" style="margin-top:10px;"><input id="feed3" class="form-control input-lg" placeholder="Heat number" value="0"/></div>
                 </div>
 
             </div>
@@ -63,7 +76,7 @@
             <div id="form4" style="display:none;">
 
                 <div class="row">
-                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list2" style="margin:5px 0px 0px;">Feed</h1></div>
+                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list4" style="margin:5px 0px 0px;">Feed</h1></div>
                     <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="publishButton" type="button" class="btn btn-default btn-lg btn-block" value="Publish"/></div>
                 </div>
 
@@ -77,6 +90,8 @@
 
             </div>
 
+            <div id="console"></div>
+
         </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
@@ -88,7 +103,7 @@
           document.getElementById('list1').onclick = service.list
           document.getElementById('list2').onclick = service.list
           document.getElementById('submitButton').onclick = service.submit
-          //document.getElementById('table1').onclick = service.editor
+          //document.getElementById('table2').onclick = service.editor
         </script>
 
     </body>

@@ -46,7 +46,8 @@ service.submit = function() {
 };
 
 service.list = function() {
-  //document.getElementById('console2').innerHTML="Loading..."
+  document.getElementById('console2').innerHTML="Loading..."
+  document.getElementById('console').innerHTML="Loading..."
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
@@ -54,17 +55,55 @@ service.list = function() {
       function(resp) {
         if (!resp.code) {
             resp.list = resp.list || []
-            //document.getElementById('console2').innerHTML=""
+            document.getElementById('console2').innerHTML=""
+            document.getElementById('console').innerHTML=""
             print2(resp.list);
         }
       }
   );
 };
 
+act = function () {
+ for (r in $(this).parent('tbody').children('tr')){$(this).parent('tbody').children('tr')[r].className=""}
+ this.className="active"
+ //console.log(this.id)
+}
+
+print3 = function (id,rider,trick,judge,score,attempt){
+
+   var riderf = document.createElement('td');
+   riderf.innerHTML=rider
+
+    var trickf = document.createElement('td');
+    trickf.innerHTML=trick
+
+   var judgef = document.createElement('td');
+   judgef.innerHTML=judge
+
+    var scoref = document.createElement('td');
+    scoref.innerHTML=score
+
+    var attemptf = document.createElement('td');
+    attemptf.innerHTML=attempt
+
+    var row = document.createElement('tr');
+    row.id=id
+    row.onclick=act
+    row.appendChild(riderf);
+    row.appendChild(trickf);
+    row.appendChild(judgef);
+    row.appendChild(scoref);
+    row.appendChild(attemptf);
+
+    document.getElementById('console2').appendChild(row);
+
+}
+
 print2 = function(s) {
 
   var object = {}
   for (var i = 0; i < s.length; i++) {
+    var id=s[i]['id']
     var rider=s[i]['rider']
     var event=s[i]['event']
     var heat=s[i]['heat']
@@ -72,6 +111,7 @@ print2 = function(s) {
     var attempt=s[i]['attempt']
     var score=s[i]['score']
     var judge=s[i]['judge']
+    print3(id,rider,trick,judge,score,attempt)
     if (!object[rider]) {object[rider]={};}
     if (!object[rider][event]) {object[rider][event]={}}
     if (!object[rider][event][heat]) {object[rider][event][heat]={};}
@@ -100,13 +140,15 @@ print2 = function(s) {
            var name=""
            var max=0
            var score=0
+           var score2=[]
            for (judge in object[rider][event][heat][attempt]) {
             if(object[rider][event][heat][attempt].hasOwnProperty(judge)){
              max+=10
              score+=object[rider][event][heat][attempt][judge][0]
+             score2.push(object[rider][event][heat][attempt][judge][0])
              name=object[rider][event][heat][attempt][judge][1]
-             if (!list[name]){list[name]=[score,max,name]}
-             else if (list[name][0]<score){list[name]=[score,max,name]}
+             if (!list[name]){list[name]=[score,max,name,score2]}
+             else if (list[name][0]<score){list[name]=[score,max,name,score2]}
             }
            }
            //console.log(name+':'+score+'/'+max)
@@ -185,7 +227,7 @@ print2 = function(s) {
             for (heat in trick[rider][event]){
              if(trick[rider][event].hasOwnProperty(heat)){
                for (score in trick[rider][event][heat]){
-                   print1(rider,trick[rider][event][heat][score][2],trick[rider][event][heat][score][0])
+                   print1(rider,trick[rider][event][heat][score][2],trick[rider][event][heat][score][0],trick[rider][event][heat][score][3])
                }
              }
             }
@@ -196,13 +238,13 @@ print2 = function(s) {
 
 };
 
-print1 = function(rider,trick,score) {
+print1 = function(rider,trick,score,score2) {
 
     var trickf = document.createElement('td');
     trickf.innerHTML=trick
 
     var scoref = document.createElement('td');
-    scoref.innerHTML=score
+    scoref.innerHTML=score //+' <= ('+score2.toString()+')'
 
     var row = document.createElement('tr');
     //row.id=s['id']
@@ -232,7 +274,9 @@ print4 = function(rider) {
     table.appendChild(thead)
     table.appendChild(tbody)
 
-  document.getElementsByClassName('container')[0].appendChild(table);
+    document.getElementById('console').appendChild(table);
+
+  //document.getElementsByClassName('container')[0].appendChild(table);
 
 }
 
