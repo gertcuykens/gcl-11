@@ -1,9 +1,17 @@
 service = {}
 
 service.truncate = function() {
-  //t.access_token = FB.getAccessToken()
-  //gapi.auth.setToken(t)
+  var t= new Tokeng()
+  t.access_token = FB.getAccessToken()
+  gapi.auth.setToken(t)
   gapi.client.service.datastore.truncate().execute(function(resp){service.list()})
+};
+
+service.delete = function() {
+  var t= new Tokeng()
+  t.access_token = FB.getAccessToken()
+  gapi.auth.setToken(t)
+  gapi.client.service.datastore.delete(act2()).execute(function(resp){service.list()})
 };
 
 service.editor = function() {
@@ -15,7 +23,7 @@ service.editor = function() {
     console.log(response)
     if (!response.error){ form(2) } // else { form(1) }
   })
-}
+};
 
 service.publish = function() {
   FB.api(
@@ -37,7 +45,7 @@ service.submit = function() {
     "date":d,
     "judge":"",
     "event":"2014",
-    "heat":0,
+    "heat":1,
     "rider":$('#rider').val(),
     "trick":$('#trick').val(),
     "score":parseInt($("#score").val(), 10),
@@ -47,7 +55,7 @@ service.submit = function() {
 
 service.list = function() {
   document.getElementById('console2').innerHTML="Loading..."
-  document.getElementById('console').innerHTML="Loading..."
+  document.getElementById('console3').innerHTML="Loading..."
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
@@ -56,7 +64,7 @@ service.list = function() {
         if (!resp.code) {
             resp.list = resp.list || []
             document.getElementById('console2').innerHTML=""
-            document.getElementById('console').innerHTML=""
+            document.getElementById('console3').innerHTML=""
             print2(resp.list);
         }
       }
@@ -64,9 +72,25 @@ service.list = function() {
 };
 
 act = function () {
+ //console.log("-"+this.className)
+ if (this.className=="active") {this.className="";return;}
  for (r in $(this).parent('tbody').children('tr')){$(this).parent('tbody').children('tr')[r].className=""}
  this.className="active"
  //console.log(this.id)
+}
+
+act2 = function () {
+ var i=0;
+ var list = []
+ var tbody = $('#console2').children('tr')
+ for (tr in tbody){
+  if(tbody.hasOwnProperty(tr)){
+   if (tbody[tr].className=='active'){
+    list[i++]={'id':parseInt(tbody[tr].id)}
+   }
+  }
+ }
+ return {'list':list}
 }
 
 print3 = function (id,rider,trick,judge,score,attempt){
@@ -211,7 +235,7 @@ print2 = function(s) {
                  print4(rider)
                  if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
                  else {rider2= rank[event][heat][0]}
-                 document.getElementById("-"+rider).innerHTML=" score "+score[event][heat][rider]
+                 document.getElementById("-"+rider).innerHTML=" heat "+heat+" score "+score[event][heat][rider]
                  document.getElementById("-"+rider).innerHTML+=" difference "+(score[event][heat][rider]-score[event][heat][rider2])
                }
               }
@@ -274,7 +298,7 @@ print4 = function(rider) {
     table.appendChild(thead)
     table.appendChild(tbody)
 
-    document.getElementById('console').appendChild(table);
+    document.getElementById('console3').appendChild(table);
 
   //document.getElementsByClassName('container')[0].appendChild(table);
 
@@ -285,8 +309,9 @@ stop = service.list //document.getElementById('console').innerHTML=""
 
 form = function(x) {
     switch(x){
-        case 1: $( "#form1" ).show(),$( "#form2" ).hide(); break;
-        case 2: $( "#form1" ).hide(),$( "#form2" ).show(); break;
+        case 1: $( "#form1" ).show(); $( "#form2" ).hide(); $( "#form3" ).hide();   break;
+        case 2: $( "#form1" ).hide(); $( "#form2" ).show(); $( "#form3" ).hide();   break;
+        default: $( "#form1" ).hide(); $( "#form2" ).hide(); $( "#form3" ).show();  break;
     }
 }
 

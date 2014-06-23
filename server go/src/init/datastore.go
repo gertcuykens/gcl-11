@@ -10,13 +10,13 @@ import (
 	"io/ioutil"
 )
 
-type Accounts struct {
-	Data []Data `json:"data"`
-}
-
 type Data struct {
 	Name string `json:"name"`
 	Perms []string `json:"perms"`
+}
+
+type Accounts struct {
+	Data []Data `json:"data"`
 }
 
 func (a *Accounts) editor(c endpoints.Context, r *http.Request) bool {
@@ -141,6 +141,11 @@ func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) erro
 func (s *Service) Delete(r *http.Request, m *cloud.Entity, _ *cloud.Entity) error {
 	c := endpoints.NewContext(r)
 
+	s.Status="no authentication"
+	var a = &Accounts{}
+	if !a.editor(c,r) {return s}
+	s.Status="ok"
+
 	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	d := cloud.DataStore {
 		Root:  k,
@@ -154,6 +159,11 @@ func (s *Service) Delete(r *http.Request, m *cloud.Entity, _ *cloud.Entity) erro
 
 func (s *Service) Truncate(r *http.Request, m *cloud.Entity, _ *cloud.Entity) error {
 	c := endpoints.NewContext(r)
+
+	s.Status="no authentication"
+	var a = &Accounts{}
+	if !a.editor(c,r) {return s}
+	s.Status="ok"
 
 	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	d := cloud.DataStore {

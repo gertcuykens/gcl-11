@@ -45,8 +45,10 @@
                     <div class="col-xs-12" style="margin-top:10px;"><input id="attempt" class="form-control input-lg" placeholder="Attempt"/></div>
                 </div>
 
-                <table id="table2" class="table table-hover">
-                    <thead>
+                <div>
+
+                    <table id="table2" style="margin-top:10px;" class="table table-hover">
+                        <thead>
                         <tr>
                             <th>Rider</th>
                             <th>Trick</th>
@@ -54,22 +56,23 @@
                             <th>Score</th>
                             <th>Attempt</th>
                         </tr>
-                    </thead>
-                    <tbody id="console2"></tbody>
-                </table>
+                        </thead>
+                        <tbody id="console2"></tbody>
+                    </table>
+
+                </div>
 
             </div>
 
-            <div id="form3" style="display:none;">
+            <div id="form3">
 
-                <div class="row">
-                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list3" style="margin:5px 0px 0px;">Heat</h1></div>
-                    <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="searchButton" type="button" class="btn btn-default btn-lg btn-block" value="Search"/></div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-6"></div>
+                    <div class="col-xs-3"><input id="previousButton" type="button" class="btn btn-default btn-lg btn-block" value="Previous"/></div>
+                    <div class="col-xs-3"><input id="nextButton" type="button" class="btn btn-default btn-lg btn-block" value="Next"/></div>
                 </div>
 
-                <div class="row">
-                    <div class="col-xs-12" style="margin-top:10px;"><input id="feed3" class="form-control input-lg" placeholder="Heat number" value="0"/></div>
-                </div>
+                <div id="console3"></div>
 
             </div>
 
@@ -90,7 +93,18 @@
 
             </div>
 
-            <div id="console"></div>
+            <div id="form5" style="display:none;">
+
+                <div class="row">
+                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list5" style="margin:5px 0px 0px;">Gcl-11</h1></div>
+                    <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="removeButton" type="button" class="btn btn-default btn-lg btn-block" value="Remove" /></div>
+                </div>
+
+            </div>
+
+
+
+
 
         </div>
 
