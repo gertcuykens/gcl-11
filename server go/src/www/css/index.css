@@ -18,6 +18,12 @@ caption {text-align:left;}
 }
 
 h1 {margin:0px;}
+
+table caption {text-align:left;}
+
+#table2 {position:relative;}
+#table2 caption {position:absolute;top:20px; right:0px;}
+
 /*
 #login {border-bottom: 1px solid transparent;}
 #bs-navbar-collapse-1 ul .dropdown-menu {margin-top: 5px !important; min-width: 50px !important;}

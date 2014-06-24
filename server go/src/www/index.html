@@ -5,7 +5,6 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/index.css">
-        <style>caption {text-align:left;}</style>
     </head>
     <body>
 
@@ -16,7 +15,7 @@
             <div id="form1" style="display:none;">
 
                 <div class="row">
-                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list1" style="margin:5px 0px 0px;">Gcl-11</h1></div>
+                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 onclick="service.list()" style="margin:5px 0px 0px;">Gcl-11</h1></div>
                     <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="fsigninButton" type="button" class="btn btn-default btn-lg btn-block" value="Sign in" style="display:none;"/></div>
                 </div>
 
@@ -24,30 +23,31 @@
 
             <div id="form2" style="display:none;">
 
-                <div class="row">
-                    <div class="col-xs-8 col-md-10" style="margin-top:10px;"><h1 id="list2" style="margin:5px 0px 0px;">Score</h1></div>
-                    <div class="col-xs-4 col-md-2" style="margin-top:10px;"><input id="submitButton" type="button" class="btn btn-default btn-lg btn-block" value="Submit"/></div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-8 col-md-10"><h1 onclick="service.list()">Score</h1></div>
+                    <div class="col-xs-4 col-md-2"><input onclick="service.submit()" id="submitButton" type="button" class="btn btn-default btn-lg btn-block" value="Submit"/></div>
                 </div>
 
-                <div class="row">
-                    <div class="col-xs-12" style="margin-top:10px;"><input id="rider" class="form-control input-lg" placeholder="Rider"/></div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12"><input id="rider" class="form-control input-lg" placeholder="Rider"/></div>
                 </div>
 
-                <div class="row">
-                    <div class="col-xs-12" style="margin-top:10px;"><input id="trick" class="form-control input-lg" placeholder="Trick"/></div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12"><input id="trick" class="form-control input-lg" placeholder="Trick"/></div>
                 </div>
 
-                <div class="row">
-                    <div class="col-xs-12" style="margin-top:10px;"><input id="score" class="form-control input-lg" placeholder="Score"/></div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12"><input id="score" class="form-control input-lg" placeholder="Score"/></div>
                 </div>
 
-                <div class="row">
-                    <div class="col-xs-12" style="margin-top:10px;"><input id="attempt" class="form-control input-lg" placeholder="Attempt"/></div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12"><input id="attempt" class="form-control input-lg" placeholder="Attempt"/></div>
                 </div>
 
-                <div>
+                <div style="margin-top:10px;">
 
-                    <table id="table2" style="margin-top:10px;" class="table table-hover">
+                    <table id="table2" class="table table-hover">
+                        <caption style="text-align:right;"><a onclick="service.delete()">delete</a></caption>
                         <thead>
                         <tr>
                             <th>Rider</th>
@@ -113,12 +113,6 @@
         <script type="text/javascript" src="./js/token.js"></script>
         <script type="text/javascript" src="./js/service.js"></script>
         <script type="text/javascript" src="./js/facebook.js"></script>
-        <script>
-          document.getElementById('list1').onclick = service.list
-          document.getElementById('list2').onclick = service.list
-          document.getElementById('submitButton').onclick = service.submit
-          //document.getElementById('table2').onclick = service.editor
-        </script>
 
     </body>
 </html>
