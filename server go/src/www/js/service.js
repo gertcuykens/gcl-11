@@ -21,7 +21,7 @@ service.editor = function() {
   gapi.auth.setToken(t)
   gapi.client.service.datastore.editor().execute(function(response){
     console.log(response)
-    if (!response.error){ form(2) } // else { form(1) }
+    if (!response.error){ view(2) } // else { form(1) }
   })
 };
 
@@ -93,7 +93,7 @@ act2 = function () {
  return {'list':list}
 }
 
-print3 = function (id,rider,trick,judge,score,attempt){
+print3 = function (id,rider,trick,score,attempt,judge){
 
    var riderf = document.createElement('td');
    riderf.innerHTML=rider
@@ -101,26 +101,25 @@ print3 = function (id,rider,trick,judge,score,attempt){
     var trickf = document.createElement('td');
     trickf.innerHTML=trick
 
-   var judgef = document.createElement('td');
-   judgef.innerHTML=judge
-
     var scoref = document.createElement('td');
     scoref.innerHTML=score
 
     var attemptf = document.createElement('td');
     attemptf.innerHTML=attempt
 
+    var judgef = document.createElement('td');
+    judgef.innerHTML=judge
+
     var row = document.createElement('tr');
     row.id=id
     row.onclick=act
     row.appendChild(riderf);
     row.appendChild(trickf);
-    row.appendChild(judgef);
     row.appendChild(scoref);
     row.appendChild(attemptf);
+    row.appendChild(judgef);
 
     document.getElementById('console2').appendChild(row);
-
 }
 
 print2 = function(s) {
@@ -135,7 +134,7 @@ print2 = function(s) {
     var attempt=s[i]['attempt']
     var score=s[i]['score']
     var judge=s[i]['judge']
-    print3(id,rider,trick,judge,score,attempt)
+    print3(id,rider,trick,score,attempt,judge)
     if (!object[rider]) {object[rider]={};}
     if (!object[rider][event]) {object[rider][event]={}}
     if (!object[rider][event][heat]) {object[rider][event][heat]={};}
@@ -307,7 +306,7 @@ print4 = function(rider) {
 start = service.list
 stop = service.list //document.getElementById('console').innerHTML=""
 
-form = function(x) {
+view = function(x) {
     switch(x){
         case 1: $( "#form1" ).show(); $( "#form2" ).hide(); $( "#form3" ).hide();   break;
         case 2: $( "#form1" ).hide(); $( "#form2" ).show(); $( "#form3" ).hide();   break;
