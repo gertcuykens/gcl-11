@@ -20,9 +20,8 @@ caption {text-align:left;}
 h1 {margin:0px;}
 
 table caption {text-align:left;}
-
-#table2 {position:relative;}
-#table2 caption {position:absolute;top:20px; right:0px;}
+table {position:relative;}
+table caption a {position:absolute;top:60px; right:0px;}
 
 /*
 #login {border-bottom: 1px solid transparent;}

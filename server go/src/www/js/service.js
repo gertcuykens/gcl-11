@@ -95,6 +95,8 @@ act2 = function () {
 
 print3 = function (id,rider,trick,score,attempt,judge){
 
+   print5(rider)
+
    var riderf = document.createElement('td');
    riderf.innerHTML=rider
 
@@ -113,13 +115,11 @@ print3 = function (id,rider,trick,score,attempt,judge){
     var row = document.createElement('tr');
     row.id=id
     row.onclick=act
-    row.appendChild(riderf);
+    row.appendChild(attemptf);
     row.appendChild(trickf);
     row.appendChild(scoref);
-    row.appendChild(attemptf);
     row.appendChild(judgef);
-
-    document.getElementById('console2').appendChild(row);
+    document.getElementById('--'+rider).appendChild(row);
 }
 
 print2 = function(s) {
@@ -270,9 +270,6 @@ print1 = function(rider,trick,score,score2) {
     scoref.innerHTML=score //+' <= ('+score2.toString()+')'
 
     var row = document.createElement('tr');
-    //row.id=s['id']
-    //row.onclick=delete
-    //row.appendChild(rider);
     row.appendChild(trickf);
     row.appendChild(scoref);
 
@@ -281,6 +278,8 @@ print1 = function(rider,trick,score,score2) {
 };
 
 print4 = function(rider) {
+
+    //if (document.getElementById('-'+rider)) return
 
     var caption = document.createElement('caption');
     caption.innerHTML='<h1>'+rider+'<span class="result" id="-'+rider+'"></span></h1>'
@@ -299,7 +298,28 @@ print4 = function(rider) {
 
     document.getElementById('console3').appendChild(table);
 
-  //document.getElementsByClassName('container')[0].appendChild(table);
+}
+
+print5 = function(rider) {
+
+    if (document.getElementById('-'+rider)) return
+
+    var caption = document.createElement('caption');
+    caption.innerHTML='<h1>'+rider+'<span class="result" id="-'+rider+'"></span></h1><a onclick="service.delete()">delete</a>'
+
+    var thead = document.createElement('thead');
+    thead.innerHTML="<tr><th>Attempt</th><th>Trick</th><th>Score</th><th>Judge</th></tr>"
+
+    var tbody = document.createElement('tbody');
+    tbody.id='--'+rider
+
+    var table = document.createElement('table');
+    table.className="table table-hover"
+    table.appendChild(caption)
+    table.appendChild(thead)
+    table.appendChild(tbody)
+
+    document.getElementById('console2').appendChild(table);
 
 }
 
