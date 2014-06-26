@@ -8,10 +8,17 @@ service.truncate = function() {
 };
 
 service.delete = function() {
+ var i=0;
+ var list = []
+ $(this).closest('table').children('tbody').children('tr').each(function(){
+  if (!$(this).hasClass('active')) {return true}
+  list[i++]={'id':parseInt($(this).attr('id'))}
+ })
+
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
-  gapi.client.service.datastore.delete(act2()).execute(function(resp){service.list()})
+  gapi.client.service.datastore.delete({'list':list}).execute(function(resp){service.list()})
 };
 
 service.editor = function() {
@@ -72,25 +79,9 @@ service.list = function() {
 };
 
 act = function () {
- //console.log("-"+this.className)
  if (this.className=="active") {this.className="";return;}
  for (r in $(this).parent('tbody').children('tr')){$(this).parent('tbody').children('tr')[r].className=""}
  this.className="active"
- //console.log(this.id)
-}
-
-act2 = function () {
- var i=0;
- var list = []
- var tbody = $('#console2').children('tr')
- for (tr in tbody){
-  if(tbody.hasOwnProperty(tr)){
-   if (tbody[tr].className=='active'){
-    list[i++]={'id':parseInt(tbody[tr].id)}
-   }
-  }
- }
- return {'list':list}
 }
 
 print3 = function (id,rider,trick,score,attempt,judge){
@@ -240,8 +231,7 @@ print2 = function(s) {
                  var rider= rank[event][heat][place]
                  var rider2= rider
                  print4(rider)
-                 ///////////REARANGE
-                 ///////////SCORE JUDGE
+                 ///////////TODO:REARANGE
                  if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
                  else {rider2= rank[event][heat][0]}
                  document.getElementById("-"+rider  ).innerHTML=" heat "+heat+" score "+score[event][heat][rider]
@@ -293,7 +283,7 @@ print4 = function(rider) {
 
     //if (document.getElementById('-'+rider)) return
 
-    //RE-ORDER JUDGE TABLE
+    //TODO:RE-ORDER JUDGE TABLE
 
     var caption = document.createElement('caption');
     caption.innerHTML='<h1>'+rider+'<span class="result" id="-'+rider+'"></span></h1>'
@@ -319,7 +309,7 @@ print5 = function(rider) {
     if (document.getElementById('--'+rider)) return
 
     var caption = document.createElement('caption');
-    caption.innerHTML='<h1>'+rider+'<span class="result" id="---'+rider+'"></span></h1><a onclick="service.delete()">delete</a>'
+    caption.innerHTML='<h1>'+rider+'<span class="result" id="---'+rider+'"></span></h1><a class="delete">delete</a>'
 
     var thead = document.createElement('thead');
     thead.innerHTML="<tr><th>Attempt</th><th>Trick</th><th>Score</th><th>Judge</th></tr>"
@@ -334,6 +324,7 @@ print5 = function(rider) {
     table.appendChild(tbody)
 
     document.getElementById('console2').appendChild(table);
+    $('.delete').each(function(){$(this).click(service.delete)})
 
 }
 
