@@ -120,6 +120,7 @@ print3 = function (id,rider,trick,score,attempt,judge){
     row.appendChild(scoref);
     row.appendChild(judgef);
     $('#--'+rider).prepend(row);
+
 }
 
 print2 = function(s) {
@@ -239,10 +240,14 @@ print2 = function(s) {
                  var rider= rank[event][heat][place]
                  var rider2= rider
                  print4(rider)
+                 ///////////REARANGE
+                 ///////////SCORE JUDGE
                  if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
                  else {rider2= rank[event][heat][0]}
-                 document.getElementById("-"+rider).innerHTML=" heat "+heat+" score "+score[event][heat][rider]
-                 document.getElementById("-"+rider).innerHTML+=" difference "+(score[event][heat][rider]-score[event][heat][rider2])
+                 document.getElementById("-"+rider  ).innerHTML=" heat "+heat+" score "+score[event][heat][rider]
+                 document.getElementById("---"+rider).innerHTML=" heat "+heat+" score "+score[event][heat][rider]
+                 document.getElementById("-"+rider  ).innerHTML+=" difference "+(score[event][heat][rider]-score[event][heat][rider2])
+                 document.getElementById("---"+rider).innerHTML+=" difference "+(score[event][heat][rider]-score[event][heat][rider2])
                }
               }
             }
@@ -255,11 +260,11 @@ print2 = function(s) {
          for (event in trick[rider]){
           if(trick[rider].hasOwnProperty(event)){
             for (heat in trick[rider][event]){
-             if(trick[rider][event].hasOwnProperty(heat)){
+
                for (score in trick[rider][event][heat]){
                    print1(rider,trick[rider][event][heat][score][2],trick[rider][event][heat][score][0],trick[rider][event][heat][score][3])
                }
-             }
+
             }
           }
         }
@@ -288,6 +293,8 @@ print4 = function(rider) {
 
     //if (document.getElementById('-'+rider)) return
 
+    //RE-ORDER JUDGE TABLE
+
     var caption = document.createElement('caption');
     caption.innerHTML='<h1>'+rider+'<span class="result" id="-'+rider+'"></span></h1>'
 
@@ -309,10 +316,10 @@ print4 = function(rider) {
 
 print5 = function(rider) {
 
-    if (document.getElementById('-'+rider)) return
+    if (document.getElementById('--'+rider)) return
 
     var caption = document.createElement('caption');
-    caption.innerHTML='<h1>'+rider+'<span class="result" id="-'+rider+'"></span></h1><a onclick="service.delete()">delete</a>'
+    caption.innerHTML='<h1>'+rider+'<span class="result" id="---'+rider+'"></span></h1><a onclick="service.delete()">delete</a>'
 
     var thead = document.createElement('thead');
     thead.innerHTML="<tr><th>Attempt</th><th>Trick</th><th>Score</th><th>Judge</th></tr>"
