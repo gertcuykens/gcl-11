@@ -119,7 +119,7 @@ print3 = function (id,rider,trick,score,attempt,judge){
     row.appendChild(trickf);
     row.appendChild(scoref);
     row.appendChild(judgef);
-    document.getElementById('--'+rider).appendChild(row);
+    $('#--'+rider).prepend(row);
 }
 
 print2 = function(s) {
@@ -134,32 +134,34 @@ print2 = function(s) {
     var attempt=s[i]['attempt']
     var score=s[i]['score']
     var judge=s[i]['judge']
-    print3(id,rider,trick,score,attempt,judge)
     if (!object[rider]) {object[rider]={};}
     if (!object[rider][event]) {object[rider][event]={}}
-    if (!object[rider][event][heat]) {object[rider][event][heat]={};}
-    if (!object[rider][event][heat][attempt]) {object[rider][event][heat][attempt]={}}
-    if (!object[rider][event][heat][attempt][judge]) {object[rider][event][heat][attempt][judge]=[score,trick]}
+    if (!object[rider][event][heat]) {object[rider][event][heat]=[];}
+    if (!object[rider][event][heat][attempt]) {object[rider][event][heat][attempt]=[]}
+    if (!object[rider][event][heat][attempt][judge]) {object[rider][event][heat][attempt][judge]=[score,trick,id]}
   }
   //console.log(object)
 
    var trick={}
    for (rider in object) {
     if(object.hasOwnProperty(rider)){
+
      //console.log(rider)
      if (!trick[rider]) {trick[rider]={};}
      for (event in object[rider]) {
       if(object[rider].hasOwnProperty(event)){
+
        //console.log(event)
        if (!trick[rider][event]) {trick[rider][event]={}}
        for (heat in object[rider][event]) {
-        if(object[rider][event].hasOwnProperty(heat)){
          //console.log(heat)
-         if (!trick[rider][event][heat]) {trick[rider][event][heat]=[]}
+
          var list={}
+
+         if (!trick[rider][event][heat]) {trick[rider][event][heat]=[]}
          for (attempt in object[rider][event][heat]) {
-          if(object[rider][event][heat].hasOwnProperty(attempt)){
            //console.log(attempt)
+
            var name=""
            var max=0
            var score=0
@@ -167,19 +169,24 @@ print2 = function(s) {
            for (judge in object[rider][event][heat][attempt]) {
             if(object[rider][event][heat][attempt].hasOwnProperty(judge)){
              max+=10
+             scorej=object[rider][event][heat][attempt][judge][0]
              score+=object[rider][event][heat][attempt][judge][0]
              score2.push(object[rider][event][heat][attempt][judge][0])
              name=object[rider][event][heat][attempt][judge][1]
+             id=object[rider][event][heat][attempt][judge][2]
+             print3(id,rider,name,scorej,attempt,judge)
              if (!list[name]){list[name]=[score,max,name,score2]}
              else if (list[name][0]<score){list[name]=[score,max,name,score2]}
             }
            }
+
            //console.log(name+':'+score+'/'+max)
-          }
+
          }
+
          var keys = Object.keys(list).sort(function(a,b){return list[b][0]-list[a][0]})
          for (k in keys) {trick[rider][event][heat].push(list[keys[k]])}
-        }
+
        }
       }
      }
@@ -340,6 +347,7 @@ testAPI = function () {
 }
 
 /*
+http://jsfiddle.net/spetnik/gFzCk/1953/
 
 truncateAPI = function () {
   console.log('Browser Facebook, Fetching your information... ');
