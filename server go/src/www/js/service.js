@@ -12,7 +12,8 @@ service.delete = function() {
  var list = []
  $(this).closest('table').children('tbody').children('tr').each(function(){
   if (!$(this).hasClass('active')) {return true}
-  list[i++]={'id':parseInt($(this).attr('id'))}
+  list[i++]={'id':$(this).attr('id')}
+  //list[i++]={'id':parseInt($(this).attr('id'))}
  })
 
   var t= new Tokeng()
@@ -48,9 +49,9 @@ service.submit = function() {
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
   gapi.client.service.datastore.put({"list":[{
-    "id":0,
-    "date":d,
-    "judge":"",
+    //"id":0,
+    //"date":d,
+    //"judge":"",
     "event":"2014",
     "heat":1,
     "rider":$('#rider').val(),
@@ -308,8 +309,13 @@ print5 = function(rider) {
 
     if (document.getElementById('--'+rider)) return
 
+    var del = document.createElement('a');
+    del.innerHTML='delete'
+    del.onclick=service.delete
+
     var caption = document.createElement('caption');
-    caption.innerHTML='<h1>'+rider+'<span class="result" id="---'+rider+'"></span></h1><a class="delete">delete</a>'
+    caption.innerHTML='<h1>'+rider+'<span class="result" id="---'+rider+'"></span></h1>'
+    caption.appendChild(del);
 
     var thead = document.createElement('thead');
     thead.innerHTML="<tr><th>Attempt</th><th>Trick</th><th>Score</th><th>Judge</th></tr>"
@@ -324,8 +330,6 @@ print5 = function(rider) {
     table.appendChild(tbody)
 
     document.getElementById('console2').appendChild(table);
-    $('.delete').each(function(){$(this).click(service.delete)})
-
 }
 
 start = service.list

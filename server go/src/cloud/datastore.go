@@ -8,15 +8,15 @@ import (
 
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
 type Message struct {
-	Id int64 `json:"id" datastore:"-"`
+	Id int64 `json:"id,string" datastore:"-"` //omitempty
     Date time.Time `json:"date"`
 	Judge string `json:"judge"`
 	Event string `json:"event"`
-	Heat int64 `json:"heat"`
+	Heat int `json:"heat"`
 	Rider string `json:"rider"`
 	Trick string `json:"trick"`
-	Score int64 `json:"score"`
-	Attempt int64 `json:"attempt"`
+	Score int `json:"score"`
+	Attempt int `json:"attempt"`
 }
 
 type Entity struct {
