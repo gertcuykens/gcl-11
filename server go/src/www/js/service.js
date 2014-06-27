@@ -73,7 +73,7 @@ service.list = function() {
             resp.list = resp.list || []
             document.getElementById('console2').innerHTML=""
             document.getElementById('console3').innerHTML=""
-            print2(resp.list);
+            mapreduce(resp.list);
         }
       }
   );
@@ -85,37 +85,7 @@ act = function () {
  this.className="active"
 }
 
-print3 = function (id,rider,trick,score,attempt,judge){
-
-   print5(rider)
-
-   var riderf = document.createElement('td');
-   riderf.innerHTML=rider
-
-    var trickf = document.createElement('td');
-    trickf.innerHTML=trick
-
-    var scoref = document.createElement('td');
-    scoref.innerHTML=score
-
-    var attemptf = document.createElement('td');
-    attemptf.innerHTML=attempt
-
-    var judgef = document.createElement('td');
-    judgef.innerHTML=judge
-
-    var row = document.createElement('tr');
-    row.id=id
-    row.onclick=act
-    row.appendChild(attemptf);
-    row.appendChild(trickf);
-    row.appendChild(scoref);
-    row.appendChild(judgef);
-    $('#--'+rider).prepend(row);
-
-}
-
-print2 = function(s) {
+mapreduce = function(s) {
 
   var object = {}
   for (var i = 0; i < s.length; i++) {
@@ -232,7 +202,6 @@ print2 = function(s) {
                  var rider= rank[event][heat][place]
                  var rider2= rider
                  print4(rider)
-                 ///////////TODO:REARANGE
                  if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
                  else {rider2= rank[event][heat][0]}
                  document.getElementById("-"+rider  ).innerHTML=" heat "+heat+" score "+score[event][heat][rider]
@@ -245,6 +214,8 @@ print2 = function(s) {
          }
        }
      }
+
+    print6()
 
     for (rider in trick){
      if(trick.hasOwnProperty(rider)){
@@ -280,11 +251,39 @@ print1 = function(rider,trick,score,score2) {
 
 };
 
+print3 = function (id,rider,trick,score,attempt,judge){
+
+   print5(rider)
+
+   var riderf = document.createElement('td');
+   riderf.innerHTML=rider
+
+    var trickf = document.createElement('td');
+    trickf.innerHTML=trick
+
+    var scoref = document.createElement('td');
+    scoref.innerHTML=score
+
+    var attemptf = document.createElement('td');
+    attemptf.innerHTML=attempt
+
+    var judgef = document.createElement('td');
+    judgef.innerHTML=judge
+
+    var row = document.createElement('tr');
+    row.id=id
+    row.onclick=act
+    row.appendChild(attemptf);
+    row.appendChild(trickf);
+    row.appendChild(scoref);
+    row.appendChild(judgef);
+    $('#--'+rider).prepend(row);
+
+}
+
 print4 = function(rider) {
 
     //if (document.getElementById('-'+rider)) return
-
-    //TODO:RE-ORDER JUDGE TABLE
 
     var caption = document.createElement('caption');
     caption.innerHTML='<h1>'+rider+'<span class="result" id="-'+rider+'"></span></h1>'
@@ -330,6 +329,12 @@ print5 = function(rider) {
     table.appendChild(tbody)
 
     document.getElementById('console2').appendChild(table);
+}
+
+print6 = function() {
+
+ console.log($('#console2').children('table').children('caption').children('h1').children('span'))
+
 }
 
 start = service.list
