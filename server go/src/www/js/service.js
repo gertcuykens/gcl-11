@@ -201,13 +201,17 @@ mapreduce = function(s) {
                  //console.log(rank[event][heat][place])
                  var rider= rank[event][heat][place]
                  var rider2= rider
-                 print4(rider)
                  if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
                  else {rider2= rank[event][heat][0]}
-                 document.getElementById("-"+rider  ).innerHTML=" heat "+heat+" score "+score[event][heat][rider]
-                 document.getElementById("---"+rider).innerHTML=" heat "+heat+" score "+score[event][heat][rider]
+
+                 print4(rider, score[event][heat][rider])
+                 //TODO:clean
+                 document.getElementById("-"+rider  ).innerHTML=" score "+score[event][heat][rider]
+                 $('#--'+rider).data('score',score[event][heat][rider])
+                 document.getElementById("---"+rider).innerHTML=" score "+score[event][heat][rider]
                  document.getElementById("-"+rider  ).innerHTML+=" difference "+(score[event][heat][rider]-score[event][heat][rider2])
                  document.getElementById("---"+rider).innerHTML+=" difference "+(score[event][heat][rider]-score[event][heat][rider2])
+
                }
               }
             }
@@ -215,7 +219,7 @@ mapreduce = function(s) {
        }
      }
 
-    print6()
+    $('#console2').tsort('table tbody',{data:'score'});
 
     for (rider in trick){
      if(trick.hasOwnProperty(rider)){
@@ -281,7 +285,7 @@ print3 = function (id,rider,trick,score,attempt,judge){
 
 }
 
-print4 = function(rider) {
+print4 = function(rider,score) {
 
     //if (document.getElementById('-'+rider)) return
 
@@ -293,6 +297,7 @@ print4 = function(rider) {
 
     var tbody = document.createElement('tbody');
     tbody.id=rider
+    $(tbody).data('score',score)
 
     var table = document.createElement('table');
     table.className="table table-hover"
@@ -329,12 +334,6 @@ print5 = function(rider) {
     table.appendChild(tbody)
 
     document.getElementById('console2').appendChild(table);
-}
-
-print6 = function() {
-
- console.log($('#console2').children('table').children('caption').children('h1').children('span'))
-
 }
 
 start = service.list
