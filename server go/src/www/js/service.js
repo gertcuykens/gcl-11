@@ -219,7 +219,11 @@ mapreduce = function(s) {
        }
      }
 
-    $('#console2').tsort('table tbody',{data:'score'});
+     $('#console2 table').sort(function(a,b){
+        return $(b).children('tbody').data('score') - $(a).children('tbody').data('score')
+     }).each(function(i,v){
+      $('#console2').append(v)
+     })
 
     for (rider in trick){
      if(trick.hasOwnProperty(rider)){
