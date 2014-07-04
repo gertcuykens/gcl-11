@@ -6,22 +6,18 @@ p {
  font-family: 'Helvetica Neue', Helvetica, Arial, 'lucida grande',tahoma,verdana,arial,sans-serif;}
 }
 
-caption {text-align:left;}
-
 .container {
  position:relative;
  height:100%;
 }
 
-.result {
- font-size: 18px;
-}
+.result {font-size: 18px;}
 
 h1 {margin:0px;}
 
 table caption {text-align:left;}
 table {position:relative;}
-table caption a {position:absolute;top:60px; right:0px;}
+table caption a {position:absolute; top:60px; right:0px;}
 
 /*
 #login {border-bottom: 1px solid transparent;}
