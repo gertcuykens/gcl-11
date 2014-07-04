@@ -61,6 +61,17 @@ service.submit = function() {
   }]}).execute(function(resp){service.list()})
 };
 
+service.submit2 = function() {
+  var d = new Date()
+  var t= new Tokeng()
+  t.access_token = FB.getAccessToken()
+  gapi.auth.setToken(t)
+  gapi.client.service.datastore.put2({"list":[{
+    "event":"2014",
+    "heat":1,
+  }]}).execute(function(resp){service.list2()})
+};
+
 service.list = function() {
   document.getElementById('console2').innerHTML="Loading..."
   document.getElementById('console3').innerHTML="Loading..."
@@ -79,16 +90,35 @@ service.list = function() {
   );
 };
 
+service.list2 = function() {
+  var t= new Tokeng()
+  t.access_token = FB.getAccessToken()
+  gapi.auth.setToken(t)
+  gapi.client.service.datastore.get2().execute(
+      function(resp) {
+        if (!resp.code) {
+            resp.list = resp.list || []
+            console.log(resp.list)
+        }
+      }
+  );
+};
+
 act = function () {
  if (this.className=="active") {this.className="";return;}
  for (r in $(this).parent('tbody').children('tr')){$(this).parent('tbody').children('tr')[r].className=""}
  this.className="active"
 }
 
+heatf = function (s) {
+ console.log(s)
+}
+
 mapreduce = function(s) {
 
   var object = {}
   for (var i = 0; i < s.length; i++) {
+    if (s[i]['id']==0){heatf(s[i]);continue;}
     var id=s[i]['id']
     var rider=s[i]['rider']
     var event=s[i]['event']
@@ -159,6 +189,7 @@ mapreduce = function(s) {
 
      var score={}
      for (var i = 0; i < s.length; i++) {
+       if (s[i]['id']==0){heatf(s[i]);continue;}
        var rider=s[i]['rider']
        var event=s[i]['event']
        var heat=s[i]['heat']

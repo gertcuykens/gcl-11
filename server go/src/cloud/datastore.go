@@ -39,9 +39,27 @@ func (s *DataStore) Put(u string) (err error) {
 	return nil
 }
 
+func (s *DataStore) Put2(u string) (err error) {
+	key := datastore.NewKey(s.Context, "tarifa", "current", 0, s.Root)
+	for _,m := range s.Entity.List {
+		m.Judge=u
+		m.Date=time.Now()
+		key, err = datastore.Put(s.Context, key, m)
+	}
+	return nil
+}
+
 func (s *DataStore) Get() (err error) {
 	for _,m := range s.Entity.List {
 		key := datastore.NewKey(s.Context, "tarifa", "", m.Id, s.Root)
+		err = datastore.Get(s.Context, key, m)
+	}
+	return nil
+}
+
+func (s *DataStore) Get2() (err error) {
+	for _,m := range s.Entity.List {
+		key := datastore.NewKey(s.Context, "tarifa", "current", 0, s.Root)
 		err = datastore.Get(s.Context, key, m)
 	}
 	return nil

@@ -54,7 +54,9 @@ func init() {
 	scope := []string{}
 	rpc(api, scope, "GetAll", "datastore.getall", "POST", "datastore/getall", "Get all.")
 	rpc(api, scope, "Get", "datastore.get", "POST", "datastore/get", "Get.")
+	rpc(api, scope, "Get2", "datastore.get2", "POST", "datastore/get2", "Get2.")
 	rpc(api, scope, "Put", "datastore.put", "POST", "datastore/put", "Put.")
+	rpc(api, scope, "Put2", "datastore.put2", "POST", "datastore/put2", "Put2.")
 	rpc(api, scope, "Delete", "datastore.delete", "POST", "datastore/delete", "Delete.")
 	rpc(api, scope, "Truncate", "datastore.truncate", "POST", "datastore/truncate", "Truncate.")
 	rpc(api, scope, "Editor", "datastore.editor", "POST", "datastore/editor", "Editor.")

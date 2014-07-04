@@ -115,6 +115,26 @@ func (s *Service) Get(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) erro
 	return nil
 }
 
+func (s *Service) Get2(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) error {
+	c := endpoints.NewContext(r)
+
+	//s.Status="no authentication"
+	//var a = &Accounts{}
+	//if !a.editor(c,r) {return s}
+	//s.Status="ok"
+
+	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+	d := cloud.DataStore {
+		Root:  k,
+		Entity: &cloud.Entity{},
+		Context: c,
+	}
+	d.Get2()
+
+	*resp = *d.Entity
+	return nil
+}
+
 func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
 
@@ -133,6 +153,29 @@ func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) erro
 		Context: c,
 	}
 	d.Put(u.Name)
+
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) Put2(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
+	c := endpoints.NewContext(r)
+
+	s.Status="no authentication"
+	var a = &Accounts{}
+	if !a.editor(c,r) {return s}
+	s.Status="ok"
+
+	var u = &User{}
+	u.set(c,r)
+
+	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+	d := cloud.DataStore {
+		Root:  k,
+		Entity: m,
+		Context: c,
+	}
+	d.Put2(u.Name)
 
 	*resp = *d.Entity
 	return nil
