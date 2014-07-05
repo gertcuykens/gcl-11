@@ -2,12 +2,12 @@ package init
 
 import (
 	"net/http"
-	"github.com/crhym3/go-endpoints/endpoints"
 	"appengine/datastore"
 	"cloud"
 	"appengine/urlfetch"
 	"encoding/json"
 	"io/ioutil"
+	"appengine"
 )
 
 type Data struct {
@@ -19,7 +19,7 @@ type Accounts struct {
 	Data []Data `json:"data"`
 }
 
-func (a *Accounts) editor(c endpoints.Context, r *http.Request) bool {
+func (a *Accounts) editor(c appengine.Context, r *http.Request) bool {
 	//t := r.Header.Get("Authorization")
 	//c.Infof("============%s",t[7:])
 
@@ -50,7 +50,7 @@ type User struct {
 	Email []string `json:"email"`
 }
 
-func (u *User) set(c endpoints.Context, r *http.Request) error {
+func (u *User) set(c appengine.Context, r *http.Request) error {
     //t := r.Header.Get("Authorization")
 	//c.Infof("============%s",t[7:])
 
@@ -67,7 +67,10 @@ func (u *User) set(c endpoints.Context, r *http.Request) error {
 }
 
 func (s *Service) Editor(r *http.Request,  _ *cloud.Entity, _ *cloud.Entity) error {
-	c := endpoints.NewContext(r)
+	c2 := appengine.NewContext(r)
+	c, err := appengine.Namespace(c2, "")
+	if err != nil {return err}
+
 	s.Status="no authentication"
 	var a = &Accounts{}
 	if !a.editor(c,r) {return s}
@@ -76,7 +79,9 @@ func (s *Service) Editor(r *http.Request,  _ *cloud.Entity, _ *cloud.Entity) err
 }
 
 func (s *Service) GetHeat(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
-	c := endpoints.NewContext(r)
+	c2 := appengine.NewContext(r)
+	c, err := appengine.Namespace(c2, "")
+	if err != nil {return err}
 
 	//s.Status="No authentication."
 	//var a = &Accounts{}
@@ -96,7 +101,9 @@ func (s *Service) GetHeat(r *http.Request, m *cloud.Entity, resp *cloud.Entity) 
 }
 
 func (s *Service) Get(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
-	c := endpoints.NewContext(r)
+	c2 := appengine.NewContext(r)
+	c, err := appengine.Namespace(c2, "")
+	if err != nil {return err}
 
 	//s.Status="no authentication"
 	//var a = &Accounts{}
@@ -116,7 +123,9 @@ func (s *Service) Get(r *http.Request, m *cloud.Entity, resp *cloud.Entity) erro
 }
 
 func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
-	c := endpoints.NewContext(r)
+	c2 := appengine.NewContext(r)
+	c, err := appengine.Namespace(c2, "")
+	if err != nil {return err}
 
 	s.Status="no authentication"
 	var a = &Accounts{}
@@ -139,7 +148,9 @@ func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) erro
 }
 
 func (s *Service) Delete(r *http.Request, m *cloud.Entity, _ *cloud.Entity) error {
-	c := endpoints.NewContext(r)
+	c2 := appengine.NewContext(r)
+	c, err := appengine.Namespace(c2, "")
+	if err != nil {return err}
 
 	s.Status="no authentication"
 	var a = &Accounts{}
@@ -158,7 +169,9 @@ func (s *Service) Delete(r *http.Request, m *cloud.Entity, _ *cloud.Entity) erro
 }
 
 func (s *Service) Truncate(r *http.Request, m *cloud.Entity, _ *cloud.Entity) error {
-	c := endpoints.NewContext(r)
+	c2 := appengine.NewContext(r)
+	c, err := appengine.Namespace(c2, "")
+	if err != nil {return err}
 
 	s.Status="no authentication"
 	var a = &Accounts{}

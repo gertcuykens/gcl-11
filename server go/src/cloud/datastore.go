@@ -1,9 +1,9 @@
 package cloud
 
 import (
-	"github.com/crhym3/go-endpoints/endpoints"
 	"appengine/datastore"
 	"time"
+	"appengine"
 )
 
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
@@ -26,7 +26,7 @@ type Entity struct {
 type DataStore struct {
 	Root *datastore.Key
 	Entity *Entity
-	Context endpoints.Context
+	Context appengine.Context
 }
 
 func (s *DataStore) Put(u string) (err error) {
