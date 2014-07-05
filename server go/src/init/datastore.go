@@ -94,7 +94,29 @@ func (s *Service) GetHeat(r *http.Request, m *cloud.Entity, resp *cloud.Entity) 
 		Entity: &cloud.Entity{},
 		Context: c,
 	}
-	d.GetHeat(m.List[0].Event, m.List[0].Heat)
+	d.GetHeat(m.List[0].Event, m.List[0].Division, m.List[0].Heat)
+
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) GetFirst(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
+	c2 := appengine.NewContext(r)
+	c, err := appengine.Namespace(c2, "")
+	if err != nil {return err}
+
+	//s.Status="No authentication."
+	//var a = &Accounts{}
+	//if !a.editor(c,r) {return s}
+	//s.Status="ok"
+
+	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+	d := cloud.DataStore {
+		Root:  k,
+		Entity: &cloud.Entity{},
+		Context: c,
+	}
+	d.GetFirst(m.List[0].Event)
 
 	*resp = *d.Entity
 	return nil

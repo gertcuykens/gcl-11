@@ -12,6 +12,7 @@ type Message struct {
     Date time.Time `json:"date"`
 	Judge string `json:"judge"`
 	Event string `json:"event" datastore:"-"`
+	Division string `json:"division"`
 	Heat int `json:"heat"`
 	Rider string `json:"rider"`
 	Trick string `json:"trick"`
@@ -48,8 +49,8 @@ func (s *DataStore) Get(e string, id int64) (err error) {
 	return nil
 }
 
-func (s *DataStore) GetHeat(e string, h int) (err error) {
-	q := datastore.NewQuery(e).Ancestor(s.Root).Filter("Heat =", h).Order("-Date")
+func (s *DataStore) GetHeat(e string, d string, h int) (err error) {
+	q := datastore.NewQuery(e).Ancestor(s.Root).Filter("Division =", d).Filter("Heat =", h).Order("-Date")
 	for t := q.Run(s.Context);; {
 		var m Message
 		m.Event=e
@@ -59,6 +60,18 @@ func (s *DataStore) GetHeat(e string, h int) (err error) {
 		m.Id = k.IntID()
 		s.Entity.List = append(s.Entity.List, &m)
 	}
+	return nil
+}
+
+func (s *DataStore) GetFirst(e string) (err error) {
+	q := datastore.NewQuery(e).Ancestor(s.Root).Order("-Date")
+	t := q.Run(s.Context)
+	var m Message
+	m.Event=e
+	k, err := t.Next(&m)
+	if err != nil {return err}
+	m.Id = k.IntID()
+	s.Entity.List = append(s.Entity.List, &m)
 	return nil
 }
 

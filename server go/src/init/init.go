@@ -55,6 +55,7 @@ func init() {
 	if err != nil {panic(err.Error())}
 	scope := []string{}
 	rpc(api, scope, "GetHeat", "datastore.getHeat", "POST", "datastore/getHeat", "Get heat.")
+	rpc(api, scope, "GetFirst", "datastore.getFirst", "POST", "datastore/getFirst", "Get first.")
 	rpc(api, scope, "Get", "datastore.get", "POST", "datastore/get", "Get.")
 	rpc(api, scope, "Put", "datastore.put", "POST", "datastore/put", "Put.")
 	rpc(api, scope, "Delete", "datastore.delete", "POST", "datastore/delete", "Delete.")

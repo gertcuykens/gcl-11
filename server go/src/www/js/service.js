@@ -53,6 +53,7 @@ service.submit = function() {
     //"date":d,
     //"judge":"",
     "event":$('#event').val(),
+    "division":$('#division').val(),
     "heat":parseInt($('#heat').val(), 10),
     "rider":$('#rider').val(),
     "trick":$('#trick').val(),
@@ -69,6 +70,7 @@ service.list = function() {
   gapi.auth.setToken(t)
   gapi.client.service.datastore.getHeat({"list":[{
                                             "event":$('#event').val(),
+                                            "division":$('#division').val(),
                                             "heat":parseInt($('#heat').val(), 10),
                                           }]}
   ).execute(
@@ -77,8 +79,22 @@ service.list = function() {
             resp.list = resp.list || []
             document.getElementById('console2').innerHTML=""
             document.getElementById('console3').innerHTML=""
-            if (resp.list[0]){heatf(resp.list[0])}
             mapreduce(resp.list);
+        }
+      }
+  );
+};
+
+service.getFirst = function() {
+  var t= new Tokeng()
+  t.access_token = FB.getAccessToken()
+  gapi.auth.setToken(t)
+  gapi.client.service.datastore.getFirst({"list":[{"event":$('#event').val(),}]}).execute(
+      function(resp) {
+        if (!resp.code) {
+            resp.list = resp.list || []
+            if (resp.list[0]){heatf(resp.list[0])}
+            service.list()
         }
       }
   );
@@ -91,15 +107,18 @@ act = function () {
 }
 
 heatf = function (s) {
- $('#heat2').html(s['event']+' Heat '+s['heat'])
- $('#heat3').html(s['event']+' Heat '+s['heat'])
+ $('#heat2').html(s['event']+' '+s['division']+' Heat '+s['heat'])
+ $('#heat3').html(s['event']+' '+s['division']+' Heat '+s['heat'])
  $('#event').attr('value',s['event'])
+ $('#division').attr('value',s['division'])
  $('#heat').attr('value',s['heat'])
 }
 
 heatb = function (v) {
+ var e=$('#event').attr('value')
  var h=parseInt($('#heat').attr('value'))
- $('#heat').attr('value',h+v)
+ var d=$('#division').attr('value')
+ heatf({'event':e,'division':d,'heat':h+v})
  service.list()
 }
 
@@ -357,9 +376,9 @@ print5 = function(rider) {
     document.getElementById('console2').appendChild(table);
 }
 
-start = service.list
+start = service.getFirst
 
-stop = service.list
+stop = service.getFirst
 
 view = function(x) {
     switch(x){
