@@ -21,11 +21,16 @@
 
             </div>
 
-            <div id="form2" style="display:none;">
+            <div id="form2" style="display:block;">
 
                 <div class="row" style="margin-top:10px;">
-                    <div class="col-xs-8 col-md-10"><h1 onclick="service.list()">Tarifa 2014 WM Heat 1</h1></div>
+                    <div class="col-xs-8 col-md-10"><h1 id="heat2" onclick="service.list()">Loading...</h1></div>
                     <div class="col-xs-4 col-md-2"><input onclick="service.submit()" id="submitButton" type="button" class="btn btn-default btn-lg btn-block" value="Submit"/></div>
+                </div>
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-6"><input id="event" class="form-control input-lg" placeholder="Event" value="Tarifa 2014 WM"/></div>
+                    <div class="col-xs-6"><input id="heat" class="form-control input-lg" placeholder="Heat" value="1"/></div>
                 </div>
 
                 <div class="row" style="margin-top:10px;">
@@ -51,9 +56,9 @@
             <div id="form3" style="display:block;">
 
                 <div class="row" style="margin-top:10px;">
-                    <div class="col-xs-6"><h1 onclick="service.list()">Tarifa 2014 WM Heat 1</h1></div>
-                    <div class="col-xs-3"><input onclick="view(2)" type="button" class="btn btn-default btn-lg btn-block" value="Previous"/></div>
-                    <div class="col-xs-3"><input onclick="view(2)" type="button" class="btn btn-default btn-lg btn-block" value="Next"/></div>
+                    <div class="col-xs-6"><h1 id="heat3" onclick="service.list()">Loading...</h1></div>
+                    <div class="col-xs-3"><input onclick="heatb(-1)" type="button" class="btn btn-default btn-lg btn-block" value="Previous"/></div>
+                    <div class="col-xs-3"><input onclick="heatb(1)" type="button" class="btn btn-default btn-lg btn-block" value="Next"/></div>
                 </div>
 
                 <div id="console3" style="margin-top:20px;"></div>

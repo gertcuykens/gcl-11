@@ -17,9 +17,19 @@ $(document).ready(function() {
     });
 
     FB.getLoginStatus(function(response){
-        $.getScript('//apis.google.com/js/client:plusone.js?onload=load');
+
+        $.getScript('//apis.google.com/js/client.js?onload=load',function(){
+            console.log('Loading Google API')
+            //var apisToLoad = 2;
+            //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
+            //var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+            //gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
+            //gapi.client.load('oauth2', 'v2', function(){});
+        });
+
         if (!FB.getAccessToken()){signin()}
         console.log(response)
+
     });
 
   });
@@ -28,40 +38,25 @@ $(document).ready(function() {
 
 signin = function() {
     var b=document.getElementById('fsigninButton')
-    b.removeEventListener('click', fsignout);
-    b.addEventListener('click',fsignin)
+    b.removeEventListener('click', signout2);
+    b.addEventListener('click',signin2)
     b.value="Sign in"
     b.style.display="block";
 }
 
 signout = function() {
     var b=document.getElementById('fsigninButton')
-    b.removeEventListener('click', fsignin)
-    b.addEventListener('click',fsignout)
+    b.removeEventListener('click', signin2)
+    b.addEventListener('click',signout2)
     b.value="Sign out"
     b.style.display="block";
 }
 
-fsignin = function() {FB.login(function(response){start()}, {scope: 'email,publish_actions,manage_pages'})}
+signin2 = function() {FB.login(function(response){start()}, {scope: 'email,publish_actions,manage_pages'})}
 
-fsignout = function() {FB.logout(); stop();}
+signout2 = function() {FB.logout(); stop();}
 
-load = function () {
-    console.log('Loading Google API')
-    //var apisToLoad = 2;
-    //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
+load = function() {
     var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
     gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
-    //gapi.client.load('oauth2', 'v2', function(){});
-};
-
-/*
-$(document).ready(function() {
-  $.ajaxSetup({ cache: true });
-  $.getScript('//connect.facebook.net/en_UK/all.js', function(){
-    FB.init({appId: FACEBOOK_CLIENT_ID,});
-    $('#loginbutton,#feedbutton').removeAttr('disabled');
-    FB.getLoginStatus(updateStatusCallback);
-  });
-});
-*/
+}

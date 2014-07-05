@@ -11,7 +11,7 @@ type Message struct {
 	Id int64 `json:"id,string" datastore:"-"` //omitempty
     Date time.Time `json:"date"`
 	Judge string `json:"judge"`
-	Event string `json:"event"`
+	Event string `json:"event" datastore:"-"`
 	Heat int `json:"heat"`
 	Rider string `json:"rider"`
 	Trick string `json:"trick"`
@@ -30,8 +30,8 @@ type DataStore struct {
 }
 
 func (s *DataStore) Put(u string) (err error) {
-	key := datastore.NewKey(s.Context, "tarifa", "", 0, s.Root)
 	for _,m := range s.Entity.List {
+		key := datastore.NewKey(s.Context, m.Event, "", 0, s.Root)
 		m.Judge=u
 		m.Date=time.Now()
 		key, err = datastore.Put(s.Context, key, m)
@@ -39,36 +39,20 @@ func (s *DataStore) Put(u string) (err error) {
 	return nil
 }
 
-func (s *DataStore) Put2(u string) (err error) {
-	key := datastore.NewKey(s.Context, "tarifa", "current", 0, s.Root)
-	for _,m := range s.Entity.List {
-		m.Judge=u
-		m.Date=time.Now()
-		key, err = datastore.Put(s.Context, key, m)
-	}
+func (s *DataStore) Get(e string, id int64) (err error) {
+	var m Message
+	m.Event=e
+	key := datastore.NewKey(s.Context, e, "", id, s.Root)
+	err = datastore.Get(s.Context, key, &m)
+	s.Entity.List = append(s.Entity.List, &m)
 	return nil
 }
 
-func (s *DataStore) Get() (err error) {
-	for _,m := range s.Entity.List {
-		key := datastore.NewKey(s.Context, "tarifa", "", m.Id, s.Root)
-		err = datastore.Get(s.Context, key, m)
-	}
-	return nil
-}
-
-func (s *DataStore) Get2() (err error) {
-	for _,m := range s.Entity.List {
-		key := datastore.NewKey(s.Context, "tarifa", "current", 0, s.Root)
-		err = datastore.Get(s.Context, key, m)
-	}
-	return nil
-}
-
-func (s *DataStore) GetAll() (err error) {
-	q := datastore.NewQuery("tarifa").Ancestor(s.Root).Order("-Date")
+func (s *DataStore) GetHeat(e string, h int) (err error) {
+	q := datastore.NewQuery(e).Ancestor(s.Root).Filter("Heat =", h).Order("-Date")
 	for t := q.Run(s.Context);; {
 		var m Message
+		m.Event=e
 		k, err := t.Next(&m)
 		if err == datastore.Done {err=nil; break}
 		if err != nil {break}
@@ -80,14 +64,14 @@ func (s *DataStore) GetAll() (err error) {
 
 func (s *DataStore) Delete() (err error) {
 	for _, m := range s.Entity.List {
-		key := datastore.NewKey(s.Context, "tarifa", "", m.Id, s.Root)
-		datastore.Delete(s.Context,key)
+		key := datastore.NewKey(s.Context, m.Event, "", m.Id, s.Root)
+		datastore.Delete(s.Context, key)
 	}
 	return nil
 }
 
-func (s *DataStore) Truncate() (err error) {
-	q := datastore.NewQuery("tarifa")
+func (s *DataStore) Truncate(e string) (err error) {
+	q := datastore.NewQuery(e)
 	var m []Message
 	keys, err := q.GetAll(s.Context, &m)
 	if err != nil {return err}
@@ -96,3 +80,25 @@ func (s *DataStore) Truncate() (err error) {
 }
 
 //s.Context.Infof("==========>%v",m)
+
+/*
+func (s *DataStore) Get2() (err error) {
+	var m Message
+	key := datastore.NewKey(s.Context, "tarifa", "current", 0, s.Root)
+	err = datastore.Get(s.Context, key, &m)
+	s.Entity.List = append(s.Entity.List, &m)
+	return nil
+}
+*/
+
+/*
+func (s *DataStore) Put2(u string) (err error) {
+	key := datastore.NewKey(s.Context, "tarifa", "current", 0, s.Root)
+	for _,m := range s.Entity.List {
+		m.Judge=u
+		m.Date=time.Now()
+		key, err = datastore.Put(s.Context, key, m)
+	}
+	return nil
+}
+*/
