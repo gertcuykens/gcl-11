@@ -106,8 +106,8 @@ act = function () {
 }
 
 heatf = function (s) {
- $('#heat2').html(s['event']+' '+s['division']+' Heat '+s['heat'])
- $('#heat3').html(s['event']+' '+s['division']+' Heat '+s['heat'])
+ $('#heat2').html(s['event']+' '+s['division']+' heat '+s['heat'])
+ $('#heat3').html(s['event']+' '+s['division']+' heat '+s['heat'])
  $('#event').attr('value',s['event'])
  $('#division').val(s['division'])
  $('#heat').attr('value',s['heat'])
@@ -126,7 +126,7 @@ division = function () {
  var h=parseInt($('#heat').attr('value'))
  var d=$('#division').val()
  switch (d) {
-  case "men": $('#division').val('women'); break;
+  case "men": $('#division').val('woman'); break;
   default: $('#division').val('men'); break;
  }
  d=$('#division').val()
@@ -134,57 +134,42 @@ division = function () {
 }
 
 mapreduce = function(s) {
-  //TODO: clean event heat
   var object = {}
   for (var i = 0; i < s.length; i++) {
     var id=s[i]['id']
     var rider=s[i]['rider']
-    var event=s[i]['event']
-    var heat=s[i]['heat']
     var trick=s[i]['trick']
     var attempt=s[i]['attempt']
     var score=s[i]['score']
     var judge=s[i]['judge']
-    if (!object[rider]) {object[rider]={};}
-    if (!object[rider][event]) {object[rider][event]={}}
-    if (!object[rider][event][heat]) {object[rider][event][heat]=[];}
-    if (!object[rider][event][heat][attempt]) {object[rider][event][heat][attempt]=[]}
-    if (!object[rider][event][heat][attempt][judge]) {object[rider][event][heat][attempt][judge]=[score,trick,id]}
+    if (!object[rider]) {object[rider]=[];print4(rider);}
+    if (!object[rider][attempt]) {object[rider][attempt]={}}
+    if (!object[rider][attempt][judge]) {object[rider][attempt][judge]=[score,trick,id]}
   }
-  //console.log(object)
+  console.log(object)
 
    var trick={}
    for (rider in object) {
     if(object.hasOwnProperty(rider)){
 
-     //console.log(rider)
-     if (!trick[rider]) {trick[rider]={};}
-     for (event in object[rider]) {
-      if(object[rider].hasOwnProperty(event)){
-
-       //console.log(event)
-       if (!trick[rider][event]) {trick[rider][event]={}}
-       for (heat in object[rider][event]) {
-         //console.log(heat)
-
          var list={}
 
-         if (!trick[rider][event][heat]) {trick[rider][event][heat]=[]}
-         for (attempt in object[rider][event][heat]) {
+         if (!trick[rider]) {trick[rider]=[]}
+         for (attempt in object[rider]) {
            //console.log(attempt)
 
            var name=""
            var max=0
            var score=0
            var score2=[]
-           for (judge in object[rider][event][heat][attempt]) {
-            if(object[rider][event][heat][attempt].hasOwnProperty(judge)){
+           for (judge in object[rider][attempt]) {
+            if(object[rider][attempt].hasOwnProperty(judge)){
              max+=10
-             scorej=object[rider][event][heat][attempt][judge][0]
-             score+=object[rider][event][heat][attempt][judge][0]
-             score2.push(object[rider][event][heat][attempt][judge][0])
-             name=object[rider][event][heat][attempt][judge][1]
-             id=object[rider][event][heat][attempt][judge][2]
+             scorej=object[rider][attempt][judge][0]
+             score+=object[rider][attempt][judge][0]
+             score2.push(object[rider][attempt][judge][0])
+             name=object[rider][attempt][judge][1]
+             id=object[rider][attempt][judge][2]
              print3(id,rider,name,scorej,attempt,judge)
              if (!list[name]){list[name]=[score,max,name,score2]}
              else if (list[name][0]<score){list[name]=[score,max,name,score2]}
@@ -196,98 +181,79 @@ mapreduce = function(s) {
          }
 
          var keys = Object.keys(list).sort(function(a,b){return list[b][0]-list[a][0]})
-         for (k in keys) {trick[rider][event][heat].push(list[keys[k]])}
+         for (k in keys) {
+         trick[rider].push(list[keys[k]])
 
-       }
-      }
+
+         }
+
      }
     }
-   }
-   //console.log(trick)
+    console.log(trick)
 
-     var score={}
-     for (var i = 0; i < s.length; i++) {
-       var rider=s[i]['rider']
-       var event=s[i]['event']
-       var heat=s[i]['heat']
-       if (!score[event]) {score[event]={}}
-       if (!score[event][heat]) {score[event][heat]=[]}
-       if (!score[event][heat][rider]) {
-        var count=0
-        var total=0
-        for (t in trick[rider][event][heat]) {total+=trick[rider][event][heat][t][0]}
-        count++
-        if (count>5){break}
-        score[event][heat][rider]=total
-       }
-     }
-     //console.log(score)
+    for (rider in trick){
+     if(trick.hasOwnProperty(rider)){
 
-     var rank={}
-     for (event in score) {
-       if(score.hasOwnProperty(event)){
-         if (!rank[event]) {rank[event]={}}
-         for (heat in score[event]) {
-            if(score[event].hasOwnProperty(heat)){
-                  if (!rank[event][heat]) {rank[event][heat]=[]}
-                  var list = score[event][heat]
-                  rank[event][heat]=Object.keys(list).sort(function(a,b){return list[b]-list[a]})
-            }
-         }
-       }
-     }
-     //console.log(rank)
 
-     for (event in rank) {
-       if(rank.hasOwnProperty(event)){
-         //console.log(event)
-         for (heat in rank[event]) {
-            if(rank[event].hasOwnProperty(heat)){
-              //console.log(heat)
-              for (place in rank[event][heat]) {
-               if(rank[event][heat].hasOwnProperty(place)){
-                 //console.log(rank[event][heat][place])
-                 var rider= rank[event][heat][place]
-                 var rider2= rider
-                 if (place=='0' && rank[event][heat][parseInt(place)+1]) {rider2= rank[event][heat][parseInt(place)+1]}
-                 else {rider2= rank[event][heat][0]}
+               for (score in trick[rider]){
 
-                 print4(rider, score[event][heat][rider])
-                 //TODO:clean
-                 document.getElementById("-"+rider  ).innerHTML=" score "+score[event][heat][rider]
-                 $('#--'+rider).data('score',score[event][heat][rider])
-                 document.getElementById("---"+rider).innerHTML=" score "+score[event][heat][rider]
-                 document.getElementById("-"+rider  ).innerHTML+=" difference "+(score[event][heat][rider]-score[event][heat][rider2])
-                 document.getElementById("---"+rider).innerHTML+=" difference "+(score[event][heat][rider]-score[event][heat][rider2])
+  print1(rider,trick[rider][score][2],trick[rider][score][0],trick[rider][score][3])
 
                }
-              }
-            }
-         }
+
+     }
+    }
+
+     var score={}
+     for (rider in trick) {
+       if (trick.hasOwnProperty(rider)) {
+        var count=0
+        var total=0
+        for (t in trick[rider]) {total+=trick[rider][t][0]}
+        count++
+        if (count>5){break}
+        score[rider]=total
        }
+     }
+     console.log(score)
+
+     var keys=Object.keys(score).sort(function(a,b){return score[b]-score[a]})
+
+     var rider
+     if (keys[0]) rider=keys[0]
+     for (k in keys) {
+
+         var rider2= keys[k]
+
+          document.getElementById("-"+rider2  ).innerHTML=" score "+score[rider2]
+          $('#--'+rider2).data('score',score[rider2])
+          $('#'+rider2).data('score',score[rider2])
+          document.getElementById("---"+rider2).innerHTML=" score "+score[rider2]
+
+          if (k=='0' && keys[parseInt(k)+1]) {
+                 rider2= keys[parseInt(k)+1]
+                 console.log(rider)
+                 console.log(rider2)
+                 document.getElementById("-"+rider  ).innerHTML+=" difference "+(score[rider]-score[rider2])
+                 document.getElementById("---"+rider).innerHTML+=" difference "+(score[rider]-score[rider2])
+          } else {
+                 document.getElementById("-"+rider2  ).innerHTML+=" difference "+(score[rider2]-score[rider])
+                 document.getElementById("---"+rider2).innerHTML+=" difference "+(score[rider2]-score[rider])
+          }
+
      }
 
      $('#console2 table').sort(function(a,b){
         return $(b).children('tbody').data('score') - $(a).children('tbody').data('score')
      }).each(function(i,v){
-      $('#console2').append(v)
+        $('#console2').append(v)
      })
 
-    for (rider in trick){
-     if(trick.hasOwnProperty(rider)){
-         for (event in trick[rider]){
-          if(trick[rider].hasOwnProperty(event)){
-            for (heat in trick[rider][event]){
-
-               for (score in trick[rider][event][heat]){
-                   print1(rider,trick[rider][event][heat][score][2],trick[rider][event][heat][score][0],trick[rider][event][heat][score][3])
-               }
-
-            }
-          }
-        }
-      }
-    }
+      $('#console3 table').sort(function(a,b){
+         return $(b).children('tbody').data('score') - $(a).children('tbody').data('score')
+      }).each(function(i,v){
+         $('#console3').append(v)
+      })
 
 };
 
@@ -337,7 +303,7 @@ print3 = function (id,rider,trick,score,attempt,judge){
 
 }
 
-print4 = function(rider,score) {
+print4 = function(rider) {
 
     //if (document.getElementById('-'+rider)) return
 
@@ -349,7 +315,7 @@ print4 = function(rider,score) {
 
     var tbody = document.createElement('tbody');
     tbody.id=rider
-    $(tbody).data('score',score)
+    //$(tbody).data('score',score)
 
     var table = document.createElement('table');
     table.className="table table-hover"
