@@ -94,7 +94,6 @@ service.getFirst = function() {
         if (!resp.code) {
             resp.list = resp.list || []
             if (resp.list[0]){heatf(resp.list[0])}
-            service.list()
         }
       }
   );
@@ -110,19 +109,32 @@ heatf = function (s) {
  $('#heat2').html(s['event']+' '+s['division']+' Heat '+s['heat'])
  $('#heat3').html(s['event']+' '+s['division']+' Heat '+s['heat'])
  $('#event').attr('value',s['event'])
- $('#division').attr('value',s['division'])
+ $('#division').val(s['division'])
  $('#heat').attr('value',s['heat'])
+ service.list()
 }
 
 heatb = function (v) {
  var e=$('#event').attr('value')
+ var d=$('#division').val()
  var h=parseInt($('#heat').attr('value'))
- var d=$('#division').attr('value')
  heatf({'event':e,'division':d,'heat':h+v})
- service.list()
+}
+
+division = function () {
+ var e=$('#event').attr('value')
+ var h=parseInt($('#heat').attr('value'))
+ var d=$('#division').val()
+ switch (d) {
+  case "men": $('#division').val('women'); break;
+  default: $('#division').val('men'); break;
+ }
+ d=$('#division').val()
+ heatf({'event':e,'division':d,'heat':h})
 }
 
 mapreduce = function(s) {
+  //TODO: clean event heat
   var object = {}
   for (var i = 0; i < s.length; i++) {
     var id=s[i]['id']

@@ -30,7 +30,13 @@
 
                 <div class="row" style="margin-top:10px;">
                     <div class="col-xs-4"><input id="event" class="form-control input-lg" placeholder="Event" value="Tarifa 2014"/></div>
-                    <div class="col-xs-4"><input id="division" class="form-control input-lg" placeholder="Division"/></div>
+                    <div class="col-xs-4">
+                        <!--input  class="form-control input-lg" placeholder="Division"/-->
+                        <select id="division" class="form-control input-lg">
+                            <option>men</option>
+                            <option>woman</option>
+                        </select>
+                    </div>
                     <div class="col-xs-4"><input id="heat" class="form-control input-lg" placeholder="Heat"/></div>
                 </div>
 
@@ -58,8 +64,9 @@
 
                 <div class="row" style="margin-top:10px;">
                     <div class="col-xs-6"><h1 id="heat3" onclick="service.list()">Loading...</h1></div>
-                    <div class="col-xs-3"><input onclick="heatb(-1)" type="button" class="btn btn-default btn-lg btn-block" value="Previous"/></div>
-                    <div class="col-xs-3"><input onclick="heatb(1)" type="button" class="btn btn-default btn-lg btn-block" value="Next"/></div>
+                    <div class="col-xs-2"><input onclick="division()" type="button" class="btn btn-default btn-lg btn-block" value="Division"/></div>
+                    <div class="col-xs-2"><input onclick="heatb(-1)" type="button" class="btn btn-default btn-lg btn-block" value="Previous"/></div>
+                    <div class="col-xs-2"><input onclick="heatb(1)" type="button" class="btn btn-default btn-lg btn-block" value="Next"/></div>
                 </div>
 
                 <div id="console3" style="margin-top:20px;"></div>
