@@ -148,6 +148,7 @@ func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) erro
 	c2 := appengine.NewContext(r)
 	c, err := appengine.Namespace(c2, "")
 	if err != nil {return err}
+	//c := NewContext(r)
 
 	s.Status="no authentication"
 	var a = &Accounts{}

@@ -47,7 +47,7 @@ var TRANS = &oauth.Transport{
 	Config: CONFIG,
 }
 
-//var NewContext=endpoints.NewContext
+var NewContext=endpoints.NewContext
 
 func init() {
 	service := &Service{}

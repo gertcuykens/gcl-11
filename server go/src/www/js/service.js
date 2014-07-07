@@ -99,6 +99,21 @@ service.getFirst = function() {
   );
 };
 
+service.get = function(id) {
+  var t= new Tokeng()
+  t.access_token = FB.getAccessToken()
+  gapi.auth.setToken(t)
+  gapi.client.service.datastore.get({"list":[{"event":$('#event').val(),"id":id}]}).execute(
+      function(resp) {
+        if (!resp.code) {
+            resp.list = resp.list || []
+            console.log(resp.list)
+            //if (resp.list[0]){heatf(resp.list[0])}
+        }
+      }
+  );
+};
+
 act = function () {
  if (this.className=="active") {this.className="";return;}
  for (r in $(this).parent('tbody').children('tr')){$(this).parent('tbody').children('tr')[r].className=""}

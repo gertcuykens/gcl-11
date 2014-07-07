@@ -9,11 +9,11 @@ import (
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
 type Message struct {
 	Id int64 `json:"id,string" datastore:"-"` //omitempty
-    Date time.Time `json:"date"`
+    Date time.Time `json:"date"` // datastore:"index"`
 	Judge string `json:"judge"`
 	Event string `json:"event" datastore:"-"`
-	Division string `json:"division"`
-	Heat int `json:"heat"`
+	Division string `json:"division"` //  datastore:"index"`
+	Heat int `json:"heat"` // datastore:"index"`
 	Rider string `json:"rider"`
 	Trick string `json:"trick"`
 	Score int `json:"score"`
@@ -64,6 +64,7 @@ func (s *DataStore) GetHeat(e string, d string, h int) (err error) {
 }
 
 func (s *DataStore) GetFirst(e string) (err error) {
+	//s.Context.Infof("============%s",e)
 	q := datastore.NewQuery(e).Ancestor(s.Root).Order("-Date")
 	t := q.Run(s.Context)
 	var m Message
