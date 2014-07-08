@@ -20,11 +20,6 @@ $(document).ready(function() {
 
         $.getScript('//apis.google.com/js/client.js?onload=load',function(){
             console.log('Loading Google API')
-            //var apisToLoad = 2;
-            //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
-            //var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
-            //gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
-            //gapi.client.load('oauth2', 'v2', function(){});
         });
 
         if (!FB.getAccessToken()){signin()}
@@ -60,3 +55,9 @@ load = function() {
     var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
     gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
 }
+
+            //var apisToLoad = 2;
+            //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
+            //var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+            //gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
+            //gapi.client.load('oauth2', 'v2', function(){});

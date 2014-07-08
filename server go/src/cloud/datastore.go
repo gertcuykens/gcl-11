@@ -3,17 +3,17 @@ package cloud
 import (
 	"appengine/datastore"
 	"time"
-	"appengine"
+	"github.com/crhym3/go-endpoints/endpoints"
 )
 
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
 type Message struct {
 	Id int64 `json:"id,string" datastore:"-"` //omitempty
-    Date time.Time `json:"date"` // datastore:"index"`
+    Date time.Time `json:"date"`
 	Judge string `json:"judge"`
 	Event string `json:"event" datastore:"-"`
-	Division string `json:"division"` //  datastore:"index"`
-	Heat int `json:"heat"` // datastore:"index"`
+	Division string `json:"division"`
+	Heat int `json:"heat"`
 	Rider string `json:"rider"`
 	Trick string `json:"trick"`
 	Score int `json:"score"`
@@ -27,7 +27,7 @@ type Entity struct {
 type DataStore struct {
 	Root *datastore.Key
 	Entity *Entity
-	Context appengine.Context
+	Context endpoints.Context
 }
 
 func (s *DataStore) Put(u string) (err error) {

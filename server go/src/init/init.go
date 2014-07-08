@@ -47,8 +47,6 @@ var TRANS = &oauth.Transport{
 	Config: CONFIG,
 }
 
-//var NewContext=endpoints.NewContext
-
 func init() {
 	service := &Service{}
 	api, err := endpoints.RegisterService(service, "service", "v0", "API", true)

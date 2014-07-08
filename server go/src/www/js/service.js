@@ -94,6 +94,7 @@ service.getFirst = function() {
         if (!resp.code) {
             resp.list = resp.list || []
             if (resp.list[0]){heatf(resp.list[0])}
+            else {view(2); }
         }
       }
   );
@@ -320,17 +321,21 @@ print3 = function (id,rider,trick,score,attempt,judge){
 
 print4 = function(rider) {
 
-    //if (document.getElementById('-'+rider)) return
+    if (document.getElementById(rider)) return
+
+    var add = document.createElement('a');
+    add.innerHTML='add'
+    add.onclick=function(){view(2)}
 
     var caption = document.createElement('caption');
     caption.innerHTML='<h1>'+rider+'<span class="result" id="-'+rider+'"></span></h1>'
+    caption.appendChild(add);
 
     var thead = document.createElement('thead');
     thead.innerHTML="<tr><th>Trick</th><th>Score</th></tr>"
 
     var tbody = document.createElement('tbody');
     tbody.id=rider
-    //$(tbody).data('score',score)
 
     var table = document.createElement('table');
     table.className="table table-hover"
