@@ -272,6 +272,7 @@ func (s *Service) Get2(r *http.Request, _ *cloud.Entity, resp *cloud.Entity) err
 	return nil
 }
 */
+
 /*
 func (s *Service) Put2(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)

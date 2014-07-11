@@ -1,21 +1,13 @@
 service = {}
 
-service.truncate = function() {
-  var t= new Tokeng()
-  t.access_token = FB.getAccessToken()
-  gapi.auth.setToken(t)
-  gapi.client.service.datastore.truncate().execute(function(resp){service.list()})
-};
-
 service.delete = function() {
- var i=0;
- var list = []
- $(this).closest('table').children('tbody').children('tr').each(function(){
-  if (!$(this).hasClass('active')) {return true}
-  list[i++]={'id':$(this).attr('id'), 'event':$('#event').val()}
-  //list[i++]={'id':parseInt($(this).attr('id'))}
- })
-
+  var i=0;
+  var list = []
+  $(this).closest('table').children('tbody').children('tr').each(function(){
+   if (!$(this).hasClass('active')) {return true}
+   list[i++]={'id':$(this).attr('id'), 'event':$('#event').val()}
+   //list[i++]={'id':parseInt($(this).attr('id'))}
+  })
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
@@ -175,20 +167,18 @@ mapreduce = function(s) {
            //console.log(attempt)
 
            var name=""
-           var max=0
            var score=0
            var score2=[]
            for (judge in object[rider][attempt]) {
             if(object[rider][attempt].hasOwnProperty(judge)){
-             max+=10
              scorej=object[rider][attempt][judge][0]
              score+=object[rider][attempt][judge][0]
              score2.push(object[rider][attempt][judge][0])
              name=object[rider][attempt][judge][1]
              id=object[rider][attempt][judge][2]
              print3(id,rider,name,scorej,attempt,judge)
-             if (!list[name]){list[name]=[score,max,name,score2]}
-             else if (list[name][0]<score){list[name]=[score,max,name,score2]}
+             if (!list[name]){list[name]=[score,score2,name]}
+             else if (list[name][0]<score){list[name]=[score,score2,name]}
             }
            }
 
@@ -213,7 +203,7 @@ mapreduce = function(s) {
 
                for (score in trick[rider]){
 
-  print1(rider,trick[rider][score][2],trick[rider][score][0],trick[rider][score][3])
+  print1(rider,trick[rider][score][0],trick[rider][score][1],trick[rider][score][2])
 
                }
 
@@ -273,13 +263,13 @@ mapreduce = function(s) {
 
 };
 
-print1 = function(rider,trick,score,score2) {
+print1 = function(rider,score,score2,trick) {
 
     var trickf = document.createElement('td');
     trickf.innerHTML=trick
 
     var scoref = document.createElement('td');
-    scoref.innerHTML=score //+' <= ('+score2.toString()+')'
+    scoref.innerHTML=score +'/'+ score2.length*10
 
     var row = document.createElement('tr');
     row.appendChild(trickf);
@@ -385,92 +375,3 @@ view = function(x) {
         default: $( "#form1" ).hide(); $( "#form2" ).hide(); $( "#form3" ).show();  break;
     }
 }
-
-testAPI = function () {
-  console.log('Browser Facebook, Fetching your information... ');
-  FB.api('/me?fields=email', function(response) {console.log('Browser Facebook, '+response.email+'.')})
-}
-
-/*
-http://jsfiddle.net/spetnik/gFzCk/1953/
-
-truncateAPI = function () {
-  console.log('Browser Facebook, Fetching your information... ');
-  FB.api('/me?fields=email', function(response) {console.log('Browser Facebook, '+response.email+'.')})
-
-  //console.log('Server Facebook, Fetching your information... ');
-  //Facebook.access_token=FB.getAccessToken()
-  //gapi.client.service.facebook.callback(Facebook).execute(function(response){console.log('Server Facebook, '+response.email_token)})
-}
-
-function testAPI2() {
-  console.log('Browser Google, Fetching your information... ');
-  gapi.client.oauth2.userinfo.get().execute(function(response) {console.log('Browser Google, '+response.email+'.')})
-
-  console.log('Server Google, Fetching your information... ');
-  Google.access_token=gapi.auth.getToken().access_token
-  gapi.client.rest.google.callback().execute(function(response){console.log('Server Google, '+response.result.message)})
-}
-
-function testAPI2() {
-    console.log('Iab, Fetching your order information... ');
-    gapi.client.rest.google.purchases().execute(function(response){console.log('Iab, '+response.message)})
-}
-
-function testAPI3() {
-    console.log('Storage, setting ACL...');
-    gapi.client.rest.google.storage().execute(function(response){console.log('Storage, '+response.message)})
-}
-*/
-
- /*
-  for (var x in s) {
-      var td = document.createElement('td');
-      if (x=="date") {td.innerHTML = new Date(s.date).toLocaleString()}
-      else {td.innerHTML = s[x]}
-      tr.appendChild(td);
-  }*/
-
-
-      //element.classList.add('row');
-
-                 /*
-                 var x = document.URL.match(/[^/]*$/)
-                 switch(x[0]) {
-                     case "":
-                         for (var i = 0; i < resp.list.length; i++) {print1(resp.list[i]);}
-                         break;
-                     case "result":
-                         print2(resp.list);
-                         break;
-                 }
-                 */
-
-/*
-service.submit2 = function() {
-  var d = new Date()
-  var t= new Tokeng()
-  t.access_token = FB.getAccessToken()
-  gapi.auth.setToken(t)
-  gapi.client.service.datastore.put2({"list":[{
-    "event":$('#event').val(),
-    "heat":$('#heat').val(),
-  }]}).execute(function(resp){service.list2()})
-};
-*/
-
-/*
-service.list2 = function() {
-  var t= new Tokeng()
-  t.access_token = FB.getAccessToken()
-  gapi.auth.setToken(t)
-  gapi.client.service.datastore.get2({}).execute(
-      function(resp) {
-        if (!resp.code) {
-            resp.list = resp.list || []
-            console.log(resp.list)
-        }
-      }
-  );
-};
-*/

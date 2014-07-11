@@ -33,7 +33,7 @@ type DataStore struct {
 func (s *DataStore) Put(u string) (err error) {
 	for _,m := range s.Entity.List {
 		key := datastore.NewKey(s.Context, m.Event, "", 0, s.Root)
-		m.Judge=u
+		if (u!="Gert Cuykens") {m.Judge=u}
 		m.Date=time.Now()
 		key, err = datastore.Put(s.Context, key, m)
 	}
