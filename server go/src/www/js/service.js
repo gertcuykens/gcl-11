@@ -35,15 +35,10 @@ service.publish = function() {
 };
 
 service.submit = function() {
-  //parseRfc3339("0001-01-01T00:00:00Z");
-  var d = new Date()
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
   gapi.client.service.datastore.put({"list":[{
-    //"id":0,
-    //"date":d,
-    //"judge":"",
     "event":$('#event').val(),
     "division":$('#division').val(),
     "heat":parseInt($('#heat').val(), 10),
@@ -69,6 +64,7 @@ service.list = function() {
       function(resp) {
         if (!resp.code) {
             resp.list = resp.list || []
+            if (resp.list[0]){heatf(resp.list[0])}
             document.getElementById('console2').innerHTML=""
             document.getElementById('console3').innerHTML=""
             mapreduce(resp.list);
@@ -85,23 +81,8 @@ service.getFirst = function() {
       function(resp) {
         if (!resp.code) {
             resp.list = resp.list || []
-            if (resp.list[0]){heatf(resp.list[0])}
+            if (resp.list[0]){heatf(resp.list[0]);service.list()}
             else {view(2); }
-        }
-      }
-  );
-};
-
-service.get = function(id) {
-  var t= new Tokeng()
-  t.access_token = FB.getAccessToken()
-  gapi.auth.setToken(t)
-  gapi.client.service.datastore.get({"list":[{"event":$('#event').val(),"id":id}]}).execute(
-      function(resp) {
-        if (!resp.code) {
-            resp.list = resp.list || []
-            console.log(resp.list)
-            //if (resp.list[0]){heatf(resp.list[0])}
         }
       }
   );
@@ -119,7 +100,6 @@ heatf = function (s) {
  $('#event').attr('value',s['event'])
  $('#division').val(s['division'])
  $('#heat').attr('value',s['heat'])
- service.list()
 }
 
 heatb = function (v) {
@@ -127,6 +107,7 @@ heatb = function (v) {
  var d=$('#division').val()
  var h=parseInt($('#heat').attr('value'))
  heatf({'event':e,'division':d,'heat':h+v})
+ service.list()
 }
 
 division = function () {
@@ -139,6 +120,7 @@ division = function () {
  }
  d=$('#division').val()
  heatf({'event':e,'division':d,'heat':h})
+ service.list()
 }
 
 mapreduce = function(s) {

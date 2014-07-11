@@ -1,6 +1,6 @@
 unit = {}
 
-unit.test = function () {
+unit.user = function () {
   console.log('Browser Facebook, Fetching your information... ');
   FB.api('/me?fields=email', function(response) {console.log('Browser Facebook, '+response.email+'.')})
 }
@@ -10,6 +10,21 @@ unit.truncate = function() {
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
   gapi.client.service.datastore.truncate({"list":[{"event":"Tarifa 2014"}]}).execute(function(resp){service.list()})
+};
+
+unit.get = function(id) {
+  var t= new Tokeng()
+  t.access_token = FB.getAccessToken()
+  gapi.auth.setToken(t)
+  gapi.client.service.datastore.get({"list":[{"event":$('#event').val(),"id":id}]}).execute(
+      function(resp) {
+        if (!resp.code) {
+            resp.list = resp.list || []
+            console.log(resp.list)
+            //if (resp.list[0]){heatf(resp.list[0])}
+        }
+      }
+  );
 };
 
 unit.data = function() {
