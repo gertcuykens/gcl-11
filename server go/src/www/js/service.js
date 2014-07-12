@@ -128,6 +128,7 @@ mapreduce = function(s) {
   for (var i = 0; i < s.length; i++) {
     var id=s[i]['id']
     var rider=s[i]['rider']
+    if (!rider) rider="Unknown"
     var trick=s[i]['trick']
     var attempt=s[i]['attempt']
     var score=s[i]['score']
