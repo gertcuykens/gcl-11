@@ -21,7 +21,11 @@ service.editor = function() {
   gapi.auth.setToken(t)
   gapi.client.service.datastore.editor().execute(function(response){
     console.log(response)
-    if (!response.error){ view(2) } // else { form(1) }
+    if (!response.error){
+     $('#submitButton').val('Submit').off('click').on('click', service.submit)
+    } else {
+     $('#submitButton').val('Login').off('click').on('click', signin2)
+    }
   })
 };
 
@@ -347,14 +351,14 @@ print5 = function(rider) {
     document.getElementById('console2').appendChild(table);
 }
 
-start = service.getFirst
+start = service.editor
 
 stop = service.getFirst
 
 view = function(x) {
     switch(x){
-        case 1: $( "#form1" ).show(); $( "#form2" ).hide(); $( "#form3" ).hide();   break;
-        case 2: $( "#form1" ).hide(); $( "#form2" ).show(); $( "#form3" ).hide();   break;
-        default: $( "#form1" ).hide(); $( "#form2" ).hide(); $( "#form3" ).show();  break;
+        case 1: $( "#form1" ).show(); $( "#form2" ).hide(); $( "#form3" ).hide(); break;
+        case 2: $( "#form1" ).hide(); $( "#form2" ).show(); $( "#form3" ).hide(); service.editor(); break;
+        default: $( "#form1" ).hide(); $( "#form2" ).hide(); $( "#form3" ).show(); break;
     }
 }

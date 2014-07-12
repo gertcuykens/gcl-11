@@ -22,7 +22,7 @@ $(document).ready(function() {
             console.log('Loading Google API')
         });
 
-        if (!FB.getAccessToken()){signin()}
+        //if (!FB.getAccessToken()){signin()}
         console.log(response)
 
     });
@@ -47,13 +47,13 @@ signout = function() {
     b.style.display="block";
 }
 
-signin2 = function() {FB.login(function(response){start()}, {scope: 'email,publish_actions,manage_pages'})}
+signin2 = function(){FB.login(function(response){start();}, {scope: 'manage_pages'})} //{scope: 'email,manage_pages,publish_actions'}
 
-signout2 = function() {FB.logout(); stop();}
+signout2 = function(){FB.logout(); stop();}
 
 load = function() {
     var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
-    gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
+    gapi.client.load('service', 'v0', stop, http+window.location.host+'/_ah/api')
 }
 
             //var apisToLoad = 2;
