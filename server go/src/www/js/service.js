@@ -15,12 +15,10 @@ service.delete = function() {
 };
 
 service.editor = function() {
-  //console.log('Server Editor, Fetching your information... ');
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
   gapi.client.service.datastore.editor().execute(function(response){
-    console.log(response)
     if (!response.error){
      $('#submitButton').val('Submit').off('click').on('click', service.submit)
     } else {
