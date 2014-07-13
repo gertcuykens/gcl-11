@@ -10,9 +10,6 @@ $(document).ready(function() {
     });
 
     FB.Event.subscribe('auth.authResponseChange', function(response) {
-        if (response.status === 'connected') {signout()}
-        else if (response.status === 'not_authorized') {alert('Not authorized.')}
-        else {signin()}
         console.log(response)
     });
 
@@ -22,7 +19,6 @@ $(document).ready(function() {
             console.log('Loading Google API')
         });
 
-        //if (!FB.getAccessToken()){signin()}
         console.log(response)
 
     });
@@ -31,6 +27,20 @@ $(document).ready(function() {
 
 });
 
+signin2 = function(){FB.login(function(response){start();}, {scope: 'manage_pages'})} //{scope: 'email,manage_pages,publish_actions'}
+
+load = function() {
+    var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+    gapi.client.load('service', 'v0', stop, http+window.location.host+'/_ah/api')
+}
+
+            //var apisToLoad = 2;
+            //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
+            //var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+            //gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
+            //gapi.client.load('oauth2', 'v2', function(){});
+
+/*
 signin = function() {
     var b=document.getElementById('fsigninButton')
     b.removeEventListener('click', signout2);
@@ -46,18 +56,12 @@ signout = function() {
     b.value="Sign out"
     b.style.display="block";
 }
+*/
 
-signin2 = function(){FB.login(function(response){start();}, {scope: 'manage_pages'})} //{scope: 'email,manage_pages,publish_actions'}
+        //if (response.status === 'connected') {}
+        //else if (response.status === 'not_authorized') {alert('Not authorized.')}
+        //else {}
 
-signout2 = function(){FB.logout(); stop();}
+                //if (!FB.getAccessToken()){signin()}
 
-load = function() {
-    var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
-    gapi.client.load('service', 'v0', stop, http+window.location.host+'/_ah/api')
-}
-
-            //var apisToLoad = 2;
-            //var callback = function() { if (--apisToLoad == 0) {autosignin()} }
-            //var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
-            //gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
-            //gapi.client.load('oauth2', 'v2', function(){});
+                //signout2 = function(){FB.logout(); stop();}

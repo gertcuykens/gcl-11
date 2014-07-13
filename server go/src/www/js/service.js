@@ -15,7 +15,7 @@ service.delete = function() {
 };
 
 service.editor = function() {
-  console.log('Server Editor, Fetching your information... ');
+  //console.log('Server Editor, Fetching your information... ');
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
@@ -68,7 +68,6 @@ service.list = function() {
       function(resp) {
         if (!resp.code) {
             resp.list = resp.list || []
-            if (resp.list[0]){heatf(resp.list[0])}
             document.getElementById('console2').innerHTML=""
             document.getElementById('console3').innerHTML=""
             mapreduce(resp.list);
@@ -85,8 +84,8 @@ service.getFirst = function() {
       function(resp) {
         if (!resp.code) {
             resp.list = resp.list || []
-            if (resp.list[0]){heatf(resp.list[0]);service.list()}
-            else {view(2); }
+            if (resp.list[0]){heatf(resp.list[0]); service.list()}
+            else {view(2)}
         }
       }
   );
@@ -101,22 +100,22 @@ act = function () {
 heatf = function (s) {
  $('#heat2').html(s['event']+' '+s['division']+' heat '+s['heat'])
  $('#heat3').html(s['event']+' '+s['division']+' heat '+s['heat'])
- $('#event').attr('value',s['event'])
+ $('#event').val(s['event'])
  $('#division').val(s['division'])
- $('#heat').attr('value',s['heat'])
+ $('#heat').val(s['heat'])
 }
 
 heatb = function (v) {
- var e=$('#event').attr('value')
+ var e=$('#event').val()
  var d=$('#division').val()
- var h=parseInt($('#heat').attr('value'))
+ var h=parseInt($('#heat').val())
  heatf({'event':e,'division':d,'heat':h+v})
  service.list()
 }
 
 division = function () {
- var e=$('#event').attr('value')
- var h=parseInt($('#heat').attr('value'))
+ var e=$('#event').val()
+ var h=parseInt($('#heat').val())
  var d=$('#division').val()
  switch (d) {
   case "men": $('#division').val('woman'); break;
@@ -141,7 +140,7 @@ mapreduce = function(s) {
     if (!object[rider][attempt]) {object[rider][attempt]={}}
     if (!object[rider][attempt][judge]) {object[rider][attempt][judge]=[score,trick,id]}
   }
-  console.log(object)
+  //console.log(object)
 
    var trick={}
    for (rider in object) {
@@ -182,7 +181,7 @@ mapreduce = function(s) {
 
      }
     }
-    console.log(trick)
+    //console.log(trick)
 
     for (rider in trick){
      if(trick.hasOwnProperty(rider)){
@@ -208,7 +207,7 @@ mapreduce = function(s) {
         score[rider]=total
        }
      }
-     console.log(score)
+     //console.log(score)
 
      var keys=Object.keys(score).sort(function(a,b){return score[b]-score[a]})
 
@@ -225,8 +224,6 @@ mapreduce = function(s) {
 
           if (k=='0' && keys[parseInt(k)+1]) {
                  rider2= keys[parseInt(k)+1]
-                 console.log(rider)
-                 console.log(rider2)
                  document.getElementById("-"+rider  ).innerHTML+=" difference "+(score[rider]-score[rider2])
                  document.getElementById("---"+rider).innerHTML+=" difference "+(score[rider]-score[rider2])
           } else {
