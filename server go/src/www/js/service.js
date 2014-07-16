@@ -1,5 +1,22 @@
 service = {}
 
+service.rider = function(rider) {
+  var option = document.createElement('option');
+  option.innerHTML=rider
+  option.id = 'option-'+rider
+  $(option).data('attempt','1')
+  $('#rider').append(option)
+};
+
+$('#rider').on('change',function (){
+  var i = this.selectedIndex
+  $('#attempt').val($(this.options[i]).data('attempt'))
+})
+
+$('#riderAdd').on('click',function (){
+  service.rider(prompt("Add rider"))
+})
+
 service.delete = function() {
   var i=0;
   var list = []
@@ -68,7 +85,9 @@ service.list = function() {
             resp.list = resp.list || []
             document.getElementById('console2').innerHTML=""
             document.getElementById('console3').innerHTML=""
+            $('#rider').html('')
             mapreduce(resp.list);
+            $('#rider').trigger('change')
         }
       }
   );
@@ -263,8 +282,6 @@ print1 = function(rider,score,score2,trick) {
 
 print3 = function (id,rider,trick,score,attempt,judge){
 
-   print5(rider)
-
    var riderf = document.createElement('td');
    riderf.innerHTML=rider
 
@@ -288,6 +305,8 @@ print3 = function (id,rider,trick,score,attempt,judge){
     row.appendChild(scoref);
     row.appendChild(judgef);
     $('#--'+rider).prepend(row);
+
+    $('#option-'+rider).data('attempt',parseInt(attempt)+1)
 
 }
 
@@ -317,11 +336,7 @@ print4 = function(rider) {
 
     document.getElementById('console3').appendChild(table);
 
-}
-
-print5 = function(rider) {
-
-    if (document.getElementById('--'+rider)) return
+    service.rider(rider)
 
     var del = document.createElement('a');
     del.innerHTML='delete'
