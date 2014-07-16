@@ -14,7 +14,7 @@ $('#rider').on('change',function (){
 })
 
 $('#riderAdd').on('click',function (){
-  service.rider(prompt("Add rider"))
+  service.rider(prompt("add rider"))
 })
 
 service.delete = function() {
