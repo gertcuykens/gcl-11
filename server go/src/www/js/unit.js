@@ -125,6 +125,12 @@ unit.data = function() {
     }
 
   ]}).execute(function(resp){service.list()})
+
+  service.addTrickName('BJ')
+  service.addTrickName('KGB')
+  service.addTrickName('HB')
+  service.addTrickName('POP')
+
 };
 
 /*

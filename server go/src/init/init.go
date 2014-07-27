@@ -54,6 +54,7 @@ func init() {
 	scope := []string{}
 	rpc(api, scope, "GetTrickList", "trickstore.getTrickList", "POST", "trickstore/getTrickList", "Get trick list.")
 	rpc(api, scope, "PutTrickName", "trickstore.putTrickName", "POST", "trickstore/putTrickName", "Put trick name.")
+	rpc(api, scope, "DeleteTrickName", "trickstore.deleteTrickName", "POST", "trickstore/deleteTrickName", "Delete trick name.")
 	
 	rpc(api, scope, "GetHeat", "datastore.getHeat", "POST", "datastore/getHeat", "Get heat.")
 	rpc(api, scope, "GetFirst", "datastore.getFirst", "POST", "datastore/getFirst", "Get first.")
