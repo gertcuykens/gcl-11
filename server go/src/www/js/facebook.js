@@ -27,11 +27,11 @@ $(document).ready(function() {
 
 });
 
-signin2 = function(){FB.login(function(response){start();}, {scope: 'manage_pages'})} //{scope: 'email,manage_pages,publish_actions'}
+signin2 = function(){FB.login(function(response){}, {scope: 'manage_pages'})} //{scope: 'email,manage_pages,publish_actions'}
 
 load = function() {
     var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
-    gapi.client.load('service', 'v0', stop, http+window.location.host+'/_ah/api')
+    gapi.client.load('service', 'v0', start, http+window.location.host+'/_ah/api')
 }
 
             //var apisToLoad = 2;

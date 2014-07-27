@@ -362,7 +362,7 @@ print4 = function(rider) {
     document.getElementById('console2').appendChild(table);
 }
 
-start = service.editor
+start = function(){service.editor(); service.getTrickList(); service.getFirst(); console.log('wtf')}
 
 stop = service.getFirst
 
