@@ -52,13 +52,17 @@ func init() {
 	api, err := endpoints.RegisterService(service, "service", "v0", "API", true)
 	if err != nil {panic(err.Error())}
 	scope := []string{}
+	rpc(api, scope, "GetTrickList", "trickstore.getTrickList", "POST", "trickstore/getTrickList", "Get trick list.")
+	rpc(api, scope, "PutTrickName", "trickstore.putTrickName", "POST", "trickstore/putTrickName", "Put trick name.")
+	
 	rpc(api, scope, "GetHeat", "datastore.getHeat", "POST", "datastore/getHeat", "Get heat.")
 	rpc(api, scope, "GetFirst", "datastore.getFirst", "POST", "datastore/getFirst", "Get first.")
 	rpc(api, scope, "Get", "datastore.get", "POST", "datastore/get", "Get.")
 	rpc(api, scope, "Put", "datastore.put", "POST", "datastore/put", "Put.")
 	rpc(api, scope, "Delete", "datastore.delete", "POST", "datastore/delete", "Delete.")
 	rpc(api, scope, "Truncate", "datastore.truncate", "POST", "datastore/truncate", "Truncate.")
-	rpc(api, scope, "Editor", "datastore.editor", "POST", "datastore/editor", "Editor.")
+
+	rpc(api, scope, "Editor", "editor", "POST", "editor", "Editor.")
 	endpoints.HandleHttp()
 }
 

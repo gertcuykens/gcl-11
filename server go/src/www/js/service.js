@@ -35,7 +35,7 @@ service.editor = function() {
   var t= new Tokeng()
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
-  gapi.client.service.datastore.editor().execute(function(response){
+  gapi.client.service.editor().execute(function(response){
     if (!response.error){
      $('#submitButton').val('Submit').off('click').on('click', service.submit)
     } else {
@@ -58,6 +58,7 @@ service.submit = function() {
   t.access_token = FB.getAccessToken()
   gapi.auth.setToken(t)
   gapi.client.service.datastore.put({"list":[{
+    "judge":"admin",
     "event":$('#event').val(),
     "division":$('#division').val(),
     "heat":parseInt($('#heat').val(), 10),

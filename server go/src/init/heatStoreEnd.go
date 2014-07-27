@@ -4,84 +4,8 @@ import (
 	"net/http"
 	"appengine/datastore"
 	"cloud"
-	"appengine/urlfetch"
-	"encoding/json"
-	"io/ioutil"
 	"github.com/crhym3/go-endpoints/endpoints"
 )
-
-type Data struct {
-	Name string `json:"name"`
-	Perms []string `json:"perms"`
-}
-
-type Accounts struct {
-	Data []Data `json:"data"`
-}
-
-func (a *Accounts) set(c endpoints.Context, r *http.Request) error {
-	//t := r.Header.Get("Authorization")
-	//c.Infof("============%s",t[7:])
-
-	client := urlfetch.Client(c)
-	req, err := http.NewRequest("GET", "https://graph.facebook.com/me/accounts", nil) //&access_token=
-	if err != nil {return nil}
-	req.Header = map[string][]string{"Authorization": {r.Header.Get("Authorization")}}
-	buf, err := client.Do(req)
-	defer buf.Body.Close()
-	b, err := ioutil.ReadAll(buf.Body)
-	err = json.Unmarshal(b,a)
-	if err != nil {return nil}
-	return nil
-}
-
-func (a *Accounts) editor() bool {
-	for i,x := range a.Data {
-		if x.Name=="Gcl-11" {
-			for _,y := range a.Data[i].Perms {
-				if y == "CREATE_CONTENT" {
-					return true
-				}
-			}
-		}
-	}
-	return false
-}
-
-type User struct {
-	Id int `json:"id"`
-	Name string `json:"name"`
-	Email []string `json:"email"`
-}
-
-func (u *User) set(c endpoints.Context, r *http.Request) error {
-    //t := r.Header.Get("Authorization")
-	//c.Infof("============%s",t[7:])
-
-	client := urlfetch.Client(c)
-	req, err := http.NewRequest("GET", "https://graph.facebook.com/me?fields=name", nil) //&access_token=
-	req.Header = map[string][]string{"Authorization": {r.Header.Get("Authorization")}}
-	buf, err := client.Do(req)
-	defer buf.Body.Close()
-	b, err := ioutil.ReadAll(buf.Body)
-	err = json.Unmarshal(b,u)
-	if err != nil {}
-
-	return nil
-}
-
-func (s *Service) Editor(r *http.Request,  _ *cloud.Entity, _ *cloud.Entity) error {
-	c := endpoints.NewContext(r)
-	//c, err := appengine.Namespace(c2, "")
-	//if err != nil {return err}
-
-	s.Status="no authentication"
-	var a = &Accounts{}
-	a.set(c,r)
-	if !a.editor() {return s}
-	s.Status="ok"
-	return nil
-}
 
 func (s *Service) GetHeat(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
 	c := endpoints.NewContext(r)
@@ -141,8 +65,7 @@ func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) erro
 
 	s.Status="no authentication"
 	var a = &Accounts{}
-	a.set(c,r)
-	if !a.editor() {return s}
+	if !a.editor(c,r) {return s}
 	s.Status="ok"
 
 	var u = &User{}
@@ -167,8 +90,7 @@ func (s *Service) Delete(r *http.Request, m *cloud.Entity, _ *cloud.Entity) erro
 
 	s.Status="no authentication"
 	var a = &Accounts{}
-	a.set(c,r)
-	if !a.editor() {return s}
+	if !a.editor(c,r) {return s}
 	s.Status="ok"
 
 	k := datastore.NewKey(c, "feed", "gcl11", 0, nil)

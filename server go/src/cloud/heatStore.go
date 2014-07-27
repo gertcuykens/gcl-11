@@ -9,7 +9,7 @@ import (
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
 type Message struct {
 	Id int64 `json:"id,string" datastore:"-"` //omitempty
-    Date time.Time `json:"date"`
+  Date time.Time `json:"date"`
 	Judge string `json:"judge"`
 	Event string `json:"event" datastore:"-"`
 	Division string `json:"division"`
