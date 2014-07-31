@@ -6,7 +6,7 @@ import (
 )
 
 type Trick struct {
-	Name string `json:"name"`
+	Name string `json:"name" datastore:"-"`
 	Difficulty int `json:"difficulty"`
 }
 
@@ -29,7 +29,7 @@ func (s *TrickStore) PutTrickName() (err error) {
 }
 
 func (s *TrickStore) GetTrickList() (err error) {
-	q := datastore.NewQuery("Trick list").Ancestor(s.Root).Order("Name")
+	q := datastore.NewQuery("Trick list").Ancestor(s.Root).Order("__key__")
 	for t := q.Run(s.Context);; {
 		var m Trick
 		k, err := t.Next(&m)
