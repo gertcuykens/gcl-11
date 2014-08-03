@@ -1,9 +1,11 @@
 package cloud
 
 import (
+	"net/http"
 	"appengine/datastore"
 	"time"
 	"github.com/crhym3/go-endpoints/endpoints"
+	"errors"
 )
 
 //Id int `json:"id" endpoints:"d=0,min=0,max=1" datastore:"noindex"`
@@ -25,33 +27,49 @@ type Entity struct {
 }
 
 type DataStore struct {
-	Root *datastore.Key
 	Entity *Entity
-	Context endpoints.Context
+	Request *http.Request
 }
 
-func (s *DataStore) Put(u string) (err error) {
+func (s *DataStore) Put() (err error) {
+	var c = endpoints.NewContext(s.Request)
+	var t = s.Request.Header.Get("Authorization")
+	var a = &Accounts{
+		Authorization: t,
+		Context: c,
+	}
+	if !a.Editor() {return errors.New("No authentication.")}
+	var u = &User{
+		Authorization: t,
+		Context: c,
+	}
+	u.set()
+	root := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	for _,m := range s.Entity.List {
-		key := datastore.NewKey(s.Context, m.Event, "", 0, s.Root)
-		if (u!="Gert Cuykens") {m.Judge=u}
+    if (u.Name!="Gert Cuykens") {m.Judge=u.Name}
 		m.Date=time.Now()
-		key, err = datastore.Put(s.Context, key, m)
+		key := datastore.NewKey(c, m.Event, "", 0, root)
+		key, err = datastore.Put(c, key, m)
 	}
 	return nil
 }
 
 func (s *DataStore) Get(e string, id int64) (err error) {
+  var c = endpoints.NewContext(s.Request)
+  root := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	var m Message
 	m.Event=e
-	key := datastore.NewKey(s.Context, e, "", id, s.Root)
-	err = datastore.Get(s.Context, key, &m)
+	key := datastore.NewKey(c, e, "", id, root)
+	err = datastore.Get(c, key, &m)
 	s.Entity.List = append(s.Entity.List, &m)
 	return nil
 }
 
 func (s *DataStore) GetHeat(e string, d string, h int) (err error) {
-	q := datastore.NewQuery(e).Ancestor(s.Root).Filter("Division =", d).Filter("Heat =", h).Order("-Date")
-	for t := q.Run(s.Context);; {
+	var c = endpoints.NewContext(s.Request)
+	root := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+	q := datastore.NewQuery(e).Ancestor(root).Filter("Division =", d).Filter("Heat =", h).Order("-Date")
+	for t := q.Run(c);; {
 		var m Message
 		m.Event=e
 		k, err := t.Next(&m)
@@ -65,8 +83,10 @@ func (s *DataStore) GetHeat(e string, d string, h int) (err error) {
 
 func (s *DataStore) GetFirst(e string) (err error) {
 	//s.Context.Infof("============%s",e)
-	q := datastore.NewQuery(e).Ancestor(s.Root).Order("-Date")
-	t := q.Run(s.Context)
+	var c = endpoints.NewContext(s.Request)
+	root := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+	q := datastore.NewQuery(e).Ancestor(root).Order("-Date")
+	t := q.Run(c)
 	var m Message
 	m.Event=e
 	k, err := t.Next(&m)
@@ -77,20 +97,47 @@ func (s *DataStore) GetFirst(e string) (err error) {
 }
 
 func (s *DataStore) Delete() (err error) {
+	var c = endpoints.NewContext(s.Request)
+	var t = s.Request.Header.Get("Authorization")
+	var a = &Accounts{
+		Authorization: t,
+		Context: c,
+	}
+	if !a.Editor() {return errors.New("No authentication.")}
+	root := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	for _, m := range s.Entity.List {
-		key := datastore.NewKey(s.Context, m.Event, "", m.Id, s.Root)
-		datastore.Delete(s.Context, key)
+		key := datastore.NewKey(c, m.Event, "", m.Id, root)
+		datastore.Delete(c, key)
 	}
 	return nil
 }
 
 func (s *DataStore) Truncate(e string) (err error) {
+	var c = endpoints.NewContext(s.Request)
+	var t = s.Request.Header.Get("Authorization")
+	var u = &User{
+		Authorization: t,
+		Context: c,
+	}
+	u.set()
+	if (u.Name!="Gert Cuykens") {return errors.New("No authentication.")}
 	q := datastore.NewQuery(e)
 	var m []Message
-	keys, err := q.GetAll(s.Context, &m)
+	keys, err := q.GetAll(c, &m)
 	if err != nil {return err}
-	for _, k := range keys {datastore.Delete(s.Context, k)}
+	for _, k := range keys {datastore.Delete(c, k)}
 	return nil
+}
+
+func (s *DataStore) Editor() (err error) {
+	var c = endpoints.NewContext(s.Request)
+	var t = s.Request.Header.Get("Authorization")
+  var a = &Accounts{
+	  Authorization: t,
+	  Context: c,
+  }
+  if !a.Editor() {return errors.New("No authentication.")}
+  return nil
 }
 
 //s.Context.Infof("==========>%v",m)

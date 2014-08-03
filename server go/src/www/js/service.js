@@ -8,14 +8,11 @@ service.rider = function(rider) {
   $('#rider').append(option)
 };
 
-$('#rider').on('change',function (){
-  var i = this.selectedIndex
-  $('#attempt').val($(this.options[i]).data('attempt'))
-})
+$('#rider').on('change',function (){var i = this.selectedIndex; $('#attempt').val($(this.options[i]).data('attempt'))})
 
-$('#riderAdd').on('click',function (){
-  service.rider(prompt("add rider"))
-})
+$('#riderAdd').on('click',function (){service.rider(prompt("add rider"))})
+
+$('#scoreAdd').val('Submit').off('click').on('click', service.submit)
 
 service.delete = function() {
   var i=0;
@@ -37,9 +34,9 @@ service.editor = function() {
   gapi.auth.setToken(t)
   gapi.client.service.editor().execute(function(response){
     if (!response.error){
-     $('#submitButton').val('Submit').off('click').on('click', service.submit)
+      $('#loginButton').hide()
     } else {
-     $('#submitButton').val('Login').off('click').on('click', signin2)
+      $('#loginButton').show()
     }
   })
 };
@@ -111,16 +108,16 @@ service.getFirst = function() {
 
 act = function () {
  if (this.className=="active") {this.className="";return;}
- for (r in $(this).parent('tbody').children('tr')){$(this).parent('tbody').children('tr')[r].className=""}
+ for (var r in $(this).parent('tbody').children('tr')){$(this).parent('tbody').children('tr')[r].className=""}
  this.className="active"
 }
 
 heatf = function (s) {
- $('#heat2').html(s['event']+' '+s['division']+' heat '+s['heat'])
- $('#heat3').html(s['event']+' '+s['division']+' heat '+s['heat'])
- $('#event').val(s['event'])
- $('#division').val(s['division'])
- $('#heat').val(s['heat'])
+ $('#heat2').html(s.event+' '+s.division+' heat '+s.heat)
+ $('#heat3').html(s.event+' '+s.division+' heat '+s.heat)
+ $('#event').val(s.event)
+ $('#division').val(s.division)
+ $('#heat').val(s.heat)
 }
 
 heatb = function (v) {
@@ -147,13 +144,13 @@ division = function () {
 mapreduce = function(s) {
   var object = {}
   for (var i = 0; i < s.length; i++) {
-    var id=s[i]['id']
-    var rider=s[i]['rider']
+    var id=s[i].id
+    var rider=s[i].rider
     if (!rider) rider="Unknown"
-    var trick=s[i]['trick']
-    var attempt=s[i]['attempt']
-    var score=s[i]['score']
-    var judge=s[i]['judge']
+    var trick=s[i].trick
+    var attempt=s[i].attempt
+    var score=s[i].score
+    var judge=s[i].judge
     if (!object[rider]) {object[rider]=[];print4(rider);}
     if (!object[rider][attempt]) {object[rider][attempt]={}}
     if (!object[rider][attempt][judge]) {object[rider][attempt][judge]=[score,trick,id]}
@@ -191,7 +188,7 @@ mapreduce = function(s) {
          }
 
          var keys = Object.keys(list).sort(function(a,b){return list[b][0]-list[a][0]})
-         for (k in keys) {
+         for (var k in keys) {
          trick[rider].push(list[keys[k]])
 
 
@@ -205,7 +202,7 @@ mapreduce = function(s) {
      if(trick.hasOwnProperty(rider)){
 
 
-               for (score in trick[rider]){
+               for (var score in trick[rider]){
 
   print1(rider,trick[rider][score][0],trick[rider][score][1],trick[rider][score][2])
 
@@ -231,7 +228,7 @@ mapreduce = function(s) {
 
      var rider
      if (keys[0]) rider=keys[0]
-     for (k in keys) {
+     for (var k in keys) {
 
          var rider2= keys[k]
 

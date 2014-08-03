@@ -11,6 +11,7 @@ $(document).ready(function() {
 
     FB.Event.subscribe('auth.authResponseChange', function(response) {
         console.log(response)
+        if (response.status=='connected') {$('#loginButton').hide()}
     });
 
     FB.getLoginStatus(function(response){
@@ -28,6 +29,7 @@ $(document).ready(function() {
 });
 
 signin2 = function(){FB.login(function(response){}, {scope: 'manage_pages'})} //{scope: 'email,manage_pages,publish_actions'}
+$('#loginButton').val('Login').off('click').on('click', signin2)
 
 load = function() {
     var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )

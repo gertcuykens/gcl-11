@@ -35,6 +35,7 @@ service.deleteTrickName = function(trick) {
 
 $('#trickAdd').on('click',function (){
   var t = prompt("add trick")
+  if (t==='') {return 0}
   var option = document.createElement('option');
   option.innerHTML=t
   $('#trick').append(option)

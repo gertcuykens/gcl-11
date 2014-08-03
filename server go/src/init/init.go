@@ -1,14 +1,83 @@
 package init
 
 import (
+	"net/http"
 	"github.com/crhym3/go-endpoints/endpoints"
 	"code.google.com/p/goauth2/oauth"
 	"time"
+	"cloud"
 )
 
 type Service struct {Status string `json:"error"`}
 
 func (s *Service) Error() string {return s.Status}
+
+func (s *Service) GetHeat(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
+	d := cloud.DataStore {Entity: &cloud.Entity{}, Request: r}
+	d.GetHeat(m.List[0].Event, m.List[0].Division, m.List[0].Heat)
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) GetFirst(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
+	d := cloud.DataStore {Entity: &cloud.Entity{}, Request: r}
+	d.GetFirst(m.List[0].Event)
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) Get(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
+	d := cloud.DataStore {Entity: &cloud.Entity{}, Request: r}
+	d.Get(m.List[0].Event, m.List[0].Id)
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) Put(r *http.Request, m *cloud.Entity, resp *cloud.Entity) error {
+	d := cloud.DataStore {Entity: m, Request: r}
+	d.Put()
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) Delete(r *http.Request, m *cloud.Entity, _ *cloud.Entity) error {
+	d := cloud.DataStore {Entity: m, Request: r}
+	d.Delete()
+	return nil
+}
+
+func (s *Service) Truncate(r *http.Request, m *cloud.Entity, _ *cloud.Entity) error {
+	d := cloud.DataStore {Entity: m, Request: r}
+	d.Truncate(m.List[0].Event)
+	return nil
+}
+
+func (s *Service) Editor(r *http.Request,  _ *cloud.Entity, _ *cloud.Entity) error {
+	d := cloud.DataStore {Request: r}
+	if err := d.Editor(); err !=nil {return err}
+	return nil
+}
+
+func (s *Service) GetTrickList(r *http.Request, m *cloud.TrickList, resp *cloud.TrickList) error {
+	d := cloud.TrickStore {Entity: &cloud.TrickList{}, Request: r}
+	d.GetTrickList()
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) PutTrickName(r *http.Request, m *cloud.TrickList, resp *cloud.TrickList) error {
+	d := cloud.TrickStore {Entity: m, Request: r}
+	d.PutTrickName()
+	*resp = *d.Entity
+	return nil
+}
+
+func (s *Service) DeleteTrickName(r *http.Request, m *cloud.TrickList, resp *cloud.TrickList) error {
+	d := cloud.TrickStore {Entity: m, Request: r}
+	d.DeleteTrickName()
+	*resp = *d.Entity
+	return nil
+}
 
 const PACKAGE string = ""
 
@@ -55,7 +124,7 @@ func init() {
 	rpc(api, scope, "GetTrickList", "trickstore.getTrickList", "POST", "trickstore/getTrickList", "Get trick list.")
 	rpc(api, scope, "PutTrickName", "trickstore.putTrickName", "POST", "trickstore/putTrickName", "Put trick name.")
 	rpc(api, scope, "DeleteTrickName", "trickstore.deleteTrickName", "POST", "trickstore/deleteTrickName", "Delete trick name.")
-	
+
 	rpc(api, scope, "GetHeat", "datastore.getHeat", "POST", "datastore/getHeat", "Get heat.")
 	rpc(api, scope, "GetFirst", "datastore.getFirst", "POST", "datastore/getFirst", "Get first.")
 	rpc(api, scope, "Get", "datastore.get", "POST", "datastore/get", "Get.")
