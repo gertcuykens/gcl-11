@@ -12,7 +12,7 @@ $('#rider').on('change',function (){var i = this.selectedIndex; $('#attempt').va
 
 $('#riderAdd').on('click',function (){service.rider(prompt("add rider"))})
 
-$('#scoreAdd').val('Submit').off('click').on('click', service.submit)
+$('#scoreAdd').on('click',function (){service.submit()})
 
 service.delete = function() {
   var i=0;
