@@ -66,7 +66,7 @@ func (s *TrickStore) DeleteTrickName() (err error) {
 	root := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	for _, m := range s.Entity.List {
 		key := datastore.NewKey(c, "Trick list", m.Name, 0, root)
-		datastore.Delete(c, key)
+		go datastore.Delete(c, key)
 	}
 	return nil
 }

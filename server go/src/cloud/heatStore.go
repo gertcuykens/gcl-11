@@ -107,7 +107,7 @@ func (s *DataStore) Delete() (err error) {
 	root := datastore.NewKey(c, "feed", "gcl11", 0, nil)
 	for _, m := range s.Entity.List {
 		key := datastore.NewKey(c, m.Event, "", m.Id, root)
-		datastore.Delete(c, key)
+		go datastore.Delete(c, key)
 	}
 	return nil
 }
@@ -125,7 +125,7 @@ func (s *DataStore) Truncate(e string) (err error) {
 	var m []Message
 	keys, err := q.GetAll(c, &m)
 	if err != nil {return err}
-	for _, k := range keys {datastore.Delete(c, k)}
+	for _, k := range keys {go datastore.Delete(c, k)}
 	return nil
 }
 
