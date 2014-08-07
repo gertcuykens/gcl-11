@@ -49,7 +49,7 @@ func (s *DataStore) Put() (err error) {
     if (u.Name!="Gert Cuykens") {m.Judge=u.Name}
 		m.Date=time.Now()
 		key := datastore.NewKey(c, m.Event, "", 0, root)
-		key, err = datastore.Put(c, key, m)
+		go datastore.Put(c, key, m)
 	}
 	return nil
 }

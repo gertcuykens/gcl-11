@@ -100,7 +100,10 @@ service.getFirst = function() {
         if (!resp.code) {
             resp.list = resp.list || []
             if (resp.list[0]){heatf(resp.list[0]); service.list()}
-            else {view(2)}
+            else {
+              heatf({event:'Tarifa 2014', division:'woman', heat:1});
+              view(2)
+            }
         }
       }
   );

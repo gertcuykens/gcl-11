@@ -30,11 +30,22 @@ func (s *TrickStore) PutTrickName() (err error) {
 	}
 	if !a.Editor() {return errors.New("No authentication.")}
 	root := datastore.NewKey(c, "feed", "gcl11", 0, nil)
+
+	/*
+	var key=[]*datastore.Key{}
+	for _,m := range s.Entity.List {
+		if (m.Name == "") {m.Name = "Unknown"}
+		key = append(key, datastore.NewKey(c, "Trick list", m.Name, 0, root))
+	}
+	key, err = datastore.PutMulti(c, key, s.Entity.List)
+	*/
+
 	for _,m := range s.Entity.List {
 		if (m.Name == "") {m.Name = "Unknown"}
 		key := datastore.NewKey(c, "Trick list", m.Name, 0, root)
-		key, err = datastore.Put(c, key, m)
+		go datastore.Put(c, key, m)
 	}
+
 	return nil
 }
 
