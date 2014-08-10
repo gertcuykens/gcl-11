@@ -15,8 +15,7 @@
 }
 
 span.ficon {
-    background: transparent url('../img/facebook.png') no-repeat;
-    background-position:0px -107px;
+    background: transparent url('../img/facebook.png') no-repeat 0px -107px;
     display: inline-block;
     vertical-align: middle;
     width: 23px;
