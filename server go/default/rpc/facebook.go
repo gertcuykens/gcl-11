@@ -1,4 +1,4 @@
-package init
+package rpc
 
 import (
 	"appengine/urlfetch"

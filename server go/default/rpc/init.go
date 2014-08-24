@@ -1,4 +1,4 @@
-package init
+package rpc
 
 import (
 	"net/http"

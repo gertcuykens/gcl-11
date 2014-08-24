@@ -1,0 +1,10 @@
+application: gcl-11
+module: default
+version: v0
+runtime: go
+api_version: go1
+threadsafe: true
+
+handlers:
+- url: /_ah/spi/.*
+  script: _go_app

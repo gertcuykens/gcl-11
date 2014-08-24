@@ -1,0 +1,7 @@
+application: gcl-11
+dispatch:
+- url: "*/_ah/*"
+  module: default
+
+- url: "*/"
+  module: www
