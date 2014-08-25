@@ -1,3 +1,3 @@
-package www
+package init
 
 func init() {}

@@ -1,7 +1,17 @@
 application: gcl-11
+
 dispatch:
-- url: "*/_ah/*"
+- url: "gcl-11.appspot.com/_ah/*"
   module: default
 
-- url: "*/"
-  module: www
+- url: "gcl-11.appspot.com/js/*"
+  module: static
+  
+- url: "gcl-11.appspot.com/css/*"
+  module: static
+
+- url: "gcl-11.appspot.com/img/*"
+  module: static
+
+- url: "gcl-11.appspot.com/"
+  module: static
