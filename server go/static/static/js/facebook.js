@@ -32,7 +32,7 @@ signin2 = function(){FB.login(function(response){}, {scope: 'manage_pages'})} //
 $('#loginButton').val('Login').off('click').on('click', signin2)
 
 load = function() {
-    var http = ( window.location.hostname == "localhost" ? "http://localhost:8081" : "https://"+window.location.host )
+    var http = ( window.location.hostname == "localhost" ? "http://localhost:8080" : "https://"+window.location.host )
     gapi.client.load('service', 'v0', start, http+'/_ah/api')
 }
 
