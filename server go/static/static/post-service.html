@@ -1,0 +1,28 @@
+<link rel="import" href="components/polymer/polymer.html">
+<link rel="import" href="components/core-ajax/core-ajax.html">
+<polymer-element name="post-service" attributes="posts">
+  <template>
+    <style>
+        :host {display: none;}
+    </style>
+    <core-ajax id="ajax"
+      auto
+      url="posts.json"
+      on-core-response="{{postsLoaded}}"
+      handleAs="json">
+    </core-ajax>
+  </template>
+  <script>
+  Polymer('post-service', {
+    created: function() {
+      this.posts = [];
+    },
+    postsLoaded: function() {
+      this.posts = this.$.ajax.response.slice(0);
+    },
+    setFavorite: function(uid, isFavorite) {
+      console.log('Favorite changed: ' + uid + ", now: " + isFavorite);
+    }
+  });
+  </script>
+</polymer-element>

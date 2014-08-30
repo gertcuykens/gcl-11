@@ -6,37 +6,49 @@ api_version: go1
 threadsafe: true
 
 handlers:
-- url: /img/(.+)
-  static_files: static/img/\1
-  upload: static/img/(.+)
-  
-- url: /css/(.+)
-  static_files: static/css/\1
-  upload: static/css/(.+)
-
-- url: /js/(.+)
-  static_files: static/js/\1
-  upload: static/js/(.+)
-  
 - url: /
   static_files: static/index.html
   upload: static/index.html
+  
   #secure: always
   #login: admin
   #http_headers:
   #  Access-Control-Allow-Origin: http://localhost:63342
 
-#inbound_services:
-#  - warmup
-#  - mail
+- url: /(.*\.go)
+  script: _go_app
+  
+  #http_headers:
+  # Access-Control-Allow-Origin: https://accounts.google.com
+
+- url: /(.*\.map)
+  mime_type: application/javascript
+  static_files: static/\1
+  upload: static/(.*\.map)
+
+- url: /(.*\.(.+))
+  static_files: static/\1
+  upload: static/(.*\.(.+))
+
+- url: /(.+)/
+  static_files: static/\1/index.html
+  upload: static/(.+)/index.html
+
+- url: /(.+)
+  static_files: static/\1/index.html
+  upload: static/(.+)/index.html
 
 skip_files:
 - ^(.*/)?\.git$
 - ^(.*/)?\.idea$
-- ^(.*/)?\.yaml$
-- ^(.*/)?\.iml$
 - ^(.*/)?\.DS_Store$
+- ^(.*/)?.*\.md$
+- ^(.*/)?.*\.yaml$
+- ^(.*/)?.*\.iml$
 
-#- url: /(.*\.html)
-#  static_files: www/\1
-#  upload: www/(.*\.html)
+#inbound_services:
+#  - warmup
+#  - mail
+
+
+
