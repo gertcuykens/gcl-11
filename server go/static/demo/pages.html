@@ -5,13 +5,14 @@
 <link rel="import" href="components/core-animated-pages/core-animated-pages.html">
 <link rel="import" href="components/core-animated-pages/transitions/slide-from-right.html">
 <link rel="import" href="post-list.html">
-<link rel="import" href="products.html">
+<link rel="import" href="catalog1.html">
+<link rel="import" href="catalog2.html">
 
-<polymer-element name="my-element">
+<polymer-element name="my-pages">
 
     <template>
-        <style>
 
+        <style>
             :host {
                 position: absolute;
                 width:100%;
@@ -19,18 +20,15 @@
                 box-sizing: border-box;
                 font-family: 'RobotoDraft', sans-serif;
             }
-
             core-header-panel {
                 height:100%;
                 overflow: auto;
                 -webkit-overflow-scrolling: touch;
             }
-
             core-toolbar {
                 background:white;
                 /*background: url('../img/4.png'); /* no-repeat; */
             }
-
             paper-tabs {
                 height:100%;
                 -webkit-user-select: none;
@@ -41,15 +39,12 @@
                 background:black;
                 color:white;
             }
-
             paper-tabs.blue::shadow #selectionBar {
                 background-color: #38d2d7;
             }
-
             .blue paper-tab::shadow #ink {
                 color: #38d2d7;
             }
-
             core-animated-pages {
                 position: absolute;
                 width: 100%;
@@ -57,7 +52,6 @@
                 left: 0px;
                 top: 0px;
             }
-
             core-card {
                 position:absolute;
                 top:0;
@@ -70,7 +64,6 @@
                 box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
                 background-color: rgb(238, 238, 238);
             }
-
         </style>
 
         <post-service id="service" posts="{{posts}}"></post-service>
@@ -96,7 +89,13 @@
                     <post-list posts="{{posts}}" show="favorites"></post-list>
                 </section>
                 <section>
-                    <music-demo></music-demo>
+                    <catalog-1></catalog-1>
+                </section>
+                <section>
+                    <catalog-2></catalog-2>
+                </section>
+                <section>
+
                 </section>
 
             </core-animated-pages>
@@ -106,9 +105,8 @@
     </template>
 
     <script>
-        Polymer('my-element', {
+        Polymer('my-pages', {
             ready: function() {
-                console.log(this.posts)
                 var panel = this.$.core_panel
                 var tabs = this.$.paper_tabs
                 var pages = this.$.core_pages
