@@ -9,7 +9,7 @@
 <polymer-element name="my-element">
 
     <template>
-        <style shim-shadowdom>
+        <style>
 
             :host {
                 position: absolute;
@@ -89,10 +89,10 @@
             <core-animated-pages hidden transitions="slide-from-right" selected="{{ $.paper_tabs.selected }}" id="core_pages">
 
                 <section>
-                    <post-list posts="{{posts}}" show="all" id="post_list1"></post-list>
+                    <post-list posts="{{posts}}" show="all"></post-list>
                 </section>
                 <section>
-                    <post-list posts="{{posts}}" show="favorites" id="post_list2"></post-list>
+                    <post-list posts="{{posts}}" show="favorites"></post-list>
                 </section>
                 <section>
 
