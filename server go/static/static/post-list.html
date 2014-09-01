@@ -2,7 +2,7 @@
 <link rel="import" href="post-service.html">
 <link rel="import" href="post-card.html">
 
-<polymer-element name="post-list" attributes="show">
+<polymer-element name="post-list" attributes="show posts">
 
     <template>
         <style>
@@ -25,8 +25,6 @@
             post-card p {margin:0; padding:0px 10px 10px 10px}
         </style>
 
-        <post-service id="service" posts="{{posts}}"></post-service>
-
         <div layout vertical center>
             <template repeat="{{post in posts}}">
                 <post-card
@@ -36,6 +34,7 @@
                     <img src="{{post.avatar}}" width="70" height="70">
                     <h2>{{post.username}}</h2>
                     <p>{{post.text}}</p>
+                    <p>hidden = {{show == "favorites" && !post.favorite}}</p>
                 </post-card>
             </template>
         </div>
@@ -45,7 +44,7 @@
         Polymer({
             handleFavorite: function(event, detail, sender) {
                 var post = sender.templateInstance.model.post;
-                this.$.service.setFavorite(post.uid, post.favorite);
+                console.log('Favorite changed: ' + post.uid + ", now: " + post.favorite);
             }
         });
     </script>

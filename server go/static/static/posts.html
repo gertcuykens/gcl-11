@@ -1,0 +1,123 @@
+<link rel="import" href="components/font-roboto/roboto.html">
+<link rel="import" href="components/core-header-panel/core-header-panel.html">
+<link rel="import" href="components/core-toolbar/core-toolbar.html">
+<link rel="import" href="components/paper-tabs/paper-tabs.html">
+<link rel="import" href="components/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="components/core-animated-pages/transitions/slide-from-right.html">
+<link rel="import" href="post-list.html">
+
+<polymer-element name="my-element">
+
+    <template>
+        <style shim-shadowdom>
+
+            :host {
+                position: absolute;
+                width:100%;
+                height:100%;
+                box-sizing: border-box;
+                font-family: 'RobotoDraft', sans-serif;
+            }
+
+            core-header-panel {
+                height:100%;
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            core-toolbar {
+                background:white;
+                /*background: url('../img/4.png'); /* no-repeat; */
+            }
+
+            paper-tabs {
+                height:100%;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                text-transform: uppercase;
+                background:black;
+                color:white;
+            }
+
+            paper-tabs.blue::shadow #selectionBar {
+                background-color: #38d2d7;
+            }
+
+            .blue paper-tab::shadow #ink {
+                color: #38d2d7;
+            }
+
+            core-animated-pages {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0px;
+                top: 0px;
+            }
+
+            core-card {
+                position:absolute;
+                top:0;
+                left:0;
+                width: 100%;
+                border-top-left-radius: 2px;
+                border-top-right-radius: 2px;
+                border-bottom-right-radius: 2px;
+                border-bottom-left-radius: 2px;
+                box-shadow: rgba(0, 0, 0, 0.0980392) 0px 2px 4px, rgba(0, 0, 0, 0.0980392) 0px 0px 3px;
+                background-color: rgb(238, 238, 238);
+            }
+
+        </style>
+
+        <post-service id="service" posts="{{posts}}"></post-service>
+
+        <core-header-panel flex mode="waterfall-tall" id="core_panel">
+
+            <core-toolbar class="animate">
+                <paper-tabs class="blue bottom fit" id="paper_tabs" self-end>
+                    <paper-tab>Menu1</paper-tab>
+                    <paper-tab>Menu2</paper-tab>
+                    <paper-tab>Menu3</paper-tab>
+                    <paper-tab>Menu4</paper-tab>
+                    <paper-tab>Menu5</paper-tab>
+                </paper-tabs>
+            </core-toolbar>
+
+            <core-animated-pages hidden transitions="slide-from-right" selected="{{ $.paper_tabs.selected }}" id="core_pages">
+
+                <section>
+                    <post-list posts="{{posts}}" show="all" id="post_list1"></post-list>
+                </section>
+                <section>
+                    <post-list posts="{{posts}}" show="favorites" id="post_list2"></post-list>
+                </section>
+                <section>
+
+                </section>
+            </core-animated-pages>
+
+        </core-header-panel>
+
+    </template>
+
+    <script>
+        Polymer('my-element', {
+            ready: function() {
+                console.log(this.posts)
+                var panel = this.$.core_panel
+                var tabs = this.$.paper_tabs
+                var pages = this.$.core_pages
+                tabs.addEventListener('core-select', function() {
+                    panel.mode = "waterfall"
+                    var tall=panel.querySelector('.tall')
+                    if (tall){tall.classList.remove('tall')}
+                    pages.removeAttribute("hidden");
+                });
+            }
+        });
+    </script>
+
+</polymer-element>

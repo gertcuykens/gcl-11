@@ -19,9 +19,6 @@
     },
     postsLoaded: function() {
       this.posts = this.$.ajax.response.slice(0);
-    },
-    setFavorite: function(uid, isFavorite) {
-      console.log('Favorite changed: ' + uid + ", now: " + isFavorite);
     }
   });
   </script>
