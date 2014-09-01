@@ -5,6 +5,7 @@
 <link rel="import" href="components/core-animated-pages/core-animated-pages.html">
 <link rel="import" href="components/core-animated-pages/transitions/slide-from-right.html">
 <link rel="import" href="post-list.html">
+<link rel="import" href="products.html">
 
 <polymer-element name="my-element">
 
@@ -74,7 +75,7 @@
 
         <post-service id="service" posts="{{posts}}"></post-service>
 
-        <core-header-panel flex mode="waterfall-tall" id="core_panel">
+        <core-header-panel flex mode="waterfall" id="core_panel">
 
             <core-toolbar class="animate">
                 <paper-tabs class="blue bottom fit" id="paper_tabs" self-end>
@@ -95,8 +96,9 @@
                     <post-list posts="{{posts}}" show="favorites"></post-list>
                 </section>
                 <section>
-
+                    <music-demo></music-demo>
                 </section>
+
             </core-animated-pages>
 
         </core-header-panel>
