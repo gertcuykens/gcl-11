@@ -15,3 +15,6 @@ dispatch:
 
 - url: "gcl-11.appspot.com/"
   module: static
+
+- url: "gcl-11.appspot.com/demo/*"
+  module: demo
