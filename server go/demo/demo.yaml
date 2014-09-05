@@ -1,0 +1,54 @@
+application: gcl-11
+module: demo
+version: v0
+runtime: go
+api_version: go1
+threadsafe: true
+
+handlers:
+- url: /
+  static_files: static/index.html
+  upload: static/index.html
+  
+  #secure: always
+  #login: admin
+  #http_headers:
+  #  Access-Control-Allow-Origin: http://localhost:63342
+
+- url: /(.*\.go)
+  script: _go_app
+  
+  #http_headers:
+  # Access-Control-Allow-Origin: https://accounts.google.com
+
+- url: /(.*\.map)
+  mime_type: application/javascript
+  static_files: static/\1
+  upload: static/(.*\.map)
+
+- url: /(.*\.(.+))
+  static_files: static/\1
+  upload: static/(.*\.(.+))
+
+- url: /(.+)/
+  static_files: static/\1/index.html
+  upload: static/(.+)/index.html
+
+- url: /(.+)
+  static_files: static/\1/index.html
+  upload: static/(.+)/index.html
+
+skip_files:
+- ^(.*/)?\.git$
+- ^(.*/)?\.idea$
+- ^(.*/)?\.DS_Store$
+- ^(.*/)?.*\.md$
+- ^(.*/)?.*\.yaml$
+- ^(.*/)?.*\.iml$
+
+#inbound_services:
+#  - warmup
+#  - mail
+
+
+
