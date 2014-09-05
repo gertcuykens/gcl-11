@@ -1,6 +1,9 @@
 application: gcl-11
 
 dispatch:
+- url: "gcl-11.appspot.com/demo/*"
+  module: demo
+
 - url: "gcl-11.appspot.com/_ah/*"
   module: default
 
@@ -16,5 +19,3 @@ dispatch:
 - url: "gcl-11.appspot.com/"
   module: static
 
-- url: "gcl-11.appspot.com/demo/*"
-  module: demo
