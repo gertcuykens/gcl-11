@@ -15,7 +15,7 @@
         }
 
         section {
-            overflow: hidden;
+            /*overflow: hidden;*/
         }
 
         .fab {
@@ -103,8 +103,10 @@
             box-sizing: border-box;
             float: left;
             height: 200px;
-            width: 49%;
-            margin: 3px;
+            width: 50%;
+            margin: 0px;
+            border-left: 5px solid #ffffff;
+            border-top: 5px solid #ffffff;
         }
 
         .tile-bottom {
@@ -115,54 +117,58 @@
 
     <core-animated-pages selected="{{page}}" transitions="hero-transition slide-up slide-down cross-fade list-cascade" on-core-animated-pages-transition-end="{{complete}}">
 
-        <section layout vertical>
+        <section layout vertical center center-justified style="border:5px solid white; border-left: 0; border-top: 0;">
 
-            <div class="tall-toolbar categories" slide-down>
-                <span>Your name here</span>
-            </div>
+            <div style="width:100%;">
 
-            <div class="tiles-container">
-                <div class="tile" style="background-color:#ccc;" layout vertical>
-                    <div class="tile-top" flex></div>
-                    <div class="tile-bottom" style="background-color:#aaa;">
-                        Leaderboard
+                <!--div class="tall-toolbar categories" slide-down>
+                    <span>Your name here</span>
+                </div-->
+
+                <div class="tiles-container">
+                    <div class="tile" style="background-color:#ccc;" layout vertical>
+                        <div class="tile-top" flex></div>
+                        <div class="tile-bottom" style="background-color:#aaa;">
+                            Leaderboard
+                        </div>
+                    </div>
+                    <div class="tile" hero-id="category-image" hero style="background-color:#ffff8d;" layout vertical on-tap="{{transition}}">
+                        <div class="tile-top" flex></div>
+                        <div class="tile-bottom" hero-id="footer" hero style="background-color:#ffeb3b;">
+                            General Knowledge
+                        </div>
+                    </div>
+                    <div class="tile" style="background-color:#b9f6ca;" layout vertical>
+                        <div class="tile-top" flex></div>
+                        <div class="tile-bottom" style="background-color:#0f9d58;">
+                            Category 2
+                        </div>
+                    </div>
+                    <div class="tile" style="background-color:#ff8a80;" layout vertical>
+                        <div class="tile-top" flex></div>
+                        <div class="tile-bottom" style="background-color:#db4437;">
+                            Category 3
+                        </div>
+                    </div>
+                    <div class="tile" style="background-color:#82b1ff;" layout vertical>
+                        <div class="tile-top" flex></div>
+                        <div class="tile-bottom" style="background-color:#4285f4;">
+                            Category 4
+                        </div>
+                    </div>
+                    <div class="tile" style="background-color:#b388ff;" layout vertical>
+                        <div class="tile-top" flex></div>
+                        <div class="tile-bottom" style="background-color:#7e57c2;">
+                            Category 5
+                        </div>
                     </div>
                 </div>
-                <div class="tile" hero-id="category-image" hero style="background-color:#ffff8d;" layout vertical on-tap="{{transition}}">
-                    <div class="tile-top" flex></div>
-                    <div class="tile-bottom" hero-id="footer" hero style="background-color:#ffeb3b;">
-                        General Knowledge
-                    </div>
-                </div>
-                <div class="tile" style="background-color:#b9f6ca;" layout vertical>
-                    <div class="tile-top" flex></div>
-                    <div class="tile-bottom" style="background-color:#0f9d58;">
-                        Category 2
-                    </div>
-                </div>
-                <div class="tile" style="background-color:#ff8a80;" layout vertical>
-                    <div class="tile-top" flex></div>
-                    <div class="tile-bottom" style="background-color:#db4437;">
-                        Category 3
-                    </div>
-                </div>
-                <div class="tile" style="background-color:#82b1ff;" layout vertical>
-                    <div class="tile-top" flex></div>
-                    <div class="tile-bottom" style="background-color:#4285f4;">
-                        Category 4
-                    </div>
-                </div>
-                <div class="tile" style="background-color:#b388ff;" layout vertical>
-                    <div class="tile-top" flex></div>
-                    <div class="tile-bottom" style="background-color:#7e57c2;">
-                        Category 5
-                    </div>
-                </div>
+
             </div>
 
         </section>
 
-        <section layout vertical>
+        <section layout vertical style="min-height: 500px; border:5px solid white;">
 
             <div class="top" hero-id="category-image" hero flex layout horizontal center center-justified>
                 <div class="top-image" cross-fade></div>
@@ -173,9 +179,10 @@
             <div class="fab fab-0" hero-id="fab" hero>
                 <paper-fab icon="av:play-arrow" on-tap="{{transition}}" hero></paper-fab>
             </div>
+
         </section>
 
-        <section layout vertical>
+        <section layout vertical style="min-height: 500px; border:5px solid white;">
 
             <div class="tall-toolbar questions" hero-id="footer" hero>
                 <span cross-fade>Question here</span>
