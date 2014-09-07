@@ -1,0 +1,15 @@
+<link href="components/core-transition/core-transition-css.html" rel="import">
+
+<polymer-element name="my-transition" extends="core-transition">
+    <script>
+        Polymer('my-transition', {
+            go: function (node, state) {
+                var x = (state.opened ? 0 : 1);
+                node.style.transition = 'opacity 1s ease-out';
+                node.style.opacity = x;
+            }
+        })
+    </script>
+</polymer-element>
+
+<my-transition id="my-grow"></my-transition>
