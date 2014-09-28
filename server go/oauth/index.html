@@ -48,14 +48,9 @@ window.gInit = function () {
   }
 
 testAPI2 = function () {
-  //var t1= new Token()
-  //t1.access_token = FB.getAccessToken()
   //gapi.auth.setToken({access_token:FB.getAccessToken()})
   //gapi.client.oauth.Facebook().execute(function(response){console.log(response)})
 
-  //var t2= new Token()
-  //t2.access_token = gapi.auth.getToken().access_token
-  //gapi.auth.setToken({access_token:gapi.auth.getToken().access_token})
   gapi.client.oauth.Google().execute(function(response){console.log(response)})
 
 }
@@ -74,13 +69,6 @@ testAPI2 = function () {
     }
     gapi.auth.signIn(options)
    }
-
-Token = function() {
-    this.access_token=null
-    this.error=null
-    this.expires_in=null
-    this.state=null
-}
 
         </script>
     </body>
