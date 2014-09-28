@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html xmlns:fb="http://ogp.me/ns/fb#">
+    <head>
+        <title>Oauth</title>
+    </head>
+    <body>
+        <div id="fb-root"></div>
+        <a href="/_ah/api/explorer">API EXPLORER</a>
+        <script>
+FACEBOOK_CLIENT_ID="249348058430770"
+FACEBOOK_SCOPE={scope: 'email,manage_pages,publish_actions'}
+
+GOOGLE_CLIENT_ID="522156758812-09f5qv0e4gqjdjqfocerqcud5m5jutau.apps.googleusercontent.com"
+GOOGLE_SCOPE={scope: 'email', immediate: true, client_id: GOOGLE_CLIENT_ID}
+
+window.fbAsyncInit = function() {
+    console.log('Loading Facebook API')
+    FB.init({appId: FACEBOOK_CLIENT_ID, version: 'v2.1'});
+    FB.Event.subscribe('auth.authResponseChange', function(response){});
+    FB.getLoginStatus(function(response){});
+}
+
+window.gInit = function () {
+    console.log('Loading Google API')
+    var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+    gapi.client.load('oauth', 'v0', function(){}, http+window.location.host+'/_ah/api')
+};
+
+  (function() {
+    var s = document.getElementsByTagName('script')[0]
+
+    var j = document.createElement('script');
+    j.id = 'google-jssdk';
+    j.async = true;
+    j.src = '//apis.google.com/js/client.js?onload=gInit';
+    s.parentNode.insertBefore(j, s);
+
+    var js = document.createElement('script');
+    js.id = 'facebook-jssdk';
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    s.parentNode.insertBefore(js, s);
+
+  })()
+
+  testAPI1 = function () {
+    FB.api('/me', function(response){console.log(response)})
+    gapi.auth.authorize(GOOGLE_SCOPE, function(response){console.log(response)})
+  }
+
+testAPI2 = function () {
+  //var t1= new Token()
+  //t1.access_token = FB.getAccessToken()
+  //gapi.auth.setToken({access_token:FB.getAccessToken()})
+  //gapi.client.oauth.Facebook().execute(function(response){console.log(response)})
+
+  //var t2= new Token()
+  //t2.access_token = gapi.auth.getToken().access_token
+  //gapi.auth.setToken({access_token:gapi.auth.getToken().access_token})
+  gapi.client.oauth.Google().execute(function(response){console.log(response)})
+
+}
+
+  testLoginFB = function(){
+    FB.login(function(response){}, FACEBOOK_SCOPE)
+  }
+
+  testLoginGAPI =function() {
+    var options = {
+        callback : function(){},
+        clientid : GOOGLE_CLIENT_ID,
+        requestvisibleactions : 'http://schemas.google.com/AddActivity',
+        cookiepolicy : 'single_host_origin',
+        scope: GOOGLE_SCOPE.scope
+    }
+    gapi.auth.signIn(options)
+   }
+
+Token = function() {
+    this.access_token=null
+    this.error=null
+    this.expires_in=null
+    this.state=null
+}
+
+        </script>
+    </body>
+</html>
+
+        <!--
+
+        Property = {
+    key:null,
+    value:null,
+    add: function(t) {t.extra.push({key:this.key, value:this.value})}
+}
+
+Token = function() {
+    this.id_token=null
+    this.type_token=null
+    this.access_token=null
+    this.refresh_token=null
+    this.expires_in=null
+    this.expiry=new Date().toJSON()
+    this.extra=[]
+    this.status=null
+}
+
+
+            //var apisToLoad = 2;
+    //var callback = function() { if (--apisToLoad == 0) {} }
+
+        signin2 = function(){}
+
+//$('#loginButton').val('Login').off('click').on('click', signin2)
+
+Google=new Token()
+Google.type_token="google"
+
+
+
+}
+
+autosignin = function() {
+    var b=document.getElementById('gsigninButton')
+    b.removeEventListener('click', signout);
+    b.addEventListener('click',signin)
+    //document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
+
+    var callback = function (t) {
+        if (!t) return false
+        var b=document.getElementById("gsigninButton")
+        b.removeEventListener('click', signin);
+        b.addEventListener('click', signout)
+        //document.getElementsByClassName("buttonText")[1].innerHTML='Log Out'
+        console.log('Sign-in state: '+ t['status']['signed_in'])
+        Google.access_token=gapi.auth.getToken().access_token
+        border()
+    }
+
+
+}
+
+signout = function () {
+    Google.access_token=gapi.auth.getToken().access_token
+    gapi.client.rest.google.revoke(Google).execute(function(response){console.log('Server, Bye, '+response.message);Google.access_token=null;border()})
+    var b=document.getElementById('gsigninButton')
+    b.removeEventListener('click', signout)
+    b.addEventListener('click',signin)
+    //document.getElementsByClassName("buttonText")[1].innerHTML='Log In'
+}
+
+                                -->

@@ -1,0 +1,14 @@
+application: gcl-11
+module: oauth
+version: v0
+runtime: go
+api_version: go1
+threadsafe: true
+
+handlers:
+- url: /
+  static_files: index.html
+  upload: index.html
+
+- url: /_ah/spi/.*
+  script: _go_app

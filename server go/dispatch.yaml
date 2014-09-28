@@ -6,3 +6,4 @@ dispatch:
 
 - url: "gcl-11.appspot.com/*"
   module: static
+
