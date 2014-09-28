@@ -10,7 +10,7 @@ func (s *Service) Error() string {return s.Status}
 
 func init() {
 	service := &Service{}
-	api, err := endpoints.RegisterService(service, "Oauth", "v0", "API", true)
+	api, err := endpoints.RegisterService(service, "oauth", "v0", "API", true)
 	if err != nil {panic(err.Error())}
 	scope := []string{"https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/plus.me"}
 	rpc(api, scope, "Google", "Google login.")
