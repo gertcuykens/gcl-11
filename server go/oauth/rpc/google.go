@@ -28,7 +28,7 @@ func (u *GoogleUser) set() error {
 	return err
 }
 
-func (s *Service) Google(r *http.Request, _*Q, _*Q) error {
+func (s *Service) Google(r *http.Request, _ *Q, _ *Q) error {
 	var c = endpoints.NewContext(r)
 	var t = r.Header.Get("Authorization")
 	//c.Infof("GOOGLE TOKEN ============\n%s\n============",t[7:])

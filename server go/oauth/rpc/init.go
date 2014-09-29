@@ -6,6 +6,8 @@ type Q struct{}
 
 type Service struct {Status string `json:"error"`}
 
+const PRIVATE_KEY string = ""
+
 func (s *Service) Error() string {return s.Status}
 
 func init() {
@@ -27,7 +29,8 @@ func rpc(api *endpoints.RpcService, scope []string, a ...string) {
 	info.Scopes = scope
 }
 
-/*
+/*********************************************************************************/
+/*********************************************************************************
 import (
 	"github.com/crhym3/go-endpoints/endpoints"
 	"code.google.com/p/goauth2/oauth"

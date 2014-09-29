@@ -10,5 +10,5 @@ handlers:
   static_files: index.html
   upload: index.html
 
-- url: /_ah/spi/.*
+- url: /oauth
   script: _go_app

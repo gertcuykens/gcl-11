@@ -5,8 +5,8 @@
     </head>
     <body>
         <div id="fb-root"></div>
-        <a href="/_ah/api/explorer">API EXPLORER</a>
         <script>
+
 FACEBOOK_CLIENT_ID="249348058430770"
 FACEBOOK_SCOPE={scope: 'email,manage_pages,publish_actions'}
 
@@ -22,8 +22,6 @@ window.fbAsyncInit = function() {
 
 window.gInit = function () {
     console.log('Loading Google API')
-    var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
-    gapi.client.load('oauth', 'v0', function(){}, http+window.location.host+'/_ah/api')
 };
 
   (function() {
@@ -48,9 +46,29 @@ window.gInit = function () {
   }
 
 testAPI2 = function () {
-  //gapi.auth.setToken({access_token:FB.getAccessToken()})
-  //gapi.client.oauth.Facebook().execute(function(response){console.log(response)})
-  gapi.client.oauth.Google().execute(function(response){console.log(response)})
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/google', true);
+    xhr.setRequestHeader ("Authorization", "Bearer "+gapi.auth.getToken().access_token);
+    xhr.responseType = 'json';
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+       console.log(this.getResponseHeader("Authorization"))
+      }
+    };
+    xhr.send();
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/facebook', true);
+    xhr.setRequestHeader ("Authorization", "Bearer "+FB.getAccessToken());
+    xhr.responseType = 'json';
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+       console.log(this.getResponseHeader("Authorization"))
+      }
+    };
+    xhr.send();
+
 }
 
   testLoginFB = function(){
@@ -72,7 +90,20 @@ testAPI2 = function () {
     </body>
 </html>
 
+<!--a href="/_ah/api/explorer">API EXPLORER</a-->
+
         <!--
+
+  //var http = ( window.location.hostname == "localhost" ? "http://" : "https://" )
+  //gapi.client.load('oauth', 'v0', function(){}, http+window.location.host+'/_ah/api')
+
+
+  //gapi.auth.setToken({access_token:FB.getAccessToken()})
+  //gapi.client.oauth.Facebook().execute(function(response){console.log(response)})
+  //gapi.client.oauth.Google().execute(function(response){console.log(response)})
+  //console.log(gapi.auth.getToken().access_token)
+  //gapi.client.request({path:'http://localhost:8080/_ah/api/rpc', method:'POST', body:'[{"jsonrpc":"2.0","id":"gapiRpc","method":"oauth.Google","apiVersion":"v0"}]'}).execute(function(r,r2){console.log(r2)})
+
 
         Property = {
     key:null,

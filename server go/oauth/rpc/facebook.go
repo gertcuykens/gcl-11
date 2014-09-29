@@ -84,5 +84,6 @@ func (s *Service) Facebook(r *http.Request, _*Q, _*Q) error {
 	}
 	u.set()
 	c.Infof("FACEBOOK USER ============\n%v\n============",u)
+	r.Header.Set("Authorization","ttttttttttttttttt")
 	return nil
 }
