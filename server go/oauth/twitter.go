@@ -1,14 +1,14 @@
-package rpc
+package oauth
 
 import (
 	"log"
 	"github.com/mrjones/oauth"
-	"github.com/crhym3/go-endpoints/endpoints"
 	"io/ioutil"
 	"encoding/json"
 	"net/http"
 	"appengine/urlfetch"
 	"time"
+	"appengine"
 )
 
 type Property struct {
@@ -29,7 +29,7 @@ type Token struct {
 	Status string `json:"status"`
 	Message string `json:"message"`
 	Client *http.Client `json:"-"`
-	Context endpoints.Context `json:"-"`
+	Context appengine.Context `json:"-"`
 	Oauth_token string `json:"oauth_token"`
 	Oauth_verifier string `json:"oauth_verifier"`
 }
@@ -66,8 +66,8 @@ var TWITTER_SERVER = oauth.ServiceProvider{
 var consumer = oauth.NewConsumer(TWITTER_ID, TWITTER_SECRET, TWITTER_SERVER)
 //consumer.Debug(true)
 
-func (s *Service) TwitterOauth(r *http.Request, _, resp *ResponseOauth) error {
-	c := endpoints.NewContext(r)
+func TwitterOauth(r *http.Request, _, resp *ResponseOauth) error {
+	c := appengine.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	requestToken, url, err := consumer.GetRequestTokenAndUrl("http://localhost:8080/_ah/api/rest/v0/twitter/callback")
 	if err != nil {log.Fatal(err)}
@@ -76,8 +76,8 @@ func (s *Service) TwitterOauth(r *http.Request, _, resp *ResponseOauth) error {
 	return err
 }
 
-func (s *Service) TwitterOauthOob(r *http.Request, _, resp *ResponseOauth) error {
-	c := endpoints.NewContext(r)
+func TwitterOauthOob(r *http.Request, _, resp *ResponseOauth) error {
+	c := appengine.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	requestToken, url, err := consumer.GetRequestTokenAndUrl("oob")
 	if err != nil {log.Fatal(err)}
@@ -86,8 +86,8 @@ func (s *Service) TwitterOauthOob(r *http.Request, _, resp *ResponseOauth) error
 	return err
 }
 
-func (s *Service) TwitterCallback(r *http.Request, req *RequestOauth, resp *Token) error {
-	c := endpoints.NewContext(r)
+func TwitterCallback(r *http.Request, req *RequestOauth, resp *Token) error {
+	c := appengine.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	resp.Oauth_token = req.Oauth_token
 	resp.Oauth_verifier = req.Oauth_verifier
@@ -95,8 +95,8 @@ func (s *Service) TwitterCallback(r *http.Request, req *RequestOauth, resp *Toke
 	return err
 }
 
-func (s *Service) TwitterCallbackOob(r *http.Request, req *RequestOob, resp *Token) error {
-	c := endpoints.NewContext(r)
+func TwitterCallbackOob(r *http.Request, req *RequestOob, resp *Token) error {
+	c := appengine.NewContext(r)
 	consumer.HttpClient=urlfetch.Client(c)
 	resp.Oauth_token = req.RequestToken.Token
 	resp.Oauth_verifier = req.VerificationCode
