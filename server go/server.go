@@ -9,6 +9,9 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"encoding/base64"
+	"time"
+	jwt "github.com/dgrijalva/jwt-go"
+	"bytes"
 )
 
 type User struct {
@@ -21,16 +24,27 @@ type User struct {
 
 const PRIVATE_KEY string = "00000000"
 
-func check(e error) {
-	if e != nil {panic(e)}
-}
+var (
+	privateKey []byte
+	publicKey []byte
+)
 
+//openssl genrsa -out demo.rsa 1024
+//openssl rsa -in demo.rsa -pubout > demo.rsa.pub
 func main() {
+	privateKey, _ = ioutil.ReadFile("demo.rsa")
+	publicKey, _ = ioutil.ReadFile("demo.rsa.pub")
 	index := http.FileServer(http.Dir("oauth"))
 	http.Handle("/", index)
+	http.HandleFunc("/jwt", authJwt)
+	http.HandleFunc("/auth", auth)
 	http.HandleFunc("/google", connect)
 	http.HandleFunc("/facebook", connect)
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func check(e error) {
+	if e != nil {panic(e)}
 }
 
 /**************************************************************/
@@ -71,6 +85,40 @@ func connect(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Authorization", base64.URLEncoding.EncodeToString(h.Sum([]byte(data+PRIVATE_KEY))))
 	io.WriteString(w, data)
+}
+
+/*****************************************************************************/
+// Create a Token that will be signed with RSA 256.
+//{
+//   "typ":"JWT",
+//   "alg":"RS256"
+//}
+
+func authJwt(w http.ResponseWriter, r *http.Request) {
+	token := jwt.New(jwt.GetSigningMethod("RS256"))
+	token.Claims["ID"] = "This is my super fake ID"
+	token.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	tokenString, _ := token.SignedString(privateKey)
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Authorization", "Bearer "+tokenString)
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "{\"token\": %s}", tokenString)
+}
+
+func auth(w http.ResponseWriter, r *http.Request) {
+	token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) (interface{}, error) {
+		var b bytes.Buffer
+		b.Write(publicKey)
+		return b, nil
+	})
+	if err == nil && token.Valid {
+		//OK
+	} else {
+		//NOT OK
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "{\"token\": %v}", token)
 }
 
 /*****************************************************************************/
@@ -122,6 +170,3 @@ func Scope(t string) string{
 	return scope
 	*/
 }
-
-/*****************************************************************************/
-

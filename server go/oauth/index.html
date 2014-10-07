@@ -71,6 +71,32 @@ testAPI2 = function () {
 
 }
 
+testAPI3 = function () {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/jwt', true);
+    xhr.responseType = 'json';
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+       console.log(this.getResponseHeader("Authorization"))
+       testAPI4(this.getResponseHeader("Authorization"))
+      }
+    };
+    xhr.send();
+}
+
+testAPI4 = function (jwt) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/auth', true);
+    xhr.setRequestHeader ("Authorization", jwt);
+    xhr.responseType = 'json';
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+       console.log(this.getResponseHeader("Authorization"))
+      }
+    };
+    xhr.send();
+}
+
   testLoginFB = function(){
     FB.login(function(response){}, FACEBOOK_SCOPE)
   }

@@ -2,7 +2,7 @@
 *.idea
 *.apk
 *.iml
+*.rsa*
 gen
 out
 target
-
